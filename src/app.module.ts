@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { WhatsappModule } from './modules/whatsapp/whatsapp.module';
 import { ConfigModule } from '@nestjs/config';
 import { getEnvPath } from './common/helper/env.helper';
-import openapi from './common/configs/openapi.config';
+import openapi from './common/configs/openai.config';
 
 const envFilePath: string = getEnvPath(`${__dirname}/common/envs/`);
 
