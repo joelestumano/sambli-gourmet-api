@@ -19,7 +19,10 @@ export class WhatsappService {
 
     private async start(client: Whatsapp) {
         client.onMessage(async (message: Message) => {
-            console.log('message: ', message);
+            if (message.body && !message.isGroupMsg) {
+                console.log('message: ', message);
+                return await client.sendText(message.from, '🤖 Olá');
+            }
         });
     }
 }
