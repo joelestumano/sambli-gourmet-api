@@ -81,20 +81,22 @@ export class WhatsappService {
                     //return await this.reply(client, message.chatId, response, message.id);
                     //return await this.sendImage(client, message.chatId, 'src\\modules\\whatsapp\\img.jpg', 'name', 'Image');
                     //return await this.sendLocation(client, message.chatId, { lat: '-1.722247', lng: '-48.879224' }, 'Location');
-                    const buttons = [
-                        {
-                            "buttonId": "1",
-                            "buttonText": {
-                                "displayText": "Text of Button 1"
+                    let buttons =
+                        [
+                            {
+                                "buttonId": "1", "text": "Teste",
+                                "buttonText": {
+                                    "displayText": "Button 1"
+                                }
+                            },
+                            {
+                                "buttonId": "2",
+                                "text": "Teste2", "buttonText":
+                                {
+                                    "displayText": "Button 2"
+                                }
                             }
-                        },
-                        {
-                            "buttonId": "2",
-                            "buttonText": {
-                                "displayText": "Text of Button 2"
-                            }
-                        }
-                    ]
+                        ]
                     return await this.sendButtons(client, message.chatId, 'Title', buttons, 'Description')
                 }
             }
