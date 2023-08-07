@@ -36,3 +36,7 @@ lerna-debug.log*
 
 #Outhers
 /tokens
+
+# Environment
+/src/common/envs/dev.env
+/src/common/envs/prod.env
