@@ -31,6 +31,7 @@ export class WhatsappService {
     async bot() {
         create({
             session: 'session-sambli-gourmet-api',
+            autoClose: 0
         }).then(async (client: Whatsapp) => await this.start(client))
             .catch((error) => {
                 console.error('error: ', error);
@@ -38,6 +39,13 @@ export class WhatsappService {
     }
 
     private async start(client: Whatsapp) {
+
+        /* 
+        await client.setProfileStatus('Atendendo pedidos! 👱‍♀️');
+        await client.setProfileName('Sambli Gourmet');
+        await client.setProfilePic('src\\modules\\whatsapp\\img.jpg');
+        */
+
         client.onMessage(async (message: Message) => {
             switch (message.body) {
                 case 'bot-kill':
@@ -73,23 +81,21 @@ export class WhatsappService {
                     //return await this.reply(client, message.chatId, response, message.id);
                     //return await this.sendImage(client, message.chatId, 'src\\modules\\whatsapp\\img.jpg', 'name', 'Image');
                     //return await this.sendLocation(client, message.chatId, { lat: '-1.722247', lng: '-48.879224' }, 'Location');
-                    let buttons = [
+                    const buttons = [
                         {
                             "buttonId": "1",
-                            "text": "Teste",
                             "buttonText": {
-                                "displayText": "Button 1"
+                                "displayText": "Text of Button 1"
                             }
                         },
                         {
                             "buttonId": "2",
-                            "text": "Teste2",
                             "buttonText": {
-                                "displayText": "Button 2"
+                                "displayText": "Text of Button 2"
                             }
                         }
                     ]
-                    return await this.sendButtons(client, message.chatId, 'Title', 'Subtitle', buttons)
+                    return await this.sendButtons(client, message.chatId, 'Title', buttons, 'Description')
                 }
             }
         });
@@ -130,8 +136,8 @@ export class WhatsappService {
             .catch((error) => error);
     }
 
-    private async sendButtons(client: Whatsapp, to: string, title: string, subtitle: string, buttons: any): Promise<Object> {
-        return await client.sendButtons(to, title, subtitle, buttons).then((result) => result)
+    private async sendButtons(client: Whatsapp, to: string, title: string, buttons: any, description: string): Promise<Object> {
+        return await client.sendButtons(to, title, buttons, description).then((result) => result)
             .catch((error) => error);
     }
 }
