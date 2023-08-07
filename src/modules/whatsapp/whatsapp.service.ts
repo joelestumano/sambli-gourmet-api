@@ -1,10 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from 'openai';
-import { create, Message, Whatsapp } from 'venom-bot';
+import { create, Message, SendFileResult, Whatsapp } from 'venom-bot';
 
 @Injectable()
 export class WhatsappService {
+
+    private readonly logger = new Logger(WhatsappService.name);
+
     private openai: OpenAIApi;
     private customerChat: ChatCompletionRequestMessage[] = [
         {
@@ -19,6 +22,7 @@ export class WhatsappService {
     constructor(private configService: ConfigService) {
         const openaiConfig = new Configuration({
             apiKey: this.configService.get<string>('openai.key'),
+
         });
         this.openai = new OpenAIApi(openaiConfig);
         this.bot();
@@ -27,8 +31,7 @@ export class WhatsappService {
     async bot() {
         create({
             session: 'session-sambli-gourmet-api',
-        })
-            .then(async (client: Whatsapp) => await this.start(client))
+        }).then(async (client: Whatsapp) => await this.start(client))
             .catch((error) => {
                 console.error('error: ', error);
             });
@@ -66,10 +69,27 @@ export class WhatsappService {
                         content: response,
                     });
 
-                    //return await this.sendText(client, message, response);
-                    //return await this.reply(client, message, response);
-                    return await this.sendImage(client, message, 'src\\modules\\whatsapp\\img.jpg','name','caption');
-                    //return await this.sendLocation(client, message, { lat: '-1.722247', lng: '-48.879224' }, 'Title');
+                    //return await this.sendText(client, message.chatId, response);
+                    //return await this.reply(client, message.chatId, response, message.id);
+                    //return await this.sendImage(client, message.chatId, 'src\\modules\\whatsapp\\img.jpg', 'name', 'Image');
+                    //return await this.sendLocation(client, message.chatId, { lat: '-1.722247', lng: '-48.879224' }, 'Location');
+                    let buttons = [
+                        {
+                            "buttonId": "1",
+                            "text": "Teste",
+                            "buttonText": {
+                                "displayText": "Button 1"
+                            }
+                        },
+                        {
+                            "buttonId": "2",
+                            "text": "Teste2",
+                            "buttonText": {
+                                "displayText": "Button 2"
+                            }
+                        }
+                    ]
+                    return await this.sendButtons(client, message.chatId, 'Title', 'Subtitle', buttons)
                 }
             }
         });
@@ -87,47 +107,31 @@ export class WhatsappService {
         return completion.data.choices[0].message?.content;
     }
 
-    /*  */
-    private async sendText(client: Whatsapp, message: Message, res: any) {
+    private async sendText(client: Whatsapp, to: string, content: string): Promise<Object> {
         return await client
-            .sendText(message.from, `👱‍♀️ ${res}`)
-            .then((result) => {
-                console.log('sendText success: ', result);
-            })
-            .catch((erro) => {
-                console.error('sendText error when sending: ', erro);
-            });
+            .sendText(to, `👱‍♀️ ${content}`).then((result) => result)
+            .catch((error) => error);
     }
 
-    private async reply(client: Whatsapp, message: Message, res: any) {
+    private async reply(client: Whatsapp, to: string, content: string, quotedMsg: string): Promise<Message | object> {
         return await client
-            .reply(message.from, `👱‍♀️ ${res}`, message.id)
-            .then((result) => {
-                console.log('reply success: ', result);
-            })
-            .catch((erro) => {
-                console.error('reply error when sending: ', erro);
-            });
+            .reply(to, `👱‍♀️ ${content}`, quotedMsg).then((result) => result)
+            .catch((error) => error);
     }
 
-    private async sendLocation(client: Whatsapp, message: Message, location: { lat: string, lng: string }, title: string) {
+    private async sendLocation(client: Whatsapp, to: string, location: { lat: string, lng: string }, title: string): Promise<unknown> {
         return await client
-            .sendLocation(message.from, location.lat, location.lng, title)
-            .then((result) => {
-                console.log('sendLocation success: ', result);
-            })
-            .catch((erro) => {
-                console.error('sendLocation when sending: ', erro);
-            });
+            .sendLocation(to, location.lat, location.lng, title).then((result) => result)
+            .catch((error) => error);
     }
 
-    private async sendImage(client: Whatsapp, message: Message, path: string, name: string, caption: string) {
-        return await client.sendImage(message.from, path, name, caption)
-            .then((result) => {
-                console.log('sendImage success: ', result);
-            })
-            .catch((erro) => {
-                console.error('sendImage error when sending: ', erro);
-            });
+    private async sendImage(client: Whatsapp, to: string, filePath: string, fileName?: string, caption?: string, passId?: any): Promise<SendFileResult> {
+        return await client.sendImage(to, filePath, fileName, caption).then((result) => result)
+            .catch((error) => error);
+    }
+
+    private async sendButtons(client: Whatsapp, to: string, title: string, subtitle: string, buttons: any): Promise<Object> {
+        return await client.sendButtons(to, title, subtitle, buttons).then((result) => result)
+            .catch((error) => error);
     }
 }
