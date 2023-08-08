@@ -1,10 +1,11 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { WhatsappService } from './whatsapp.service';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DtoWhatsappProfileStatus } from './dtos/whatsapp-profile-status.dto';
 import { DtoWhatsappProfileName } from './dtos/whatsapp-profile-name.dto';
 
 @Controller('whatsapp')
+@ApiTags('whatsapp')
 export class WhatsappController {
 
     constructor(private readonly whatsappService: WhatsappService) { }

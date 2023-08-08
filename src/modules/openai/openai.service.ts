@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from 'openai';
 import { Message } from 'venom-bot';
+import { DtoOpenaiChatSystem } from './dtos/openai-chat-system.dto';
 
 @Injectable()
 export class OpenaiService {
@@ -47,5 +48,14 @@ export class OpenaiService {
             messages: messages,
         });
         return completion.data.choices[0].message?.content;
+    }
+
+    async setChatSystem(dto: DtoOpenaiChatSystem) {
+       /*  if (this.client) {
+            return await this.client.setProfileStatus(dto.profileStatus).then((result) => result)
+                .catch((error) => error);
+        } else {
+            throw new InternalServerErrorException('Whatsapp client is null');
+        } */
     }
 }
