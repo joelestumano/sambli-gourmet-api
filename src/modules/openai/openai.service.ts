@@ -10,13 +10,7 @@ export class OpenaiService {
     private readonly logger = new Logger(OpenaiService.name);
     private readonly openai: OpenAIApi;
 
-    private customerChat: ChatCompletionRequestMessage[] = [
-        {
-            role: 'system',
-            content:
-                'Você é uma atendente de delivery de refeição da empresa Sambli Gourmet, você deve atender e receber pedidos dos clientes e atender da melhor forma possível',
-        },
-    ];
+    private customerChat: ChatCompletionRequestMessage[] = [];
 
     constructor(private readonly configService: ConfigService) {
         const openaiConfig = new Configuration({
@@ -26,6 +20,13 @@ export class OpenaiService {
     }
 
     async getMessage(message: Message) {
+
+        if (!this.customerChat.length) {
+            const prompt = 'Você é uma atendente de delivery de refeição da empresa Xptgh, você deve atender e receber pedidos dos clientes e atender da melhor forma possível. Informe o número do protocolo de atendimento ao cliente que é {{protocol}}.'
+            const protoc = 'BR6346463PA'
+            this.initPrompt(prompt, protoc);
+        }
+
         this.customerChat.push({
             role: 'user',
             content: message.body,
@@ -51,11 +52,20 @@ export class OpenaiService {
     }
 
     async setChatSystem(dto: DtoOpenaiChatSystem) {
-       /*  if (this.client) {
-            return await this.client.setProfileStatus(dto.profileStatus).then((result) => result)
-                .catch((error) => error);
-        } else {
-            throw new InternalServerErrorException('Whatsapp client is null');
-        } */
+        return new Promise<ChatCompletionRequestMessage>((resolve, reject) => {
+            let system: ChatCompletionRequestMessage = {
+                role: 'system',
+                content: (dto.systemContent),
+            }
+            this.customerChat[0] = system;
+            resolve(this.customerChat[0]);
+        });
+    }
+
+    private initPrompt(prompt: string, protocol: string): void {
+        this.customerChat.unshift({
+            role: 'system',
+            content: prompt.replace(/{{[\s]?protocol[\s]?}}/g, protocol)
+        });
     }
 }
