@@ -25,7 +25,7 @@ export class WhatsappController {
         description: 'name',
     })
     @ApiResponse({ status: 201, description: 'sucesso' })
-    async setProfilePic(@Body() dto: DtoWhatsappProfileName) {
+    async setProfileName(@Body() dto: DtoWhatsappProfileName) {
         return await this.whatsappService.setProfileName(dto);
     }
 }

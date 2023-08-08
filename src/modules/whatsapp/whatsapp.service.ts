@@ -86,8 +86,8 @@ export class WhatsappService {
     async setProfilePic(dto: DtoWhatsappProfilePic) {
         if (this.client) {
             const profilePic = dto.profilePic; //read file;
-            return await this.client.setProfilePic(profilePic).then((result) => result)
-                .catch((error) => error);
+           /*  return await this.client.setProfilePic(profilePic).then((result) => result)
+                .catch((error) => error); */
         } else {
             throw new InternalServerErrorException('Whatsapp client is null');
         }
