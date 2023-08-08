@@ -1,34 +1,16 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from 'openai';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { create, Message, SendFileResult, Whatsapp } from 'venom-bot';
+import { OpenaiService } from '../openai/openai.service';
+import { DtoWhatsappProfileName } from './dtos/whatsapp-profile-name.dto';
+import { DtoWhatsappProfileStatus } from './dtos/whatsapp-profile-status.dto';
+import { DtoWhatsappProfilePic } from './dtos/whatsapp-profile-pic.dto';
 
 @Injectable()
 export class WhatsappService {
 
-    private readonly logger = new Logger(WhatsappService.name);
+    private client: Whatsapp = null;
 
-    private openai: OpenAIApi;
-    private customerChat: ChatCompletionRequestMessage[] = [
-        {
-            role: 'system',
-            content:
-                'Você é uma atendente de delivery de refeição da empresa Sambli Gourmet, você deve atender e receber pedidos dos clientes e atender da melhor forma possível',
-        },
-    ];
-
-    private botMode = true;
-
-    constructor(private configService: ConfigService) {
-        const openaiConfig = new Configuration({
-            apiKey: this.configService.get<string>('openai.key'),
-
-        });
-        this.openai = new OpenAIApi(openaiConfig);
-        this.bot();
-    }
-
-    async bot() {
+    constructor(private readonly openaiService: OpenaiService) {
         create({
             session: 'session-sambli-gourmet-api',
             autoClose: 0
@@ -40,77 +22,19 @@ export class WhatsappService {
 
     private async start(client: Whatsapp) {
 
-        /* 
-        await client.setProfileStatus('Atendendo pedidos! 👱‍♀️');
-        await client.setProfileName('Sambli Gourmet');
-        await client.setProfilePic('src\\modules\\whatsapp\\img.jpg');
-        */
+        this.client = client;
 
         client.onMessage(async (message: Message) => {
-            switch (message.body) {
-                case 'bot-kill':
-                    this.botMode = false;
-                    break;
-                case 'bot-restore':
-                    this.botMode = true;
-                    break;
-            }
-
-            if (
-                message.body &&
-                !message.isGroupMsg &&
-                !['bot-kill', 'bot-restore'].includes(message.body)
-            ) {
-                if (this.botMode) {
-                    this.customerChat.push({
-                        role: 'user',
-                        content: message.body,
-                    });
-
+            if (message.body && !message.isGroupMsg) {
+                this.openaiService.getMessage(message).then(async response => {
                     console.log('message: ', message);
-
-                    const response =
-                        (await this.completion(this.customerChat)) || 'Não entendi...';
-
-                    this.customerChat.push({
-                        role: 'assistant',
-                        content: response,
-                    });
-
-                    //return await this.sendText(client, message.chatId, response);
+                    return await this.sendText(client, message.chatId, response);
                     //return await this.reply(client, message.chatId, response, message.id);
                     //return await this.sendImage(client, message.chatId, 'src\\modules\\whatsapp\\img.jpg', 'name', 'Image');
                     //return await this.sendLocation(client, message.chatId, { lat: '-1.722247', lng: '-48.879224' }, 'Location');
-                    const buttons = [
-                        {
-                            "buttonId": "1",
-                            "buttonText": {
-                                "displayText": "Text of Button 1"
-                            }
-                        },
-                        {
-                            "buttonId": "2",
-                            "buttonText": {
-                                "displayText": "Text of Button 2"
-                            }
-                        }
-                    ]
-                    return await this.sendButtons(client, message.chatId, 'Title', buttons, 'Description')
-                }
+                });
             }
         });
-    }
-
-    private async completion(
-        messages: ChatCompletionRequestMessage[],
-    ): Promise<string | undefined> {
-        const completion = await this.openai.createChatCompletion({
-            model: 'gpt-3.5-turbo',
-            temperature: 0.7,
-            max_tokens: 256,
-            messages: messages,
-        });
-        return completion.data.choices[0].message?.content;
     }
 
     private async sendText(client: Whatsapp, to: string, content: string): Promise<Object> {
@@ -136,8 +60,36 @@ export class WhatsappService {
             .catch((error) => error);
     }
 
-    private async sendButtons(client: Whatsapp, to: string, title: string, buttons: any, description: string): Promise<Object> {
+    /* private async sendButtons(client: Whatsapp, to: string, title: string, buttons: any, description: string): Promise<Object> {
         return await client.sendButtons(to, title, buttons, description).then((result) => result)
             .catch((error) => error);
+    } */
+
+    async setProfileStatus(dto: DtoWhatsappProfileStatus) {
+        if (this.client) {
+            return await this.client.setProfileStatus(dto.profileStatus).then((result) => result)
+                .catch((error) => error);
+        } else {
+            throw new InternalServerErrorException('Whatsapp client is null');
+        }
+    }
+
+    async setProfileName(dto: DtoWhatsappProfileName) {
+        if (this.client) {
+            return await this.client.setProfileName(dto.profileName).then((result) => result)
+                .catch((error) => error);
+        } else {
+            throw new InternalServerErrorException('Whatsapp client is null');
+        }
+    }
+
+    async setProfilePic(dto: DtoWhatsappProfilePic) {
+        if (this.client) {
+            const profilePic = dto.profilePic; //read file;
+           /*  return await this.client.setProfilePic(profilePic).then((result) => result)
+                .catch((error) => error); */
+        } else {
+            throw new InternalServerErrorException('Whatsapp client is null');
+        }
     }
 }
