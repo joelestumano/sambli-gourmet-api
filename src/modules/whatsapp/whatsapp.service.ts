@@ -24,11 +24,11 @@ export class WhatsappService {
             this.client = new Client(whatsapp);
             return await this.start(this.client);
         }).catch((error) => {
-            console.error('error: ', error);
+            throw new InternalServerErrorException(error);
         });
     }
 
-    private async start(client: Client) {
+    private async start(client: Client): Promise<void> {
         client.whatsapp.onMessage(async (message: Message) => {
             if (message.body && !message.isGroupMsg) {
                 this.openaiService.loadChat(message).then(async (response) => {
