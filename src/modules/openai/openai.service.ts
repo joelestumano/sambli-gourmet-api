@@ -20,13 +20,11 @@ export class OpenaiService {
     }
 
     async getMessage(message: Message) {
-
         if (!this.customerChat.length) {
             const prompt = 'Você é uma atendente de delivery de refeição da empresa Xptgh, você deve atender e receber pedidos dos clientes e atender da melhor forma possível. Informe o número do protocolo de atendimento ao cliente que é {{protocol}}.'
-            const protoc = 'BR6346463PA'
+            const protoc = 'TE' + this.fakeProtocol();
             this.initPrompt(prompt, protoc);
         }
-
         this.customerChat.push({
             role: 'user',
             content: message.body,
@@ -52,14 +50,14 @@ export class OpenaiService {
     }
 
     async setChatSystem(dto: DtoOpenaiChatSystem) {
-        return new Promise<ChatCompletionRequestMessage>((resolve, reject) => {
-            let system: ChatCompletionRequestMessage = {
-                role: 'system',
-                content: (dto.systemContent),
-            }
-            this.customerChat[0] = system;
-            resolve(this.customerChat[0]);
-        });
+        /*  return new Promise<ChatCompletionRequestMessage>((resolve, reject) => {
+             let system: ChatCompletionRequestMessage = {
+                 role: 'system',
+                 content: (dto.systemContent),
+             }
+             this.customerChat[0] = system;
+             resolve(this.customerChat[0]);
+         }); */
     }
 
     private initPrompt(prompt: string, protocol: string): void {
@@ -67,5 +65,10 @@ export class OpenaiService {
             role: 'system',
             content: prompt.replace(/{{[\s]?protocol[\s]?}}/g, protocol)
         });
+    }
+
+    fakeProtocol(): string {
+        var data = new Date();
+        return ("0" + data.getDate()).substr(-2) + ("0" + (data.getMonth() + 1)).substr(-2) + data.getFullYear() + Math.floor(1000 + Math.random() * 9000);
     }
 }

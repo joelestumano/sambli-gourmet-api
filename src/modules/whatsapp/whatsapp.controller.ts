@@ -1,8 +1,9 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, UploadedFile } from '@nestjs/common';
 import { WhatsappService } from './whatsapp.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DtoWhatsappProfileStatus } from './dtos/whatsapp-profile-status.dto';
 import { DtoWhatsappProfileName } from './dtos/whatsapp-profile-name.dto';
+import { UploadTempFile } from 'src/common/decorators/upload-file.decorator';
 
 @Controller('whatsapp')
 @ApiTags('whatsapp')
@@ -28,5 +29,16 @@ export class WhatsappController {
     @ApiResponse({ status: 201, description: 'sucesso' })
     async setProfileName(@Body() dto: DtoWhatsappProfileName) {
         return await this.whatsappService.setProfileName(dto);
+    }
+
+    @Post('set-profile-pic')
+    @ApiOperation({
+        summary: 'atualização da foto de perfil',
+        description: 'pic',
+    })
+    @ApiResponse({ status: 201, description: 'sucesso' })
+    @UploadTempFile()
+    async setProfilePic(@UploadedFile() file: Express.Multer.File) {
+        return await this.whatsappService.setProfilePic(file);
     }
 }

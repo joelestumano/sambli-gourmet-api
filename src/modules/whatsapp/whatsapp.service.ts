@@ -3,7 +3,6 @@ import { create, Message, SendFileResult, Whatsapp } from 'venom-bot';
 import { OpenaiService } from '../openai/openai.service';
 import { DtoWhatsappProfileName } from './dtos/whatsapp-profile-name.dto';
 import { DtoWhatsappProfileStatus } from './dtos/whatsapp-profile-status.dto';
-import { DtoWhatsappProfilePic } from './dtos/whatsapp-profile-pic.dto';
 
 @Injectable()
 export class WhatsappService {
@@ -26,6 +25,7 @@ export class WhatsappService {
 
         client.onMessage(async (message: Message) => {
             if (message.body && !message.isGroupMsg) {
+
                 this.openaiService.getMessage(message).then(async response => {
                     console.log('message: ', message);
                     return await this.sendText(client, message.chatId, response);
@@ -83,11 +83,14 @@ export class WhatsappService {
         }
     }
 
-    async setProfilePic(dto: DtoWhatsappProfilePic) {
+    async setProfilePic(file: Express.Multer.File): Promise<boolean> {
         if (this.client) {
-            const profilePic = dto.profilePic; //read file;
-           /*  return await this.client.setProfilePic(profilePic).then((result) => result)
-                .catch((error) => error); */
+            const pathToFilePic = `src/temp/${file.originalname}`;
+            return await this.client.setProfilePic(pathToFilePic).then((result) => {
+                const fs = require("fs")
+                fs.unlinkSync(pathToFilePic).catch((error: any) => { throw new InternalServerErrorException(error) })
+                return result;
+            }).catch((error) => error);
         } else {
             throw new InternalServerErrorException('Whatsapp client is null');
         }
