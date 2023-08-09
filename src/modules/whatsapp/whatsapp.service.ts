@@ -65,32 +65,29 @@ export class WhatsappService {
             .catch((error) => error);
     } */
 
-    async setProfileStatus(dto: DtoWhatsappProfileStatus) {
+    async setProfileStatus(dto: DtoWhatsappProfileStatus): Promise<void> {
         if (this.client) {
-            return await this.client.setProfileStatus(dto.profileStatus).then((result) => result)
-                .catch((error) => error);
+            await this.client.setProfileStatus(dto.profileStatus);
         } else {
             throw new InternalServerErrorException('Whatsapp client is null');
         }
     }
 
-    async setProfileName(dto: DtoWhatsappProfileName) {
+    async setProfileName(dto: DtoWhatsappProfileName): Promise<void> {
         if (this.client) {
-            return await this.client.setProfileName(dto.profileName).then((result) => result)
-                .catch((error) => error);
+            await this.client.setProfileName(dto.profileName);
         } else {
             throw new InternalServerErrorException('Whatsapp client is null');
         }
     }
 
-    async setProfilePic(file: Express.Multer.File): Promise<boolean> {
+    async setProfilePic(file: Express.Multer.File): Promise<void> {
         if (this.client) {
-            const picturePath = `src/temp/${file.originalname}`;
-            return await this.client.setProfilePic(picturePath).then((result) => {
+            const filePath = `src/temp/${file.originalname}`;
+            await this.client.setProfilePic(filePath).then(() => {
                 const fs = require("fs")
-                fs.unlinkSync(picturePath).catch((error: any) => { throw new InternalServerErrorException(error) })
-                return result;
-            }).catch((error) => error);
+                fs.unlinkSync(filePath).catch((error: any) => { throw new InternalServerErrorException(error) })
+            })
         } else {
             throw new InternalServerErrorException('Whatsapp client is null');
         }
