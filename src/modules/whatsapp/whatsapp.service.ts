@@ -85,10 +85,10 @@ export class WhatsappService {
 
     async setProfilePic(file: Express.Multer.File): Promise<boolean> {
         if (this.client) {
-            const pathToFilePic = `src/temp/${file.originalname}`;
-            return await this.client.setProfilePic(pathToFilePic).then((result) => {
+            const picturePath = `src/temp/${file.originalname}`;
+            return await this.client.setProfilePic(picturePath).then((result) => {
                 const fs = require("fs")
-                fs.unlinkSync(pathToFilePic).catch((error: any) => { throw new InternalServerErrorException(error) })
+                fs.unlinkSync(picturePath).catch((error: any) => { throw new InternalServerErrorException(error) })
                 return result;
             }).catch((error) => error);
         } else {
