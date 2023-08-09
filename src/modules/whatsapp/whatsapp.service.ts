@@ -3,7 +3,6 @@ import { create, Message, Whatsapp } from 'venom-bot';
 import { OpenaiService } from '../openai/openai.service';
 import { DtoWhatsappProfileName } from './dtos/whatsapp-profile-name.dto';
 import { DtoWhatsappProfileStatus } from './dtos/whatsapp-profile-status.dto';
-import { error } from 'console';
 
 class Client {
     whatsapp: Whatsapp;
