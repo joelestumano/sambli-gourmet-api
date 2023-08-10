@@ -2,10 +2,13 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { WhatsappModule } from './modules/whatsapp/whatsapp.module';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { getEnvPath } from './common/helper/env.helper';
 import openapi from './common/configs/openai.config';
+import dbconfig from './common/configs/db.config';
 import { OpenaiModule } from './modules/openai/openai.module';
+import { MongooseModule } from '@nestjs/mongoose';
+import { ProdutosModule } from './modules/produtos/produtos.module';
 
 const envFilePath: string = getEnvPath(`${__dirname}/common/envs/`);
 
@@ -13,10 +16,18 @@ const envFilePath: string = getEnvPath(`${__dirname}/common/envs/`);
   imports: [
     OpenaiModule,
     WhatsappModule,
+    ProdutosModule,
     ConfigModule.forRoot({
       envFilePath: envFilePath,
       isGlobal: true,
-      load: [openapi],
+      load: [openapi, dbconfig],
+    }),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get<string>('dbconfig.host'),
+      }),
+      inject: [ConfigService],
     }),
   ],
   controllers: [AppController],

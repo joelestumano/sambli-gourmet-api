@@ -3,11 +3,12 @@ import { ConfigService } from '@nestjs/config';
 import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from 'openai';
 import { Message } from 'venom-bot';
 import { OpenaiChatSystemDto } from './dtos/openai-chat-system.dto';
-import { PromptService } from './prompt/prompt.service';
+import { OpenaiPromptService } from './openai-prompt.service';
 
 type Call = {
     chatId: string;
     messages: ChatCompletionRequestMessage[];
+    status: 'open' | 'close';
 };
 
 @Injectable()
@@ -17,7 +18,7 @@ export class OpenaiService {
     private calls: Call[] = [];
 
     constructor(private readonly configService: ConfigService,
-        private readonly promptService: PromptService) {
+        private readonly promptService: OpenaiPromptService) {
         const openaiConfig = new Configuration({
             apiKey: this.configService.get<string>('openai.key'),
         });
@@ -44,7 +45,7 @@ export class OpenaiService {
     ): Promise<string | undefined> {
         const completion = await this.openai.createChatCompletion({
             model: 'gpt-3.5-turbo',
-            temperature: 0.7,
+            temperature: 0.2,
             max_tokens: 256,
             messages: messages,
         });
@@ -65,10 +66,11 @@ export class OpenaiService {
                         message.sender.pushname,
                         this.fakeProtocol(),
                     ),
+                    status: 'open'
                 };
                 this.calls.push(call);
                 resolve(call.messages);
-            }
+            } console.log(message)
         });
     }
 
