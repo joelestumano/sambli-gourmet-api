@@ -1,11 +1,13 @@
 import { Module } from '@nestjs/common';
 import { OpenaiController } from './openai.controller';
 import { OpenaiService } from './openai.service';
-import { PromptService } from './prompt/prompt.service';
+import { OpenaiPromptService } from './openai-prompt.service';
+import { ProdutosModule } from '../produtos/produtos.module';
 
 @Module({
   controllers: [OpenaiController],
-  providers: [OpenaiService, PromptService],
+  providers: [OpenaiService, OpenaiPromptService],
+  imports: [ProdutosModule],
   exports: [OpenaiService]
 })
 export class OpenaiModule { }

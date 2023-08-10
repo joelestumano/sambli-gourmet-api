@@ -14,7 +14,7 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 export class OpenaiController {
     constructor(private readonly openaiService: OpenaiService) { }
 
-    @Post('set-chat-system')
+    /* @Post('set-chat-system')
     @UsePipes(new ValidationPipe({ transform: true }))
     @ApiOperation({
         summary: 'atualização do chat system',
@@ -23,5 +23,5 @@ export class OpenaiController {
     @ApiResponse({ status: 201, description: 'sucesso' })
     async setChatSystem(@Body() dto: OpenaiChatSystemDto) {
         return await this.openaiService.setChatSystem(dto);
-    }
+    } */
 }

@@ -3,7 +3,7 @@ import { PaginateQueryProdutoDto } from './dtos/paginate-query-produto.dto';
 import { Model, PaginateModel, PaginateOptions, PaginateResult } from 'mongoose';
 import { PaginateConfig } from 'src/common/paginate/paginate-config';
 import { InjectModel } from '@nestjs/mongoose';
-import { Produto, ProdutoDocument } from './entities/produto.entity';
+import { Produto, ProdutoDocument, ProdutoProps } from './entities/produto.entity';
 import { ProdutoCreateDto } from './dtos/produto-create.dto';
 
 @Injectable()
@@ -13,12 +13,16 @@ export class ProdutosService {
 
     async create(dto: ProdutoCreateDto): Promise<Produto> {
         const { descricao } = dto;
-        const fund = await this.produtoModel.findOne({ descricao }).exec();
-        if (fund) {
+        const find = await this.produtoModel.findOne({ descricao }).exec();
+        if (find) {
             throw new BadRequestException(`o argumento ${descricao} não pode ser usado`);
         }
         const produto = await new this.produtoModel(dto).save();
         return produto;
+    }
+
+    async list(): Promise<Produto[]> {
+        return await this.produtoModel.find({ active: true, isDeleted: false }).sort({ [ProdutoProps.descricao]: 1 }).exec();
     }
 
     async paginate(dto: PaginateQueryProdutoDto): Promise<PaginateResult<any>> {

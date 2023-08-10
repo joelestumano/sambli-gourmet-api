@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from 'openai';
 import { Message } from 'venom-bot';
 import { OpenaiChatSystemDto } from './dtos/openai-chat-system.dto';
-import { PromptService } from './prompt/prompt.service';
+import { OpenaiPromptService } from './openai-prompt.service';
 
 type Call = {
     chatId: string;
@@ -18,7 +18,7 @@ export class OpenaiService {
     private calls: Call[] = [];
 
     constructor(private readonly configService: ConfigService,
-        private readonly promptService: PromptService) {
+        private readonly promptService: OpenaiPromptService) {
         const openaiConfig = new Configuration({
             apiKey: this.configService.get<string>('openai.key'),
         });

@@ -1,22 +1,35 @@
 import { Injectable } from '@nestjs/common';
-import { BusinessEnum } from '../enums/business.enum';
+import { BusinessEnum } from './enums/business.enum';
+import { ProdutosService } from 'src/modules/produtos/produtos.service';
 
 @Injectable()
-export class PromptService {
+export class OpenaiPromptService {
+
     private source = {
         business: BusinessEnum.food,
         company: 'XptgH Company',
+        produtos: ''
     };
 
     private prompt: string = '';
+
+    constructor(private readonly produtosService: ProdutosService) {
+
+        this.produtosService.list().then(produtos => {
+            produtos.forEach((produto, index) => {
+                this.source.produtos += ` - ${index + 1}. ${produto.descricao}. R$ ${produto.valor} \n`
+            });
+        })
+
+    }
 
     readPrompt(): string {
         this.prompt = `Você é uma atendente de delivery de ${this.source.business} da empresa ${this.source.company}, você deve atender os pedidos do cliente da melhor forma possível. 
          
         Muita atenção, não se esqueça de: 
 
-         - atender o cliente pelo nome que é {{name}}
-         - de informar o número do protocolo de atendimento ao cliente que é {{protocol}}
+         - atender o cliente pelo nome que é {{name}} 
+         - de informar o número do protocolo de atendimento ao cliente que é {{protocol}} 
 
         O roteiro de atendimento é:
 
@@ -27,9 +40,7 @@ export class PromptService {
          
         Cardápio de ${this.source.business} (o número da opção está no início de cada item):
 
-        - 1. Chocolate: Chocolate ao leite e granulado. R$ 70,00
-        - 2. Romeu e Julieta: Goiabada e queijo mussarela. R$ 82,50
-        - 3. California: Banana, canela e açúcar. R$ 130,00 `;
+        ${this.source.produtos}`;
 
         return this.prompt;
     }
