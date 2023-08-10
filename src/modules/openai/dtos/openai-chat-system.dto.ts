@@ -1,14 +1,26 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsEnum, IsNotEmpty, IsString } from "class-validator";
+import { BusinessEnum } from "../enums/business.enum";
+import { Transform } from "class-transformer";
 
-export class DtoOpenaiChatSystem {
+export class OpenaiChatSystemDto {
     @ApiProperty({
-        description: 'systemContent',
-        example: 'Você é uma atendente de delivery de refeição da empresa Xptgh, você deve atender e receber pedidos dos clientes e atender da melhor forma possível',
+        description: 'company',
+        example: 'Best Delivery',
     })
     @IsNotEmpty({
-        message: 'o systemContent deve ser informado',
+        message: 'o company deve ser informado',
     })
     @IsString()
-    systemContent: string;
+    company: string;
+
+    @ApiProperty({
+        description: 'business (ramo de atividade)',
+        example: BusinessEnum.bakery,
+        enum: BusinessEnum,
+        enumName: 'Business'
+    })
+    @IsEnum(BusinessEnum)
+    @Transform((business) => business.value.toLowerCase())
+    business: BusinessEnum;
 }
