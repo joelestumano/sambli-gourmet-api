@@ -1,20 +1,21 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
 import { create, Message, Whatsapp } from 'venom-bot';
 import { OpenaiService } from '../openai/openai.service';
 import { DtoWhatsappProfileName } from './dtos/whatsapp-profile-name.dto';
 import { DtoWhatsappProfileStatus } from './dtos/whatsapp-profile-status.dto';
 
 class Client {
-    whatsapp: Whatsapp;
-    constructor(whatsapp: Whatsapp) {
-        this.whatsapp = whatsapp;
+    constructor(private readonly whatsapp: Whatsapp) { }
+    getWhatsapp(): Whatsapp {
+        return this.whatsapp;
     }
 }
 
 @Injectable()
 export class WhatsappService {
 
-    private client: Client = null;
+    private readonly logger = new Logger(WhatsappService.name);
+    private client: Client;
 
     constructor(private readonly openaiService: OpenaiService) {
         create({
@@ -29,23 +30,28 @@ export class WhatsappService {
     }
 
     private async start(client: Client): Promise<void> {
-        client.whatsapp.onMessage(async (message: Message) => {
+        client.getWhatsapp().onMessage(async (message: Message) => {
             if (message.body && !message.isGroupMsg) {
-                this.openaiService.loadChat(message).then(async (response) => {
+                this.openaiService.loadChat(message).then(async (content) => {
 
-                    return await client.whatsapp.sendText(message.chatId, `👱‍♀️ ${response}`)
-                        .then((result) => result)
+                    this.logger.log(message.body);
+
+                    return await client.getWhatsapp().sendText(message.chatId, `👱‍♀️ ${content}`)
+                        .then((result: any) => {
+                            this.logger.log(result.text);
+                            return result;
+                        })
                         .catch((error) => error);
 
-                    /* return await client.whatsapp.reply(message.chatId, `👱‍♀️ ${response}`, message.id)
+                    /* return await client.getWhatsapp().reply(message.chatId, `👱‍♀️ ${content}`, message.id)
                         .then((result) => result)
                         .catch((error) => error); */
 
-                    /* return await client.whatsapp.sendImage(message.chatId, 'src\\temp\\banner.jpg', 'Banner', 'Caption')
+                    /* return await client.getWhatsapp().sendImage(message.chatId, 'src\\temp\\banner.jpg', 'Banner', 'Caption')
                         .then((result) => result)
                         .catch((error) => error); */
 
-                    /* return await client.whatsapp.sendLocation(message.chatId, '-1.722247', '-48.879224', 'Location')
+                    /* return await client.getWhatsapp().sendLocation(message.chatId, '-1.722247', '-48.879224', 'Location')
                         .then((result) => result)
                         .catch((error) => error); */
 
@@ -56,7 +62,7 @@ export class WhatsappService {
 
     async setProfileStatus(dto: DtoWhatsappProfileStatus): Promise<void> {
         if (this.client) {
-            await this.client.whatsapp.setProfileStatus(dto.profileStatus);
+            await this.client.getWhatsapp().setProfileStatus(dto.profileStatus);
         } else {
             throw new InternalServerErrorException('Whatsapp client is null');
         }
@@ -64,7 +70,7 @@ export class WhatsappService {
 
     async setProfileName(dto: DtoWhatsappProfileName): Promise<void> {
         if (this.client) {
-            await this.client.whatsapp.setProfileName(dto.profileName);
+            await this.client.getWhatsapp().setProfileName(dto.profileName);
         } else {
             throw new InternalServerErrorException('Whatsapp client is null');
         }
@@ -73,7 +79,7 @@ export class WhatsappService {
     async setProfilePic(file: Express.Multer.File): Promise<void> {
         if (this.client) {
             const filePath = `src/temp/${file.originalname}`;
-            await this.client.whatsapp.setProfilePic(filePath).then(() => {
+            await this.client.getWhatsapp().setProfilePic(filePath).then(() => {
                 const fs = require('fs');
                 fs.unlinkSync(filePath, (err: any) => {
                     if (err) {
