@@ -8,6 +8,7 @@ import openapi from './common/configs/openai.config';
 import dbconfig from './common/configs/db.config';
 import { OpenaiModule } from './modules/openai/openai.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ProdutosModule } from './modules/produtos/produtos.module';
 
 const envFilePath: string = getEnvPath(`${__dirname}/common/envs/`);
 
@@ -15,6 +16,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/common/envs/`);
   imports: [
     OpenaiModule,
     WhatsappModule,
+    ProdutosModule,
     ConfigModule.forRoot({
       envFilePath: envFilePath,
       isGlobal: true,
