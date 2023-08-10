@@ -8,6 +8,7 @@ import { PromptService } from './prompt/prompt.service';
 type Call = {
     chatId: string;
     messages: ChatCompletionRequestMessage[];
+    status: 'open' | 'close';
 };
 
 @Injectable()
@@ -44,7 +45,7 @@ export class OpenaiService {
     ): Promise<string | undefined> {
         const completion = await this.openai.createChatCompletion({
             model: 'gpt-3.5-turbo',
-            temperature: 0.7,
+            temperature: 0.2,
             max_tokens: 256,
             messages: messages,
         });
@@ -65,10 +66,11 @@ export class OpenaiService {
                         message.sender.pushname,
                         this.fakeProtocol(),
                     ),
+                    status: 'open'
                 };
                 this.calls.push(call);
                 resolve(call.messages);
-            }
+            } console.log(message)
         });
     }
 
