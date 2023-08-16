@@ -6,11 +6,12 @@ import { OpenaiChatSystemDto } from './dtos/openai-chat-system.dto';
 import { OpenaiPromptService } from './openai-prompt.service';
 import { ECallState } from './enums/openai.enum';
 import { OrdersService } from '../orders/orders.service';
+import { Order, OrderStatus } from '../orders/entities/order.entity';
 
 type Call = {
     chatId: string;
     messages: ChatCompletionRequestMessage[];
-    protocol: string;
+    orderId: string;
     status: ECallState;
 };
 
@@ -46,9 +47,25 @@ export class OpenaiService {
                 content: content,
             });
 
-            if ((call.status === ECallState.open) && message.content.match(call.protocol)) {
+            if ((call.status === ECallState.open) && message.content.match(call.orderId)) {
                 call.status = ECallState.close;
-                this.calls = this.calls.filter(c => c.status === ECallState.open);
+
+                this.calls = this.calls.filter(c => c.status === ECallState.open && c.chatId !== message.chatId);
+
+                const order: Order = {
+                    active: true,
+                    client: message.sender.pushname,
+                    descricao: content,
+                    isDeleted: false,
+                    order: call.orderId,
+                    status: OrderStatus.pending,
+                    whatsapp: call.chatId
+                }
+
+                await this.ordersService.create(order).then(result => {
+                    console.log(result);
+                });
+
             }
 
             return content;
@@ -83,7 +100,7 @@ export class OpenaiService {
                         message.sender.pushname,
                         fakeProtocol,
                     ),
-                    protocol: fakeProtocol,
+                    orderId: fakeProtocol,
                     status: ECallState.open,
                 };
                 this.calls.push(newCall);
@@ -94,21 +111,21 @@ export class OpenaiService {
 
     private initPrompt(
         name: string,
-        protocol: string,
+        orderId: string,
     ): ChatCompletionRequestMessage[] {
         let customer: ChatCompletionRequestMessage[] = [];
         customer.unshift({
             role: 'system',
-            content: this.applyPatternReplace(name, protocol),
+            content: this.applyPatternReplace(name, orderId),
         });
         return customer;
     }
 
-    private applyPatternReplace(name: string, protocol: string): string {
+    private applyPatternReplace(name: string, orderId: string): string {
         return this.promptService
             .readPrompt()
             .replace(/{{[\s]?name[\s]?}}/g, name)
-            .replace(/{{[\s]?protocol[\s]?}}/g, protocol);
+            .replace(/{{[\s]?orderId[\s]?}}/g, orderId);
     }
 
     private fakeProtocol(): string {
