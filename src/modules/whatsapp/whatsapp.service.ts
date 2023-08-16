@@ -19,7 +19,7 @@ export class WhatsappService {
 
     constructor(private readonly openaiService: OpenaiService) {
         create({
-            session: 'session-sambli-gourmet-api',
+            session: 'session-sg-api',
             autoClose: 0,
         }).then(async (whatsapp: Whatsapp) => {
             this.client = new Client(whatsapp);

@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { BusinessEnum } from './enums/business.enum';
+import { EBusiness } from './enums/openai.enum';
 import { ProdutosService } from 'src/modules/produtos/produtos.service';
 
 @Injectable()
 export class OpenaiPromptService {
 
     private source = {
-        business: BusinessEnum.food,
+        business: EBusiness.food,
         company: 'XptgH Company',
         produtos: ''
     };
@@ -36,16 +36,18 @@ export class OpenaiPromptService {
         - 1. Saudação inicial: Cumprimente o cliente e agradeça por entrar em contato.
         - 4. Cardápio:  Envie a lista resumida apenas com os nomes das opções do cardápio e pergunte ao cliente ele deseja pedir.
 
-        Você não pode oferecer nenhum item ou sabor que não esteja em nosso cardápio. Siga estritamente as listas de opções aseguir:
+        Você não pode oferecer nenhum item ou sabor que não esteja em nosso cardápio. Siga estritamente as listas de opções a seguir:
          
         Cardápio de ${this.source.business} (o número da opção está no início de cada item):
 
-        ${this.source.produtos}`;
+        ${this.source.produtos} \n
+        
+        Para confirmar o pedido, solicite ao cliente que informe o número do protocolo de seu atendimento.`
 
         return this.prompt;
     }
 
-    updatePrompt(args: { business: BusinessEnum; company: string }): string {
+    updatePrompt(args: { business: EBusiness; company: string }): string {
         this.source.business = args.business;
         this.source.company = args.company;
         this.prompt = `Você é uma atendente de delivery de ${this.source.business} da empresa ${this.source.company}, você deve atender os pedidos do cliente da melhor forma possível. 

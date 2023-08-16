@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsEnum, IsNotEmpty, IsString } from "class-validator";
-import { BusinessEnum } from "../enums/business.enum";
+import { EBusiness } from "../enums/openai.enum";
 import { Transform } from "class-transformer";
 
 export class OpenaiChatSystemDto {
@@ -16,11 +16,11 @@ export class OpenaiChatSystemDto {
 
     @ApiProperty({
         description: 'business (ramo de atividade)',
-        example: BusinessEnum.bakery,
-        enum: BusinessEnum,
+        example: EBusiness.bakery,
+        enum: EBusiness,
         enumName: 'Business'
     })
-    @IsEnum(BusinessEnum)
+    @IsEnum(EBusiness)
     @Transform((business) => business.value.toLowerCase())
-    business: BusinessEnum;
+    business: EBusiness;
 }

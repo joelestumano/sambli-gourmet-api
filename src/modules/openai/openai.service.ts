@@ -4,11 +4,14 @@ import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from 'openai';
 import { Message } from 'venom-bot';
 import { OpenaiChatSystemDto } from './dtos/openai-chat-system.dto';
 import { OpenaiPromptService } from './openai-prompt.service';
+import { ECallState } from './enums/openai.enum';
+import { OrdersService } from '../orders/orders.service';
 
 type Call = {
     chatId: string;
     messages: ChatCompletionRequestMessage[];
-    status: 'open' | 'close';
+    protocol: string;
+    status: ECallState;
 };
 
 @Injectable()
@@ -17,8 +20,11 @@ export class OpenaiService {
     private readonly openai: OpenAIApi;
     private calls: Call[] = [];
 
-    constructor(private readonly configService: ConfigService,
-        private readonly promptService: OpenaiPromptService) {
+    constructor(
+        private readonly configService: ConfigService,
+        private readonly promptService: OpenaiPromptService,
+        private readonly ordersService: OrdersService
+    ) {
         const openaiConfig = new Configuration({
             apiKey: this.configService.get<string>('openai.key'),
         });
@@ -26,17 +32,27 @@ export class OpenaiService {
     }
 
     async loadChat(message: Message): Promise<string> {
-        return await this.loadPrompt(message).then(async (chats) => {
-            chats.push({
+        return await this.loadPrompt(message).then(async (call: Call) => {
+
+            call.messages.push({
                 role: 'user',
                 content: message.body,
             });
-            const content = (await this.completion(chats)) || 'Não entendi...';
-            chats.push({
+
+            const content = (await this.completion(call.messages)) || 'Não entendi...';
+
+            call.messages.push({
                 role: 'assistant',
                 content: content,
             });
+
+            if ((call.status === ECallState.open) && message.content.match(call.protocol)) {
+                call.status = ECallState.close;
+                this.calls = this.calls.filter(c => c.status === ECallState.open);
+            }
+
             return content;
+
         });
     }
 
@@ -52,25 +68,27 @@ export class OpenaiService {
         return completion.data.choices[0].message?.content;
     }
 
-    private async loadPrompt(
-        message: Message,
-    ): Promise<ChatCompletionRequestMessage[]> {
-        return new Promise<ChatCompletionRequestMessage[]>((resolve, reject) => {
-            let call = this.calls.find((call) => call.chatId === message.chatId);
-            if (call) {
-                resolve(call.messages);
+    private async loadPrompt(message: Message): Promise<Call> {
+        return new Promise<Call>((resolve, reject) => {
+            let callRetrieved = this.calls.find(
+                (retrieved) => retrieved.chatId === message.chatId,
+            );
+            if (callRetrieved) {
+                resolve(callRetrieved);
             } else {
-                let call: Call = {
+                let fakeProtocol = this.fakeProtocol();
+                let newCall: Call = {
                     chatId: message.chatId,
                     messages: this.initPrompt(
                         message.sender.pushname,
-                        this.fakeProtocol(),
+                        fakeProtocol,
                     ),
-                    status: 'open'
+                    protocol: fakeProtocol,
+                    status: ECallState.open,
                 };
-                this.calls.push(call);
-                resolve(call.messages);
-            } console.log(message)
+                this.calls.push(newCall);
+                resolve(newCall);
+            }
         });
     }
 
@@ -87,7 +105,8 @@ export class OpenaiService {
     }
 
     private applyPatternReplace(name: string, protocol: string): string {
-        return this.promptService.readPrompt()
+        return this.promptService
+            .readPrompt()
             .replace(/{{[\s]?name[\s]?}}/g, name)
             .replace(/{{[\s]?protocol[\s]?}}/g, protocol);
     }
@@ -104,7 +123,10 @@ export class OpenaiService {
 
     async setChatSystem(dto: OpenaiChatSystemDto) {
         return new Promise<string>((resolve, reject) => {
-            this.promptService.updatePrompt({ business: dto.business, company: dto.company })
+            this.promptService.updatePrompt({
+                business: dto.business,
+                company: dto.company,
+            });
             resolve(this.promptService.readPrompt());
         });
     }
