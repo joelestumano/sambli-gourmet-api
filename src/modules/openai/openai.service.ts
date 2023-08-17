@@ -8,6 +8,18 @@ import { ECallState } from './enums/openai.enum';
 import { OrdersService } from '../orders/orders.service';
 import { Order, OrderStatus } from '../orders/entities/order.entity';
 
+export enum WhatsappMessageType {
+    text = 'text',
+    reply = 'reply',
+    location = 'location',
+    image = 'image'
+}
+
+export interface OpenaiBotMessage {
+    message: string;
+    type: WhatsappMessageType
+}
+
 type Call = {
     chatId: string;
     messages: ChatCompletionRequestMessage[];
@@ -32,8 +44,8 @@ export class OpenaiService {
         this.openai = new OpenAIApi(openaiConfig);
     }
 
-    async loadChat(message: Message): Promise<string> {
-        return await this.loadPrompt(message).then(async (call: Call) => {
+    async botMessage(message: Message): Promise<OpenaiBotMessage> {
+        return await this.loadCall(message).then(async (call: Call) => {
 
             call.messages.push({
                 role: 'user',
@@ -68,14 +80,12 @@ export class OpenaiService {
 
             }
 
-            return content;
+            return { message: content, type: WhatsappMessageType.text };
 
         });
     }
 
-    private async completion(
-        messages: ChatCompletionRequestMessage[],
-    ): Promise<string | undefined> {
+    private async completion(messages: ChatCompletionRequestMessage[]): Promise<string | undefined> {
         const completion = await this.openai.createChatCompletion({
             model: 'gpt-3.5-turbo',
             temperature: 0,
@@ -85,47 +95,37 @@ export class OpenaiService {
         return completion.data.choices[0].message?.content;
     }
 
-    private async loadPrompt(message: Message): Promise<Call> {
+    private async loadCall(message: Message): Promise<Call> {
         return new Promise<Call>((resolve, reject) => {
-            let callRetrieved = this.calls.find(
-                (retrieved) => retrieved.chatId === message.chatId,
-            );
+            let callRetrieved = this.calls.find((retrieved) => retrieved.chatId === message.chatId);
             if (callRetrieved) {
                 resolve(callRetrieved);
             } else {
                 let fakeProtocol = this.fakeProtocol();
-                let newCall: Call = {
-                    chatId: message.chatId,
-                    messages: this.initPrompt(
-                        message.sender.pushname,
-                        fakeProtocol,
-                    ),
-                    orderId: fakeProtocol,
-                    status: ECallState.open,
-                };
-                this.calls.push(newCall);
-                resolve(newCall);
+                this.initPrompt(message.sender.pushname, fakeProtocol).then(init => {
+                    let newCall: Call = {
+                        chatId: message.chatId,
+                        messages: init,
+                        orderId: fakeProtocol,
+                        status: ECallState.open,
+                    };
+                    this.calls.push(newCall);
+                    resolve(newCall);
+                })
             }
         });
     }
 
-    private initPrompt(
-        name: string,
-        orderId: string,
-    ): ChatCompletionRequestMessage[] {
+    private async initPrompt(name: string, orderId: string): Promise<ChatCompletionRequestMessage[]> {
         let customer: ChatCompletionRequestMessage[] = [];
-        customer.unshift({
-            role: 'system',
-            content: this.applyPatternReplace(name, orderId),
-        });
+        this.promptService.readPrompt().then((prompt: string) => {
+            prompt.replace(/{{[\s]?name[\s]?}}/g, name).replace(/{{[\s]?orderId[\s]?}}/g, orderId);
+            customer.unshift({
+                role: 'system',
+                content: prompt,
+            });
+        })
         return customer;
-    }
-
-    private applyPatternReplace(name: string, orderId: string): string {
-        return this.promptService
-            .readPrompt()
-            .replace(/{{[\s]?name[\s]?}}/g, name)
-            .replace(/{{[\s]?orderId[\s]?}}/g, orderId);
     }
 
     private fakeProtocol(): string {

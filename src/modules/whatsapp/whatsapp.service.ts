@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
 import { create, Message, Whatsapp } from 'venom-bot';
-import { OpenaiService } from '../openai/openai.service';
+import { OpenaiBotMessage, OpenaiService, WhatsappMessageType } from '../openai/openai.service';
 import { DtoWhatsappProfileName } from './dtos/whatsapp-profile-name.dto';
 import { DtoWhatsappProfileStatus } from './dtos/whatsapp-profile-status.dto';
 
@@ -32,16 +32,20 @@ export class WhatsappService {
     private async start(client: Client): Promise<void> {
         client.getWhatsapp().onMessage(async (message: Message) => {
             if (message.body && !message.isGroupMsg) {
-                this.openaiService.loadChat(message).then(async (content) => {
+
+                this.openaiService.botMessage(message).then(async (botMessage: OpenaiBotMessage) => {
+
+                    switch (botMessage.type) {
+                        case WhatsappMessageType.text:
+                            return await client.getWhatsapp().sendText(message.chatId, `👱‍♀️ ${botMessage.message}`)
+                                .then((result: any) => {
+                                    this.logger.log(result.text);
+                                    return result;
+                                })
+                                .catch((error) => error);
+                    }
 
                     this.logger.log(message.body);
-
-                    return await client.getWhatsapp().sendText(message.chatId, `👱‍♀️ ${content}`)
-                        .then((result: any) => {
-                            this.logger.log(result.text);
-                            return result;
-                        })
-                        .catch((error) => error);
 
                     /* return await client.getWhatsapp().reply(message.chatId, `👱‍♀️ ${content}`, message.id)
                         .then((result) => result)
@@ -56,6 +60,7 @@ export class WhatsappService {
                         .catch((error) => error); */
 
                 });
+
             }
         });
     }
