@@ -1,8 +1,10 @@
-import { Body, Controller, Get, Post, Query, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Query, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ProdutosService } from './produtos.service';
 import { PaginateQueryProdutoDto } from './dtos/paginate-query-produto.dto';
 import { ProdutoCreateDto } from './dtos/produto-create.dto';
+import { ProdutoUpdateDto } from './dtos/produto-update.dto';
+import { ParamIdDto } from '../../common/dtos/param-id.dto';
 
 @Controller('produtos')
 @ApiTags('produtos')
@@ -28,5 +30,16 @@ export class ProdutosController {
     @UsePipes(new ValidationPipe({ transform: true }))
     async paginate(@Query() query: PaginateQueryProdutoDto) {
         return await this.produtosService.paginate(query);
+    }
+
+    @Patch('update/:id')
+    @ApiOperation({
+        summary: 'atualiza informações de um produto',
+        description: 'atualiza um produto',
+    })
+    @ApiResponse({ status: 200, description: 'sucesso' })
+    async update(@Param() { id }: ParamIdDto,
+        @Body() dto: ProdutoUpdateDto) {
+        return await this.produtosService.update(id, dto);
     }
 }
