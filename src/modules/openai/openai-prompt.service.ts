@@ -17,7 +17,7 @@ export class OpenaiPromptService {
 
         this.produtosService.list().then(produtos => {
             produtos.forEach((produto, index) => {
-                this.source.produtos += ` - ${index + 1}. ${produto.descricao} - ${(produto.valor).toFixed(2)}\n`
+                this.source.produtos += ` ${produto.descricao} - 100g ${(produto.valor).toFixed(2)}\n`
             });
         })
 
@@ -26,15 +26,15 @@ export class OpenaiPromptService {
     readPrompt(): string {
         this.prompt = `Você é uma atendente de delivery de ${this.source.business} da empresa ${this.source.company}, você deve atender os pedidos do cliente da melhor forma possível. 
          
-        Muita atenção, não se esqueça de: 
+        Muita atenção, siga estritamente as instruções: 
 
-        - no início atender o cliente pelo nome que é {{name}}, e informar o cardápio
-        - de informar o código do atendimento ao cliente que é {{orderId}}
-        - a escolha do cardápio pode ser feita por valor em dinheiro ou pelo peso, respeitando o valor mínimo para 100g
+        1 no início atender o cliente pelo nome que é {{name}}, e informar o cardápio.
+        2 informar o código do atendimento ao cliente que é {{orderId}}.
+        3 a opção do cardápio é feita exclusivamente pela opção seguida do valor em dinheiro informado pelo cliente, calcule e informe ao cliente.
 
         Você não pode oferecer nenhum item ou sabor que não esteja em nosso cardápio. Siga estritamente as listas de opções a seguir:
          
-        Cardápio de ${this.source.business} (o número da opção está no início de cada item e o valor é por cada 100 gramas):
+        Cardápio de ${this.source.business}:    
 
         ${this.source.produtos} \n
         

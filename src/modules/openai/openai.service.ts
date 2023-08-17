@@ -78,7 +78,7 @@ export class OpenaiService {
     ): Promise<string | undefined> {
         const completion = await this.openai.createChatCompletion({
             model: 'gpt-3.5-turbo',
-            temperature: 0.2,
+            temperature: 0,
             max_tokens: 256,
             messages: messages,
         });
