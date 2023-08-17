@@ -70,7 +70,7 @@ export class OpenaiService {
                     isDeleted: false,
                     order: call.orderId,
                     status: OrderStatus.pending,
-                    whatsapp: call.chatId
+                    whatsapp: `+${call.chatId.replace('@c.us', '')}`
                 }
 
                 await this.ordersService.create(order).then(result => {

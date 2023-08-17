@@ -30,7 +30,9 @@ export class OpenaiPromptService {
             - informar o código do atendimento ao cliente que é {{orderId}}.
             - o cliente pode pedir uma ou mais opções do cardápio.
             - as opções são vendidas por valor em dinheiro informado pelo cliente, exemplo: 10 reais da opção 1.
-            - pergunte ao cliente quantos reais ele deseja gastar para a opção ou opções escolidas do cardápio. 
+            - todas as opções do cardápio são vendidas a partir de 100 gramas.
+            - pergunte ao cliente quantos reais ele deseja gastar para a opção ou opções escolidas do cardápio.
+            - forneça um exemplo de como o cliente pode fazer o pedido (ex: quero 5 reais da opção 1 e 8 reais da opção 2).
             - não existe cobrança de valores adicionais de nenhuma natureza.
             - a moeda é somente em Real brasileiro.
             - você não pode oferecer nenhum item que não esteja em nosso cardápio.
