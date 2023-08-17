@@ -2,7 +2,6 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from 'openai';
 import { Message } from 'venom-bot';
-import { OpenaiChatSystemDto } from './dtos/openai-chat-system.dto';
 import { OpenaiPromptService } from './openai-prompt.service';
 import { ECallState } from './enums/openai.enum';
 import { OrdersService } from '../orders/orders.service';
@@ -16,7 +15,7 @@ export enum WhatsappMessageType {
 }
 
 export interface OpenaiBotMessage {
-    message: string;
+    response: string;
     type: WhatsappMessageType
 }
 
@@ -52,11 +51,11 @@ export class OpenaiService {
                 content: message.body,
             });
 
-            const content = (await this.completion(call.messages)) || 'Não entendi...';
+            const botResponse = (await this.completion(call.messages)) || 'Não entendi...';
 
             call.messages.push({
                 role: 'assistant',
-                content: content,
+                content: botResponse,
             });
 
             if ((call.status === ECallState.open) && message.content.match(call.orderId)) {
@@ -67,7 +66,7 @@ export class OpenaiService {
                 const order: Order = {
                     active: true,
                     client: message.sender.pushname,
-                    descricao: content,
+                    descricao: botResponse,
                     isDeleted: false,
                     order: call.orderId,
                     status: OrderStatus.pending,
@@ -80,7 +79,7 @@ export class OpenaiService {
 
             }
 
-            return { message: content, type: WhatsappMessageType.text };
+            return { response: botResponse, type: WhatsappMessageType.text };
 
         });
     }
@@ -101,7 +100,7 @@ export class OpenaiService {
             if (callRetrieved) {
                 resolve(callRetrieved);
             } else {
-                let fakeProtocol = this.fakeProtocol();
+                const fakeProtocol = this.fakeProtocol();
                 this.initPrompt(message.sender.pushname, fakeProtocol).then(init => {
                     let newCall: Call = {
                         chatId: message.chatId,
@@ -119,7 +118,7 @@ export class OpenaiService {
     private async initPrompt(name: string, orderId: string): Promise<ChatCompletionRequestMessage[]> {
         let customer: ChatCompletionRequestMessage[] = [];
         this.promptService.readPrompt().then((prompt: string) => {
-            prompt.replace(/{{[\s]?name[\s]?}}/g, name).replace(/{{[\s]?orderId[\s]?}}/g, orderId);
+            prompt = prompt.replace(/{{[\s]?name[\s]?}}/g, name).replace(/{{[\s]?orderId[\s]?}}/g, orderId);
             customer.unshift({
                 role: 'system',
                 content: prompt,
@@ -136,15 +135,5 @@ export class OpenaiService {
             data.getFullYear() +
             Math.floor(1000 + Math.random() * 9000)
         );
-    }
-
-    async setChatSystem(dto: OpenaiChatSystemDto) {
-        return new Promise<string>((resolve, reject) => {
-            this.promptService.updatePrompt({
-                business: dto.business,
-                company: dto.company,
-            });
-            resolve(this.promptService.readPrompt());
-        });
     }
 }
