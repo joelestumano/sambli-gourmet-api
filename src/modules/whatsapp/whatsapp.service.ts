@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
 import { create, Message, Whatsapp } from 'venom-bot';
 import { OpenaiBotMessage, OpenaiService, WhatsappMessageType } from '../openai/openai.service';
 import { DtoWhatsappProfileName } from './dtos/whatsapp-profile-name.dto';
@@ -14,6 +14,7 @@ class WhatsappRefApi {
 @Injectable()
 export class WhatsappService {
 
+    private readonly logger = new Logger(WhatsappService.name);
     private whatsappRefApi: WhatsappRefApi;
 
     constructor(private readonly openaiService: OpenaiService) {
@@ -34,10 +35,12 @@ export class WhatsappService {
 
                 this.openaiService.botMessage(message).then(async (botMessage: OpenaiBotMessage) => {
 
+                    this.logger.log(message.content)
+
                     switch (botMessage.type) {
                         case WhatsappMessageType.text:
                             return await whatsappRefApi.getInstance().sendText(message.chatId, `👱‍♀️ ${botMessage.response}`)
-                                .then((result: any) => result)
+                                .then((result) => result)
                                 .catch((error) => error);
 
                         case WhatsappMessageType.reply:
