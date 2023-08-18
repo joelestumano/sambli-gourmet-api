@@ -32,9 +32,9 @@ export class WhatsappService {
     private async start(whatsappRefApi: WhatsappRefApi): Promise<void> {
         whatsappRefApi.getInstance().onMessage(async (message: Message) => {
 
-            this.logger.log(message.body);
+            if (message.body && !message.isGroupMsg && !message.isMedia && message.type === 'chat') {
 
-            if (message.body && !message.isGroupMsg && !message.isMedia) {
+                this.logger.log(message.body);
 
                 this.openaiService.botMessage(message).then(async (botMessage: OpenaiBotMessage) => {
 
