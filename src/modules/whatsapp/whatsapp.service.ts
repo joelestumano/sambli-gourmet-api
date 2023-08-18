@@ -40,7 +40,10 @@ export class WhatsappService {
                     switch (botMessage.type) {
                         case WhatsappMessageType.text:
                             return await whatsappRefApi.getInstance().sendText(message.chatId, `👱‍♀️ ${botMessage.response}`)
-                                .then((result) => result)
+                                .then((result) => {
+                                    this.logger.log(result);
+                                    return result;
+                                })
                                 .catch((error) => error);
 
                         case WhatsappMessageType.reply:
