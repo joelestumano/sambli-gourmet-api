@@ -31,19 +31,19 @@ export class WhatsappService {
 
     private async start(whatsappRefApi: WhatsappRefApi): Promise<void> {
         whatsappRefApi.getInstance().onMessage(async (message: Message) => {
-            if (message.body && !message.isGroupMsg) {
+
+            this.logger.log(message.body);
+
+            if (message.body && !message.isGroupMsg && !message.isMedia) {
 
                 this.openaiService.botMessage(message).then(async (botMessage: OpenaiBotMessage) => {
 
-                    this.logger.log(message.content)
+                    this.logger.log(botMessage.response);
 
                     switch (botMessage.type) {
                         case WhatsappMessageType.text:
                             return await whatsappRefApi.getInstance().sendText(message.chatId, `👱‍♀️ ${botMessage.response}`)
-                                .then((result) => {
-                                    this.logger.log(result);
-                                    return result;
-                                })
+                                .then((result) => result)
                                 .catch((error) => error);
 
                         case WhatsappMessageType.reply:
