@@ -63,6 +63,11 @@ export class WhatsappService {
                     }
                 });
 
+            }else{
+                return await whatsappRefApi.getInstance().sendText(message.chatId, `👱‍♀️ Se você estiver tentando por áudio, por favor tente enviar uma mensagem de texto para continuar.`)
+                .then((result) => result)
+                .catch((error) => error);
+
             }
         });
     }

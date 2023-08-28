@@ -9,7 +9,7 @@ export class PaginateQueryOrderDto extends PaginateQueryDto {
     @ApiProperty({
         format: "date-time",
         description: '',
-        example: '2023-08-17T18:23:02.500Z',
+        example: '2023-08-28T18:23:02.500Z',
         required: true,
         default: '',
     })
@@ -19,7 +19,7 @@ export class PaginateQueryOrderDto extends PaginateQueryDto {
     @ApiProperty({
         format: "date-time",
         description: '',
-        example: '2023-08-16T18:23:02.500Z',
+        example: '2023-08-27T18:23:02.500Z',
         required: true,
         default: '',
     })
