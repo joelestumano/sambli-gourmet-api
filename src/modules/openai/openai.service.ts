@@ -63,7 +63,7 @@ export class OpenaiService {
 
                 this.calls = this.calls.filter(c => c.status === ECallState.open && c.chatId !== message.chatId);
 
-                const regex = /{[^}]+}/; // Expressão regular para encontrar o objeto entre chaves {}, rotar um array
+                const regex = /\{[\s\S]+\}/; // Expressão regular para encontrar o objeto entre chaves {}
                 const objetoMatch = botResponse.match(regex);
 
                 this.logger.log(objetoMatch)
