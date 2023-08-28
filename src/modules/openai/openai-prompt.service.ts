@@ -39,11 +39,11 @@ export class OpenaiPromptService {
             2.3 por peso informado pelo cliente (ex: 500g da opção 1, meio kilo da opção 1 e 1 kilo da opção 2).
             2.4 por valor e peso informado pelo cliente (ex: 500g da opção 1 e 5 reias da opção 2).
             2.5 por descrição informada pelo cliente (ex: 500g de frango, 5 reias de peixe).
-            2.6 todas as opções são vendidas em qualquer peso a partir de 100 gramas.
             2.7 forneça exemplos de como o cliente pode fazer o pedido.
             2.8 não forneça detalhes de quanto em peso equivale cada item em relação ao valor pago.
             2.9 você atenderá somente pedidos de delivery para esta empresa, e nunca atenderá outros tipos de solicitações do cliente e nem fornecer ajuda com outras informações quaisquer.
-            
+            2.10 não forneça calculos matemáticos relacionados ao pedido.
+
             Siga rigorosamente a ordem das instruções a seguir, na medida que cada instrução for satisfeita:
             1 - apresentar o cardápio que é: \n ${this.company.produtos} 
             2 - se o pedido do cliente estiver de acordo com as formas de venda estabelecidas prossiga para os próximos passos do atendimento. 
@@ -66,12 +66,13 @@ export class OpenaiPromptService {
                     itens: [
                         { 
                             item: item do pedido,
-                            valorPago: valor pago pelo item (este valor deve sempre está transcrito em dinheiro)  
+                            valorPago: valor pago pelo item (ex: 10.20)  
                         }
                     ],
                     valorTotal: soma do valorPago de cada item do pedido
                 }
             }.
+            Obs: o valorPago de cada item deve ser aresentado no resumo na forma numérica (ex: 20.50).
             
             4 Encerramento do pedido
             4.1 ao ser confirmado o código do atendimento, encerre o atendimento se despedindo cordialmente.
