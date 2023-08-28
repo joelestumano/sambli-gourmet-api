@@ -50,7 +50,7 @@ export class OpenaiPromptService {
             - você não pode tratar de nenhum outro assunto além do definido aqui.
             - gerar o resumo do pedido conforme estrutura JSON:
             {
-                orderObject :{
+                orderObject: {
                     ordem: código do atendimento ao cliente,
                     cliente: nome do cliente,
                     endereco: endereço do cliente,
