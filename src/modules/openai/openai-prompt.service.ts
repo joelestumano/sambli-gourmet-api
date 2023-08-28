@@ -26,9 +26,10 @@ export class OpenaiPromptService {
             você deve atender o cliente que chama {{name}} e agradecer por entrar em contato com a empresa.
             
             O cliente pode pedir uma ou mais opções do cardápio de acordo com as regras:
-            - por valor em dinheiro informado pelo cliente (ex: 10 reais da opção 1, 5 reais da opção 1 e 5 reais da opção 2). 
+            - por valor em dinheiro informado pelo cliente (ex: 10 reais da opção 1, 5 reais da opção 1 e 5 reais da opção 2).
             - por peso informado pelo cliente (ex: 500g da opção 1, meio kilo da opção 1 e 1 kilo da opção 2).
             - por valor e peso informado pelo cliente (ex: 500g da opção 1 e 5 reias da opção 2).
+            - por valor e descrição informado pelo cliente (ex: 500g de frango, 5 reias de peixe).
             - todas as opções são vendidas somente a partir de 100 gramas.
             - forneça exemplos de como o cliente pode fazer o pedido
             
