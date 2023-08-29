@@ -12,7 +12,7 @@ export enum OrderStatus {
 export interface OrderInterface {
   client: string;
   descricao: string;
-  order: string;
+  orderCode: string;
   status: OrderStatus;
   whatsapp: string;
 }
@@ -26,7 +26,7 @@ export class Order extends Default implements OrderInterface {
   @Prop({ required: true })
   descricao: string;
   @Prop({ required: true })
-  order: string;
+  orderCode: string;
   @Prop({ required: true })
   status: OrderStatus;
   @Prop({ required: true })

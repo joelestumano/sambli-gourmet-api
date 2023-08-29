@@ -74,7 +74,7 @@ export class OpenaiService {
                     client: message.sender.pushname,
                     descricao: JSON.stringify(resumo),
                     isDeleted: false,
-                    order: call.orderId,
+                    orderCode: call.orderId,
                     status: OrderStatus.pending,
                     whatsapp: `+${call.chatId.replace('@c.us', '')}`
                 }

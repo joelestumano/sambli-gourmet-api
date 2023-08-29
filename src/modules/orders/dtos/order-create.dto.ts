@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
-import { OrderStatus } from '../entities/order.entity';
+import { OrderInterface, OrderStatus } from '../entities/order.entity';
 import { Transform } from 'class-transformer';
 
-export class OrderCreateDto {
+export class OrderCreateDto implements OrderInterface {
   @ApiProperty({
     description: 'nome do cliente',
     example: 'Cliente Fiel',
@@ -32,7 +32,7 @@ export class OrderCreateDto {
     message: 'a ordem do pedido deve ser informada',
   })
   @IsString()
-  order: string;
+  orderCode: string;
 
   @ApiProperty({
     description: 'status da ordem de pedido',
