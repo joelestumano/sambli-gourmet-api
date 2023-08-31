@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
-import { OrderInterface, OrderStatus } from '../entities/order.entity';
+import { OrderInterface__, OrderStatus } from '../entities/order.entity';
 import { Transform } from 'class-transformer';
 
-export class OrderCreateDto implements OrderInterface {
+export class OrderCreateDto implements OrderInterface__ {
   @ApiProperty({
     description: 'nome do cliente',
     example: 'Cliente Fiel',

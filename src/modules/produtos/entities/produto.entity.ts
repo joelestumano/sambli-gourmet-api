@@ -13,7 +13,6 @@ export type ProdutoDocument = Produto & Document;
 export class Produto extends Default implements ProdutoInterface{
     @Prop({ required: true })
     descricao: string;
-
     @Prop({ required: true })
     valor: number;
 }
