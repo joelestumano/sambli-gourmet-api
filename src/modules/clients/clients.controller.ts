@@ -23,8 +23,8 @@ export class ClientsController {
 
     @Get('paginate')
     @ApiOperation({
-      summary: 'busca clientes por nome',
-      description: 'lista'
+      summary: 'busca clientes por nome (paginado)',
+      description: 'lista paginado'
     })
     @ApiResponse({ status: 200, description: 'sucesso' })
     @UsePipes(new ValidationPipe({ transform: true }))
