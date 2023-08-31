@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsDateString, IsEnum } from "class-validator";
 import { PaginateQueryDto } from "src/common/paginate/paginate-query.dto";
-import { OrderStatus } from "../entities/order.entity";
+import { PedidoStatusEnum } from "../entities/order.entity";
 import { Transform } from "class-transformer";
 
 export class PaginateQueryOrderDto extends PaginateQueryDto {
@@ -28,11 +28,11 @@ export class PaginateQueryOrderDto extends PaginateQueryDto {
 
     @ApiProperty({
         description: 'status da ordem de pedido',
-        example: OrderStatus.pending,
-        enum: OrderStatus,
+        example: PedidoStatusEnum.pendente,
+        enum: PedidoStatusEnum,
         enumName: 'Status',
     })
-    @IsEnum(OrderStatus)
+    @IsEnum(PedidoStatusEnum)
     @Transform((status) => status.value.toLowerCase())
-    status: OrderStatus;
+    status: PedidoStatusEnum;
 }

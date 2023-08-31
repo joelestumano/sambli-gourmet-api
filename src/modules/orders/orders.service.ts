@@ -1,18 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { Order, OrderDocument } from './entities/order.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, PaginateModel, PaginateOptions, PaginateResult } from 'mongoose';
 import { PaginateQueryOrderDto } from './dtos/paginate-query-order.dto';
 import { PaginateConfig } from 'src/common/paginate/paginate-config';
-import { OrderCreateDto } from './dtos/order-create.dto';
+import { PedidoCreateDto } from './dtos/order-create.dto';
+import { Pedido, PedidoDocument } from './entities/order.entity';
 
 @Injectable()
 export class OrdersService {
 
-    constructor(@InjectModel(Order.name) private readonly orderModel: Model<Order>) { }
+    constructor(@InjectModel(Pedido.name) private readonly pedidoModel: Model<Pedido>) { }
 
-    async create(dto: OrderCreateDto): Promise<Order> {
-        const order = await new this.orderModel(dto).save();
+    async create(dto: PedidoCreateDto): Promise<Pedido> {
+        const order = await new this.pedidoModel(dto).save();
         return order;
     }
 
@@ -37,7 +37,7 @@ export class OrdersService {
             };
         }
 
-        return await (this.orderModel as PaginateModel<OrderDocument>).paginate(
+        return await (this.pedidoModel as PaginateModel<PedidoDocument>).paginate(
             query,
             options,
         );

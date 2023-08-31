@@ -1,7 +1,7 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ClientCreateDto } from './dtos/client-create.dto';
-import { Model, PaginateModel, PaginateOptions, PaginateResult } from 'mongoose';
+import mongoose, { Model, PaginateModel, PaginateOptions, PaginateResult } from 'mongoose';
 import { Client, ClientDocument } from './entities/client.entity';
 import { PaginateConfig } from 'src/common/paginate/paginate-config';
 import { ClientPaginateQueryDto } from './dtos/client-paginate-query.dto';
@@ -35,5 +35,14 @@ export class ClientsService {
             query,
             options,
         );
+    }
+
+    async findById(id: mongoose.Schema.Types.ObjectId): Promise<Client> {
+        const found = await this.clientModel.findById(`${id}`).exec();
+        if (!found) {
+            const message = `nenhum cliente encontrado com a propriedade _id ${id}`;
+            throw new NotFoundException(message);
+        }
+        return found;
     }
 }
