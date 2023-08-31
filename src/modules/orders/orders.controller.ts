@@ -3,8 +3,8 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { PaginateQueryOrderDto } from './dtos/paginate-query-order.dto';
 import { OrdersService } from './orders.service';
 
-@Controller('orders')
-@ApiTags('orders')
+@Controller('v1/orders')
+@ApiTags('v1/orders')
 export class OrdersController {
 
     constructor(private readonly ordersService: OrdersService) { }

@@ -17,6 +17,27 @@ export interface OrderInterface {
   whatsapp: string;
 }
 
+export interface OrderInterface_ {
+  cliente: string;
+  prontaEntrega: string;
+  isDelivery: boolean;
+
+  pagamento: {
+    cartao: number;
+    dinheiro: number;
+    pix: number;
+  }
+
+
+  descricao: string;
+  
+  status: OrderStatus;
+  whatsapp: string;
+
+  
+  orderCode: string;
+}
+
 export type OrderDocument = Order & Document;
 
 @Schema({ timestamps: true, collection: 'orders' })

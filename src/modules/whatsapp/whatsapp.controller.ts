@@ -5,8 +5,8 @@ import { DtoWhatsappProfileStatus } from './dtos/whatsapp-profile-status.dto';
 import { DtoWhatsappProfileName } from './dtos/whatsapp-profile-name.dto';
 import { UploadTempFile } from 'src/common/decorators/upload-file.decorator';
 
-@Controller('whatsapp')
-@ApiTags('whatsapp')
+@Controller('v1/whatsapp')
+@ApiTags('v1/whatsapp')
 export class WhatsappController {
 
     constructor(private readonly whatsappService: WhatsappService) { }
