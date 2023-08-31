@@ -5,10 +5,10 @@ import { Model } from 'mongoose';
 import { Client } from './entities/client.entity';
 
 @Injectable()
-export class ClientService {
+export class ClientsService {
     constructor(@InjectModel(Client.name) private readonly userModel: Model<Client>) { }
 
-    private logger = new Logger(ClientService.name);
+    private logger = new Logger(ClientsService.name);
 
     async create(clientCreateDto: ClientCreateDto): Promise<Client> {
         return await new this.userModel(clientCreateDto).save();

@@ -11,7 +11,7 @@ import { OpenaiModule } from './modules/openai/openai.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ProdutosModule } from './modules/produtos/produtos.module';
 import { OrdersModule } from './modules/orders/orders.module';
-import { ClientModule } from './modules/client/client.module';
+import { ClientsModule } from './modules/clients/clients.module';
 
 const envFilePath: string = getEnvPath(`${__dirname}/common/envs/`);
 
@@ -21,7 +21,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/common/envs/`);
     WhatsappModule,
     ProdutosModule,
     OrdersModule,
-    ClientModule,
+    ClientsModule,
     ConfigModule.forRoot({
       envFilePath: envFilePath,
       isGlobal: true,
