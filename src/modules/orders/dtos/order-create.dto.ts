@@ -87,7 +87,7 @@ export class PedidoCreateDto implements OrderInterface {
     description: 'status do pedido',
     example: PedidoStatusEnum.pendente,
     enum: PedidoStatusEnum,
-    enumName: 'Status',
+    enumName: 'status',
   })
   @IsEnum(PedidoStatusEnum)
   @Transform((status) => status.value.toLowerCase())

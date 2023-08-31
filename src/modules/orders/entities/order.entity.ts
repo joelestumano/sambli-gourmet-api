@@ -6,10 +6,10 @@ import { Client } from 'src/modules/clients/entities/client.entity';
 import { ProdutoInterface } from 'src/modules/produtos/entities/produto.entity';
 
 export enum PedidoStatusEnum {
-  cancelado = 'cancelado',
-  despachado = 'despachado',
-  empreparo = 'empreparo',
   pendente = 'pendente',
+  empreparo = 'empreparo',
+  despachado = 'despachado',
+  cancelado = 'cancelado',
 }
 
 export interface OrderInterface {
