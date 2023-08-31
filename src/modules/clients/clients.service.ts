@@ -26,9 +26,9 @@ export class ClientsService {
             pagination: dto.ignorarPaginacao
         };
 
-        let query = {};
+        let query = { isDeleted: false, active: true };
         if (dto.name) {
-            query = { isDeleted: false, name: { $regex: new RegExp(dto.name, 'i') } };
+            Object.assign(query, { name: { $regex: new RegExp(dto.name, 'i') } });
         }
 
         return await (this.clientModel as PaginateModel<ClientDocument>).paginate(
