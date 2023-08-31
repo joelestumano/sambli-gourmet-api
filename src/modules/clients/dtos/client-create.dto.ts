@@ -18,6 +18,7 @@ class AddressDto implements AddressInterface {
     @ApiProperty({
         description: 'bairro',
         example: '',
+        required: false
     })
     @IsOptional()
     bairro: string;
@@ -25,6 +26,7 @@ class AddressDto implements AddressInterface {
     @ApiProperty({
         description: 'numero',
         example: '',
+        required: false
     })
     @IsOptional()
     numero: string;
@@ -32,6 +34,7 @@ class AddressDto implements AddressInterface {
     @ApiProperty({
         description: 'complemento',
         example: '',
+        required: false
     })
     @IsOptional()
     complemento: string;
@@ -41,7 +44,7 @@ class AddressDto implements AddressInterface {
         example: true,
     })
     @IsOptional()
-    default: boolean;
+    principal: boolean;
 }
 
 export class ClientCreateDto implements ClientInterface {

@@ -7,7 +7,7 @@ export type AddressInterface = {
     bairro: string;
     numero: string;
     complemento: string;
-    default: boolean;
+    principal: boolean;
 };
 
 export interface ClientInterface {
