@@ -6,7 +6,7 @@ import { Transform } from "class-transformer";
 export class ClientPaginateQueryDto extends PaginateQueryDto {
     @ApiProperty({
         description: 'nome ou parte do nome do cliente',
-        example: 'qualquer nome',
+        example: '',
         required: false,
         default: '',
     })
