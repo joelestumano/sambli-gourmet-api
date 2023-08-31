@@ -5,6 +5,7 @@ import { PaginateQueryOrderDto } from './dtos/paginate-query-order.dto';
 import { PaginateConfig } from 'src/common/paginate/paginate-config';
 import { PedidoCreateDto } from './dtos/order-create.dto';
 import { Pedido, PedidoDocument } from './entities/order.entity';
+import { Client } from '../clients/entities/client.entity';
 
 @Injectable()
 export class OrdersService {
@@ -22,6 +23,13 @@ export class OrdersService {
             limit: dto.limite,
             customLabels: PaginateConfig.paginateCustomLabels(),
             sort: { createdAt: 'desc' },
+            populate: [
+                {
+                    path: 'client',
+                    select: { name: 1, _id: 0, whatsapp: 1, adresses: 1 },
+                    model: Client.name
+                },
+            ]
         };
 
         let query = {};
