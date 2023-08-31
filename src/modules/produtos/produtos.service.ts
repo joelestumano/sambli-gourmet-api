@@ -48,9 +48,7 @@ export class ProdutosService {
 
     async update(id: string, dto: ProdutoUpdateDto) {
         const found: Produto = await this.findById(id);
-        return await this.produtoModel
-            .updateOne({ _id: id }, dto, { upsert: true })
-            .exec();
+        return await this.produtoModel.updateOne({ _id: id }, dto, { upsert: true }).exec();
     }
 
     async findById(id: string): Promise<Produto> {

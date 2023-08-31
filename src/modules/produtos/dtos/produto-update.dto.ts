@@ -6,7 +6,7 @@ export class ProdutoUpdateDto extends OmitType(ProdutoCreateDto, [] as const) {
 
     @ApiProperty({
         description: 'indica se o produto é ativo no sistema',
-        example: false,
+        example: true,
     })
     @IsNotEmpty({
         message: 'um valor para active deve ser informado',
