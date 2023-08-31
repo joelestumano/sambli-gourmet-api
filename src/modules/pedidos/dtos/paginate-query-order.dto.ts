@@ -46,7 +46,7 @@ export class PedidosPaginateQueryDto extends PaginateQueryDto {
 
     @ApiProperty({
         description: 'use true para ignorar paginacao',
-        example: false,
+        example: true,
         required: false,
         default: false,
     })
