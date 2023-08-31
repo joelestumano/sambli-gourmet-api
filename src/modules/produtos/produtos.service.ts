@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { PaginateQueryProdutoDto } from './dtos/paginate-query-produto.dto';
+import { PaginateQueryProdutoDto } from './dtos/produto-paginate-query.dto';
 import { Model, PaginateModel, PaginateOptions, PaginateResult } from 'mongoose';
 import { PaginateConfig } from 'src/common/paginate/paginate-config';
 import { InjectModel } from '@nestjs/mongoose';

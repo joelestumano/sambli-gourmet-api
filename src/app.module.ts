@@ -10,7 +10,7 @@ import company from './common/configs/company.config';
 import { OpenaiModule } from './modules/openai/openai.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ProdutosModule } from './modules/produtos/produtos.module';
-import { OrdersModule } from './modules/orders/orders.module';
+import { PedidosModule } from './modules/pedidos/pedidos.module';
 import { ClientsModule } from './modules/clients/clients.module';
 
 const envFilePath: string = getEnvPath(`${__dirname}/common/envs/`);
@@ -20,7 +20,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/common/envs/`);
     OpenaiModule,
     WhatsappModule,
     ProdutosModule,
-    OrdersModule,
+    PedidosModule,
     ClientsModule,
     ConfigModule.forRoot({
       envFilePath: envFilePath,

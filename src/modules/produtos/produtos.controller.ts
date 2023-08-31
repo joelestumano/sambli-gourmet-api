@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Patch, Post, Query, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ProdutosService } from './produtos.service';
-import { PaginateQueryProdutoDto } from './dtos/paginate-query-produto.dto';
+import { PaginateQueryProdutoDto } from './dtos/produto-paginate-query.dto';
 import { ProdutoCreateDto } from './dtos/produto-create.dto';
 import { ProdutoUpdateDto } from './dtos/produto-update.dto';
 import { ParamIdDto } from '../../common/dtos/param-id.dto';
