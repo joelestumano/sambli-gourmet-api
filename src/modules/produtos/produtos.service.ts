@@ -32,7 +32,7 @@ export class ProdutosService {
             limit: dto.limite,
             customLabels: PaginateConfig.paginateCustomLabels(),
             sort: { createdAt: 'desc' },
-            pagination: dto.ignorarPaginacao
+            pagination: dto.ativarPaginacao
         };
 
         let query = { isDeleted: false, active: true };

@@ -44,12 +44,4 @@ export class PedidosPaginateQueryDto extends PaginateQueryDto {
     @Transform((status) => status.value.toLowerCase())
     status: PedidoStatusPaginateQueryEnum;
 
-    @ApiProperty({
-        description: 'use true para ignorar paginacao',
-        example: true,
-        required: false,
-        default: false,
-    })
-    @Transform((t: any) => !(t.value === 'true' || t.value === true || t.value === 1 || t.value === '1'))
-    ignorarPaginacao: boolean;
 }

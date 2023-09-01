@@ -1,8 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import { IsOptional } from 'class-validator';
 
 export class PaginateQueryDto {
+  @ApiProperty({
+    description: 'use true para ativar a paginacao',
+    example: false,
+    required: false,
+    default: false,
+  })
+  @Transform((t: any) => (t.value === 'true' || t.value === true || t.value === 1 || t.value === '1'))
+  ativarPaginacao: boolean;
+
   @ApiProperty({
     description: 'número da página desejada',
     example: '1',
