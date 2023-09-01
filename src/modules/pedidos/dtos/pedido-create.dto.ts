@@ -4,7 +4,6 @@ import {
   IsArray,
   IsDateString,
   IsEnum,
-  IsMongoId,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -68,7 +67,6 @@ export class PedidoCreateDto implements OrderInterface {
   @IsNotEmpty({
     message: 'o _id de registro do cliente deve ser informado',
   })
-  @IsMongoId()
   @IsClientId({
     message: 'verifique o _id do cliente',
   })
