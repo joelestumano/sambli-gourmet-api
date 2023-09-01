@@ -1,9 +1,29 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsString, ValidateNested } from 'class-validator';
-import { ItemPedidoInterface, OrderInterface, PedidoStatusEnum } from '../entities/pedido.entity';
+import { ArrayMinSize, IsArray, IsEnum, IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { OrderInterface, PedidoStatusEnum } from '../entities/pedido.entity';
 import { Transform, Type } from 'class-transformer';
 import { Schema } from 'mongoose';
 import { IsClientId } from 'src/modules/clients/decorators/isClientId.decorator';
+
+class ItemPedidoDto {
+  @ApiProperty({
+    description: 'descrição do item do pedido',
+    example: '',
+  })
+  @IsNotEmpty({
+    message: 'a descrição do item deve ser informada',
+  })
+  @IsString()
+  descricao: string
+
+  @ApiProperty({
+    description: 'valor do item',
+  })
+  @IsNumber()
+  @IsOptional()
+  @Type(() => Number)
+  valor: number
+}
 
 class PagamentoDto {
   @ApiProperty({
@@ -62,7 +82,22 @@ export class PedidoCreateDto implements OrderInterface {
   })
   isDeliver: boolean;
 
-  items: ItemPedidoInterface[];
+  @ApiProperty({
+    description: 'itens do pedido',
+    type: ItemPedidoDto,
+    isArray: true,
+  })
+  @IsArray()
+  @ArrayMinSize(1, {
+    message: 'ao menos 1 item deve ser informado',
+  })
+  @ValidateNested({
+    message: 'verifique os itens do pedido',
+    each: true
+  })
+  @Type(() => ItemPedidoDto)
+  items: ItemPedidoDto[];
+
   @ApiProperty({
     description: 'valores de pagamento',
   })
