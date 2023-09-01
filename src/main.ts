@@ -19,9 +19,9 @@ async function bootstrap() {
   SwaggerModule.setup('docs', app, document);
 
   app.useGlobalPipes(new ValidationPipe());
-  await app.listen(process.env.PORT || 3000);
   app.useGlobalFilters(new HttpExceptionFilter());
 
+  await app.listen(process.env.PORT || 3000);
   logger.log(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();
