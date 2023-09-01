@@ -1,15 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsDateString, IsEnum } from "class-validator";
+import { IsDateString, IsEnum, IsOptional } from "class-validator";
 import { PaginateQueryDto } from "src/common/paginate/paginate-query.dto";
 import { Transform } from "class-transformer";
-
-export enum PedidoStatusPaginateQueryEnum {
-    todos = 'todos',
-    pendente = 'pendente',
-    empreparo = 'empreparo',
-    despachado = 'despachado',
-    cancelado = 'cancelado',
-  }
+import { PedidoStatusEnum } from "../entities/pedido.entity";
 
 export class PedidosPaginateQueryDto extends PaginateQueryDto {
 
@@ -17,9 +10,10 @@ export class PedidosPaginateQueryDto extends PaginateQueryDto {
         format: "date-time",
         description: '',
         example: '2023-12-31T18:23:02.500Z',
-        required: true,
+        required: false,
         default: '',
     })
+    @IsOptional()
     @IsDateString()
     dateEnd: string;
 
@@ -27,20 +21,23 @@ export class PedidosPaginateQueryDto extends PaginateQueryDto {
         format: "date-time",
         description: '',
         example: '2023-08-27T18:23:02.500Z',
-        required: true,
+        required: false,
         default: '',
     })
+    @IsOptional()
     @IsDateString()
     dateStart: string;
 
     @ApiProperty({
         description: 'status da ordem de pedido',
-        example: PedidoStatusPaginateQueryEnum.todos,
-        enum: PedidoStatusPaginateQueryEnum,
+        example: PedidoStatusEnum.pendente,
+        enum: PedidoStatusEnum,
         enumName: 'Status',
+        required: false
     })
-    @IsEnum(PedidoStatusPaginateQueryEnum)
+    @IsOptional()
+    @IsEnum(PedidoStatusEnum)
     @Transform((status) => status.value.toLowerCase())
-    status: PedidoStatusPaginateQueryEnum;
+    status: PedidoStatusEnum;
 
 }

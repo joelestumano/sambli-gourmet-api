@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, PaginateModel, PaginateOptions, PaginateResult } from 'mongoose';
-import { PedidoStatusPaginateQueryEnum, PedidosPaginateQueryDto } from './dtos/pedido-paginate-query.dto';
+import { PedidosPaginateQueryDto } from './dtos/pedido-paginate-query.dto';
 import { PaginateConfig } from 'src/common/paginate/paginate-config';
 import { PedidoCreateDto } from './dtos/pedido-create.dto';
-import { Pedido, PedidoDocument } from './entities/pedido.entity';
+import { Pedido, PedidoDocument, PedidoStatusEnum } from './entities/pedido.entity';
 import { Client } from '../clients/entities/client.entity';
 
 @Injectable()
@@ -44,12 +44,15 @@ export class PedidosService {
                     $lt: end
                 }
             })
+        }
 
-            if (dto.status !== PedidoStatusPaginateQueryEnum.todos) {
-                Object.assign(query, {
-                    status: dto.status
-                })
-            }
+        if (dto.status === PedidoStatusEnum.pendente ||
+            dto.status === PedidoStatusEnum.empreparo ||
+            dto.status === PedidoStatusEnum.despachado ||
+            dto.status === PedidoStatusEnum.cancelado) {
+            Object.assign(query, {
+                status: dto.status
+            })
         }
 
         return await (this.pedidoModel as PaginateModel<PedidoDocument>).paginate(
