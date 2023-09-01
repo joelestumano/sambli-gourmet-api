@@ -1,8 +1,8 @@
 import { Body, Controller, Get, Post, Query, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { PedidosPaginateQueryDto } from './dtos/paginate-query-order.dto';
+import { PedidosPaginateQueryDto } from './dtos/pedido-paginate-query.dto';
 import { PedidosService } from './pedidos.service';
-import { PedidoCreateDto } from './dtos/order-create.dto';
+import { PedidoCreateDto } from './dtos/pedido-create.dto';
 
 @Controller('v1/pedidos')
 @ApiTags('v1/pedidos')

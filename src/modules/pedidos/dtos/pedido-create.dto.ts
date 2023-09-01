@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsString, ValidateNested } from 'class-validator';
-import { OrderInterface, PedidoStatusEnum } from '../entities/order.entity';
+import { ItemPedidoInterface, OrderInterface, PedidoStatusEnum } from '../entities/pedido.entity';
 import { Transform, Type } from 'class-transformer';
 import { Schema } from 'mongoose';
 import { IsClientId } from 'src/modules/clients/decorators/isClientId.decorator';
@@ -62,7 +62,7 @@ export class PedidoCreateDto implements OrderInterface {
   })
   isDeliver: boolean;
 
-  //items: ProdutoInterface[];
+  items: ItemPedidoInterface[];
   @ApiProperty({
     description: 'valores de pagamento',
   })

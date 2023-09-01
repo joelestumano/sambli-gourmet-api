@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, PaginateModel, PaginateOptions, PaginateResult } from 'mongoose';
-import { PedidoStatusPaginateQueryEnum, PedidosPaginateQueryDto } from './dtos/paginate-query-order.dto';
+import { PedidoStatusPaginateQueryEnum, PedidosPaginateQueryDto } from './dtos/pedido-paginate-query.dto';
 import { PaginateConfig } from 'src/common/paginate/paginate-config';
-import { PedidoCreateDto } from './dtos/order-create.dto';
-import { Pedido, PedidoDocument } from './entities/order.entity';
+import { PedidoCreateDto } from './dtos/pedido-create.dto';
+import { Pedido, PedidoDocument } from './entities/pedido.entity';
 import { Client } from '../clients/entities/client.entity';
 
 @Injectable()

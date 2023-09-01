@@ -3,7 +3,6 @@ import mongoose from 'mongoose';
 import * as mongoosePaginate from 'mongoose-paginate-v2';
 import { Default } from 'src/common/entities/default.entity';
 import { Client } from 'src/modules/clients/entities/client.entity';
-import { ProdutoInterface } from 'src/modules/produtos/entities/produto.entity';
 
 export enum PedidoStatusEnum {
   pendente = 'pendente',
@@ -12,11 +11,16 @@ export enum PedidoStatusEnum {
   cancelado = 'cancelado',
 }
 
+export interface ItemPedidoInterface {
+  descricao: string,
+  valor: number
+}
+
 export interface OrderInterface {
   cliente: mongoose.Schema.Types.ObjectId;
   horaDespacho: string;
   isDeliver: boolean;
-  //items: ProdutoInterface[]
+  items: ItemPedidoInterface[]
   pagamento: {
     cartao: number;
     dinheiro: number;
@@ -24,6 +28,13 @@ export interface OrderInterface {
   }
   obs: string;
   status: PedidoStatusEnum;
+}
+
+abstract class ItemPedido implements ItemPedidoInterface {
+  @Prop({ required: true })
+  descricao: string;
+  @Prop({ required: true })
+  valor: number
 }
 
 abstract class Pagamento {
@@ -46,7 +57,7 @@ export class Pedido extends Default implements OrderInterface {
   @Prop({ required: true, default: false })
   isDeliver: boolean;
   @Prop({ required: true })
-  items: ProdutoInterface[];
+  items: ItemPedido[];
   @Prop({ required: true })
   pagamento: Pagamento;
   @Prop({ required: false, default: '' })

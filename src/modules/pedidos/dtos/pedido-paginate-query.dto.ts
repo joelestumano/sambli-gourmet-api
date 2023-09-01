@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsDateString, IsEnum } from "class-validator";
 import { PaginateQueryDto } from "src/common/paginate/paginate-query.dto";
-import { PedidoStatusEnum } from "../entities/order.entity";
+import { PedidoStatusEnum } from "../entities/pedido.entity";
 import { Transform } from "class-transformer";
 
 export enum PedidoStatusPaginateQueryEnum {
