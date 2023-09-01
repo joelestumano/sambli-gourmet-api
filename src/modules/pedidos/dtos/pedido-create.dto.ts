@@ -1,5 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ArrayMinSize, IsArray, IsEnum, IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsString, ValidateNested } from 'class-validator';
+import {
+  ArrayMinSize,
+  IsArray,
+  IsDateString,
+  IsEnum,
+  IsMongoId,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 import { OrderInterface, PedidoStatusEnum } from '../entities/pedido.entity';
 import { Transform, Type } from 'class-transformer';
 import { Schema } from 'mongoose';
@@ -14,7 +25,7 @@ class ItemPedidoDto {
     message: 'a descrição do item deve ser informada',
   })
   @IsString()
-  descricao: string
+  descricao: string;
 
   @ApiProperty({
     description: 'valor do item',
@@ -22,7 +33,7 @@ class ItemPedidoDto {
   @IsNumber()
   @IsOptional()
   @Type(() => Number)
-  valor: number
+  valor: number;
 }
 
 class PagamentoDto {
@@ -46,7 +57,7 @@ class PagamentoDto {
   @IsNumber()
   @IsOptional()
   @Type(() => Number)
-  pix: number
+  pix: number;
 }
 
 export class PedidoCreateDto implements OrderInterface {
@@ -64,13 +75,16 @@ export class PedidoCreateDto implements OrderInterface {
   cliente: Schema.Types.ObjectId;
 
   @ApiProperty({
+    format: 'date-time',
     description: 'horário para despacho do pedido',
-    example: '11:30',
+    example: '2023-12-31T18:23:02.500Z',
+    required: true,
+    default: '',
   })
   @IsNotEmpty({
     message: 'horário para despacho do pedido deve ser informado',
   })
-  @IsString()
+  @IsDateString()
   horaDespacho: string;
 
   @ApiProperty({
@@ -93,7 +107,7 @@ export class PedidoCreateDto implements OrderInterface {
   })
   @ValidateNested({
     message: 'verifique os itens do pedido',
-    each: true
+    each: true,
   })
   @Type(() => ItemPedidoDto)
   items: ItemPedidoDto[];
