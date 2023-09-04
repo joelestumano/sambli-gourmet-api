@@ -14,7 +14,8 @@ import { PedidoInterface, PedidoStatusEnum } from '../entities/pedido.entity';
 import { Transform, Type } from 'class-transformer';
 import { Schema } from 'mongoose';
 import { IsClientId } from 'src/modules/clients/decorators/isClientId.decorator';
-import { EnderecoDto } from 'src/common/dtos/endereco.dto';
+import { EnderecoPedidoDto } from 'src/common/dtos/endereco.dto';
+
 
 class ItemPedidoDto {
   @ApiProperty({
@@ -113,13 +114,14 @@ export class PedidoCreateDto implements PedidoInterface {
 
   @ApiProperty({
     description: 'endereço para entrega',
+    required: false
   })
   @IsOptional()
   @ValidateNested({
     message: 'verifique o endereço informado',
   })
-  @Type(() => EnderecoDto)
-  endereco: EnderecoDto;
+  @Type(() => EnderecoPedidoDto)
+  endereco: EnderecoPedidoDto;
 
   @ApiProperty({
     description: 'valores de pagamento',

@@ -5,7 +5,7 @@ export interface EnderecoInterface {
   bairro: string;
   numero: string;
   complemento: string;
-  principal: boolean;
+  principal?: boolean;
 };
 
 export abstract class Endereco implements EnderecoInterface {

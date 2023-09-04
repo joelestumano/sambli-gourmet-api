@@ -1,7 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsOptional } from "class-validator";
 import { PaginateQueryDto } from "src/common/paginate/paginate-query.dto";
-import { Transform } from "class-transformer";
 
 export class ClientPaginateQueryDto extends PaginateQueryDto {
     @ApiProperty({
