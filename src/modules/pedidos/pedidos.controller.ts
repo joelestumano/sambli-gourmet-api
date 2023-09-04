@@ -23,7 +23,7 @@ export class PedidosController {
 
     @Get('paginate')
     @ApiOperation({
-        summary: 'busca ordens de pedido por período (paginado)',
+        summary: 'busca pedidos por período (paginado)',
         description: 'lista paginado'
     })
     @ApiResponse({ status: 200, description: 'sucesso' })
