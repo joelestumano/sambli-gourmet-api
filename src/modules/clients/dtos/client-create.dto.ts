@@ -1,62 +1,19 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { AddressInterface, ClientInterface } from "../entities/client.entity";
+import { ClientInterface } from "../entities/client.entity";
 import { IsNotEmpty, IsOptional, IsString, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
-
-class AddressDto implements AddressInterface {
-
-    @ApiProperty({
-        description: 'logradouro',
-        example: '',
-    })
-    @IsNotEmpty({
-        message: 'o logradouro de endereço do cliente deve ser informado',
-    })
-    @IsString()
-    logradouro: string;
-
-    @ApiProperty({
-        description: 'bairro',
-        example: '',
-        required: false
-    })
-    @IsOptional()
-    bairro: string;
-
-    @ApiProperty({
-        description: 'numero',
-        example: '',
-        required: false
-    })
-    @IsOptional()
-    numero: string;
-
-    @ApiProperty({
-        description: 'complemento',
-        example: '',
-        required: false
-    })
-    @IsOptional()
-    complemento: string;
-
-    @ApiProperty({
-        description: 'default',
-        example: true,
-    })
-    @IsOptional()
-    principal: boolean;
-}
+import { EnderecoDto } from "src/common/dtos/endereco.dto";
 
 export class ClientCreateDto implements ClientInterface {
     @ApiProperty({
-        description: 'endereçõs do cliente',
-        type: AddressDto,
+        description: 'endereços do cliente',
+        type: EnderecoDto,
         isArray: true,
     })
     @IsOptional()
     @ValidateNested({ each: true })
-    @Type(() => AddressDto)
-    adresses: AddressDto[];
+    @Type(() => EnderecoDto)
+    enderecos: EnderecoDto[];
 
     @ApiProperty({
         description: 'nome do cliente',

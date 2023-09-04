@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import * as mongoosePaginate from 'mongoose-paginate-v2';
 import { Default } from 'src/common/entities/default.entity';
+import { Endereco, EnderecoInterface } from 'src/common/entities/endereco.entity';
 import { Client } from 'src/modules/clients/entities/client.entity';
 
 export enum PedidoStatusEnum {
@@ -16,11 +17,12 @@ export interface ItemPedidoInterface {
   valor: number
 }
 
-export interface OrderInterface {
+export interface PedidoInterface {
   cliente: mongoose.Schema.Types.ObjectId;
   horaDespacho: string;
   isDeliver: boolean;
   items: ItemPedidoInterface[]
+  endereco: EnderecoInterface;
   pagamento: {
     cartao: number;
     dinheiro: number;
@@ -49,7 +51,7 @@ abstract class Pagamento {
 export type PedidoDocument = Pedido & Document;
 
 @Schema({ timestamps: true, collection: 'pedidos' })
-export class Pedido extends Default implements OrderInterface {
+export class Pedido extends Default implements PedidoInterface {
   @Prop({ required: true, ref: Client.name })
   cliente: mongoose.Schema.Types.ObjectId;
   @Prop({ required: true })
@@ -58,6 +60,8 @@ export class Pedido extends Default implements OrderInterface {
   isDeliver: boolean;
   @Prop({ required: true })
   items: ItemPedido[];
+  @Prop({ required: false })
+  endereco: Endereco;
   @Prop({ required: true })
   pagamento: Pagamento;
   @Prop({ required: false, default: '' })

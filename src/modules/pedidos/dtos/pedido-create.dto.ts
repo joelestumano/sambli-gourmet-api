@@ -10,10 +10,11 @@ import {
   IsString,
   ValidateNested,
 } from 'class-validator';
-import { OrderInterface, PedidoStatusEnum } from '../entities/pedido.entity';
+import { PedidoInterface, PedidoStatusEnum } from '../entities/pedido.entity';
 import { Transform, Type } from 'class-transformer';
 import { Schema } from 'mongoose';
 import { IsClientId } from 'src/modules/clients/decorators/isClientId.decorator';
+import { EnderecoDto } from 'src/common/dtos/endereco.dto';
 
 class ItemPedidoDto {
   @ApiProperty({
@@ -59,7 +60,7 @@ class PagamentoDto {
   pix: number;
 }
 
-export class PedidoCreateDto implements OrderInterface {
+export class PedidoCreateDto implements PedidoInterface {
   @ApiProperty({
     description: '_id de registro do cliente',
     example: '64f0ebd13ba9f5b7171af5ca',
@@ -109,6 +110,16 @@ export class PedidoCreateDto implements OrderInterface {
   })
   @Type(() => ItemPedidoDto)
   items: ItemPedidoDto[];
+
+  @ApiProperty({
+    description: 'endereço para entrega',
+  })
+  @IsOptional()
+  @ValidateNested({
+    message: 'verifique o endereço informado',
+  })
+  @Type(() => EnderecoDto)
+  endereco: EnderecoDto;
 
   @ApiProperty({
     description: 'valores de pagamento',

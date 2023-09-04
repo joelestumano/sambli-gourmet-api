@@ -1,24 +1,26 @@
 import { Prop } from '@nestjs/mongoose';
 
-export abstract class Endereco {
+export interface EnderecoInterface {
+  logradouro: string;
+  bairro: string;
+  numero: string;
+  complemento: string;
+  principal: boolean;
+};
+
+export abstract class Endereco implements EnderecoInterface {
   @Prop({ required: true })
   logradouro: string;
 
+  @Prop({})
+  bairro: string;
+  
   @Prop({})
   numero: string;
 
   @Prop({})
   complemento: string;
 
-  @Prop({})
-  bairro: string;
-
   @Prop({ required: true })
-  cidade: string;
-
-  @Prop({})
-  cep: string;
-
-  @Prop({ required: true })
-  uf: string;
+  principal: boolean;
 }

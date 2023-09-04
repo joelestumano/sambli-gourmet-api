@@ -1,19 +1,12 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import * as mongoosePaginate from 'mongoose-paginate-v2';
 import { Default } from "src/common/entities/default.entity";
-
-export type AddressInterface = {
-    logradouro: string;
-    bairro: string;
-    numero: string;
-    complemento: string;
-    principal: boolean;
-};
+import { EnderecoInterface } from "src/common/entities/endereco.entity";
 
 export interface ClientInterface {
     name: string;
     whatsapp: string;
-    adresses: AddressInterface[];
+    enderecos: EnderecoInterface[];
 }
 
 export type ClientDocument = Client & Document;
@@ -25,7 +18,7 @@ export class Client extends Default implements ClientInterface {
     @Prop({ required: true })
     whatsapp: string;
     @Prop({ required: false })
-    adresses: AddressInterface[];
+    enderecos: EnderecoInterface[];
 }
 
 export const ClientSchema = SchemaFactory.createForClass(Client);
