@@ -1,8 +1,9 @@
-import { Body, Controller, Get, Post, Query, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Sse, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { PedidosPaginateQueryDto } from './dtos/pedido-paginate-query.dto';
 import { PedidosService } from './pedidos.service';
 import { PedidoCreateDto } from './dtos/pedido-create.dto';
+import { Observable, interval, map } from 'rxjs';
 
 @Controller('v1/pedidos')
 @ApiTags('v1/pedidos')
@@ -30,5 +31,10 @@ export class PedidosController {
     @UsePipes(new ValidationPipe({ transform: true }))
     async paginate(@Query() query: PedidosPaginateQueryDto) {
         return await this.ordersService.paginate(query);
+    }
+
+    @Sse('new-notifier')
+    sse(): Observable<MessageEvent | any> {
+        return interval(10000).pipe(map((_) => ({ data: { hello: 'world' } })));
     }
 }

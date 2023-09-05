@@ -19,7 +19,9 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
 
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({
+    whitelist: true, // remove propriedades desnecessárias no corpo da solicitação POST
+  }));
   app.useGlobalFilters(new HttpExceptionFilter());
 
   Date.prototype.toJSON = function (): any {
