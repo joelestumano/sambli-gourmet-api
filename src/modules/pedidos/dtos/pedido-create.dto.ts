@@ -1,13 +1,14 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { ArrayMinSize, IsArray, IsDateString, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { PedidoInterface, PedidoStatusEnum } from '../entities/pedido.entity';
 import { Transform, Type } from 'class-transformer';
 import { Schema } from 'mongoose';
 import { IsClientId } from 'src/modules/clients/decorators/isClientId.decorator';
-import { EnderecoPedidoDto } from 'src/common/dtos/endereco.dto';
 import { ProdutoCreateDto } from 'src/modules/produtos/dtos/produto-create.dto';
+import { EnderecoDto } from 'src/common/dtos/endereco.dto';
 
 class ItemPedidoDto extends ProdutoCreateDto { }
+class EnderecoPedidoDto extends OmitType(EnderecoDto, ['principal'] as const) { }
 
 class PagamentoDto {
   @ApiProperty({

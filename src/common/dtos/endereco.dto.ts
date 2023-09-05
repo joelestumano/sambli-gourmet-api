@@ -1,5 +1,4 @@
-import { Prop } from "@nestjs/mongoose";
-import { ApiProperty, OmitType } from "@nestjs/swagger";
+import { ApiProperty } from "@nestjs/swagger";
 import { IsNotEmpty, IsOptional, IsString } from "class-validator";
 import { EnderecoInterface } from "../entities/endereco.entity";
 
@@ -46,5 +45,3 @@ export class EnderecoDto implements EnderecoInterface {
     @IsOptional()
     principal: boolean;
 }
-
-export class EnderecoPedidoDto extends OmitType(EnderecoDto, ['principal'] as const) { }

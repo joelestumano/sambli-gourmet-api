@@ -14,7 +14,7 @@ export class ProdutoCreateDto {
 
   @ApiProperty({
     description: 'descrição do produto',
-    example: 'Bife',
+    example: 'Frango',
   })
   @IsNotEmpty({
     message: 'a descrição do produto deve ser informada',
