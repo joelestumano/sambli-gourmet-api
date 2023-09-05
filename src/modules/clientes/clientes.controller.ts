@@ -4,8 +4,8 @@ import { ClientesService } from './clientes.service';
 import { ClienteCreateDto } from './dtos/cliente-create.dto';
 import { ClientPaginateQueryDto } from './dtos/cliente-paginate-query.dto';
 
-@Controller('v1/clients')
-@ApiTags('v1/clients')
+@Controller('v1/clientes')
+@ApiTags('v1/clientes')
 export class ClientesController {
 
     constructor(private readonly clientesService: ClientesService) { }
