@@ -12,6 +12,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ProdutosModule } from './modules/produtos/produtos.module';
 import { PedidosModule } from './modules/pedidos/pedidos.module';
 import { ClientesModule } from './modules/clientes/clientes.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 const envFilePath: string = getEnvPath(`${__dirname}/common/envs/`);
 
@@ -34,6 +35,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/common/envs/`);
       }),
       inject: [ConfigService],
     }),
+    EventEmitterModule.forRoot()
   ],
   controllers: [AppController],
   providers: [AppService],

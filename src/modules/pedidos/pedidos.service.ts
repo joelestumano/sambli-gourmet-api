@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, PaginateModel, PaginateOptions, PaginateResult } from 'mongoose';
 import { PedidosPaginateQueryDto } from './dtos/pedido-paginate-query.dto';
@@ -6,15 +6,26 @@ import { PaginateConfig } from 'src/common/paginate/paginate-config';
 import { PedidoCreateDto } from './dtos/pedido-create.dto';
 import { Pedido, PedidoDocument, PedidoStatusEnum } from './entities/pedido.entity';
 import { Cliente } from '../clientes/entities/cliente.entity';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { PedidoCreatedEvent } from './events/pedido-created.event';
 
 @Injectable()
 export class PedidosService {
 
-    constructor(@InjectModel(Pedido.name) private readonly pedidoModel: Model<Pedido>) { }
+    private readonly logger = new Logger(PedidosService.name);
+
+    constructor(@InjectModel(Pedido.name) private readonly pedidoModel: Model<Pedido>,
+        private eventEmitter: EventEmitter2) { }
 
     async create(dto: PedidoCreateDto): Promise<Pedido> {
-        const order = await new this.pedidoModel(dto).save();
-        return order;
+        const pedido: Pedido = await new this.pedidoModel(dto).save();
+
+        const pedidoCreatedEvent = new PedidoCreatedEvent();
+        pedidoCreatedEvent.nome = 'novo pedido!';
+        pedidoCreatedEvent.descricao = pedido.items;
+        this.eventEmitter.emit('pedido.created', pedidoCreatedEvent);
+
+        return pedido;
     }
 
     async paginate(dto: PedidosPaginateQueryDto): Promise<PaginateResult<any>> {

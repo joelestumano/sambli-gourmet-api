@@ -37,7 +37,7 @@ class PagamentoDto {
 export class PedidoCreateDto implements PedidoInterface {
   @ApiProperty({
     description: '_id de registro do cliente',
-    example: '64f0ebd13ba9f5b7171af5ca',
+    example: '64f764ae018dc9c9c2681bf7',
   })
   @IsNotEmpty({
     message: 'o _id de registro do cliente deve ser informado',
