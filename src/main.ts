@@ -4,6 +4,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { useContainer } from 'class-validator';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import * as momentTimezone from 'moment-timezone';
 
 async function bootstrap() {
   const logger = new Logger('Main');
@@ -20,6 +21,12 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new HttpExceptionFilter());
+
+  Date.prototype.toJSON = function (): any {
+    return momentTimezone(this)
+      .tz('America/Belem')
+      .format('YYYY-MM-DD HH:mm:ss.SSS');
+  }
 
   await app.listen(process.env.PORT || 3000);
   logger.log(`Application is running on: ${await app.getUrl()}`);
