@@ -8,6 +8,6 @@ export class PedidoCreatedListener {
 
   @OnEvent('pedido.created')
   handlePedidoCreatedEvent(event: PedidoCreatedEvent) {
-    this.logger.log({event});
+    this.logger.log({ event });
   }
 }

@@ -13,7 +13,7 @@ export class ProdutosController {
 
     @Post('create')
     @ApiOperation({
-        summary: 'registro de um novo produto',
+        summary: 'registra novo produto',
         description: 'create',
     })
     @ApiResponse({ status: 201, description: 'sucesso' })

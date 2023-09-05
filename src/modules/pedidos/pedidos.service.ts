@@ -20,10 +20,7 @@ export class PedidosService {
     async create(dto: PedidoCreateDto): Promise<Pedido> {
         const pedido: Pedido = await new this.pedidoModel(dto).save();
 
-        const pedidoCreatedEvent = new PedidoCreatedEvent();
-        pedidoCreatedEvent.nome = 'novo pedido!';
-        pedidoCreatedEvent.descricao = pedido.items;
-        this.eventEmitter.emit('pedido.created', pedidoCreatedEvent);
+        this.eventEmitter.emit('pedido.created', new PedidoCreatedEvent('novo pedido!', pedido.items));
 
         return pedido;
     }

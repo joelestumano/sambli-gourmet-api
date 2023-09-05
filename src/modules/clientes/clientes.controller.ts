@@ -12,7 +12,7 @@ export class ClientesController {
 
     @Post('create')
     @ApiOperation({
-        summary: 'registro de um novo cliente',
+        summary: 'registra novo cliente',
         description: 'create',
     })
     @ApiResponse({ status: 201, description: 'sucesso' })
