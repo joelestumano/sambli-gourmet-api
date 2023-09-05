@@ -10,5 +10,5 @@ export class ClientPaginateQueryDto extends PaginateQueryDto {
         default: '',
     })
     @IsOptional()
-    name: string;
+    nome: string;
 }

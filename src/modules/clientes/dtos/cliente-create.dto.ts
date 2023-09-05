@@ -23,7 +23,7 @@ export class ClienteCreateDto implements ClienteInterface {
         message: 'o nome do cliente deve ser informado',
     })
     @IsString()
-    name: string;
+    nome: string;
 
     @ApiProperty({
         description: 'contato whatsapp do cliente',

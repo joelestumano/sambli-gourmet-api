@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import * as mongoosePaginate from 'mongoose-paginate-v2';
 import { Default } from 'src/common/entities/default.entity';
 import { Endereco, EnderecoInterface } from 'src/common/entities/endereco.entity';
-import { Client } from 'src/modules/clientes/entities/cliente.entity';
+import { Cliente } from 'src/modules/clientes/entities/cliente.entity';
 
 export enum PedidoStatusEnum {
   pendente = 'pendente',
@@ -52,7 +52,7 @@ export type PedidoDocument = Pedido & Document;
 
 @Schema({ timestamps: true, collection: 'pedidos' })
 export class Pedido extends Default implements PedidoInterface {
-  @Prop({ required: true, ref: Client.name })
+  @Prop({ required: true, ref: Cliente.name })
   cliente: mongoose.Schema.Types.ObjectId;
   @Prop({ required: true })
   horaDespacho: string;

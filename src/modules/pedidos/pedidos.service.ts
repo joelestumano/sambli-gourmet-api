@@ -5,7 +5,7 @@ import { PedidosPaginateQueryDto } from './dtos/pedido-paginate-query.dto';
 import { PaginateConfig } from 'src/common/paginate/paginate-config';
 import { PedidoCreateDto } from './dtos/pedido-create.dto';
 import { Pedido, PedidoDocument, PedidoStatusEnum } from './entities/pedido.entity';
-import { Client } from '../clientes/entities/cliente.entity';
+import { Cliente } from '../clientes/entities/cliente.entity';
 
 @Injectable()
 export class PedidosService {
@@ -28,7 +28,7 @@ export class PedidosService {
                 {
                     path: 'cliente',
                     select: { name: 1, _id: 0, whatsapp: 1, adresses: 1 },
-                    model: Client.name
+                    model: Cliente.name
                 },
             ]
         };

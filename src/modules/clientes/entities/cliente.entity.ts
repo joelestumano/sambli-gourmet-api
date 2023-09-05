@@ -4,22 +4,22 @@ import { Default } from "src/common/entities/default.entity";
 import { EnderecoInterface } from "src/common/entities/endereco.entity";
 
 export interface ClienteInterface {
-    name: string;
+    nome: string;
     whatsapp: string;
     enderecos: EnderecoInterface[];
 }
 
-export type ClientDocument = Client & Document;
+export type ClienteDocument = Cliente & Document;
 
-@Schema({ timestamps: true, collection: 'clients' })
-export class Client extends Default implements ClienteInterface {
+@Schema({ timestamps: true, collection: 'clientes' })
+export class Cliente extends Default implements ClienteInterface {
     @Prop({ required: true })
-    name: string;
+    nome: string;
     @Prop({ required: true })
     whatsapp: string;
     @Prop({ required: false })
     enderecos: EnderecoInterface[];
 }
 
-export const ClientSchema = SchemaFactory.createForClass(Client);
-ClientSchema.plugin(mongoosePaginate);
+export const ClienteSchema = SchemaFactory.createForClass(Cliente);
+ClienteSchema.plugin(mongoosePaginate);
