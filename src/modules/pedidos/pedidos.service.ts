@@ -7,7 +7,7 @@ import { PedidoCreateDto } from './dtos/pedido-create.dto';
 import { Pedido, PedidoDocument, PedidoStatusEnum } from './entities/pedido.entity';
 import { Cliente } from '../clientes/entities/cliente.entity';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { PedidoCreatedEvent } from './events/pedido-created.event';
+import { CustomEvent } from '../../common/events/pedido-created.event';
 
 @Injectable()
 export class PedidosService {
@@ -20,7 +20,7 @@ export class PedidosService {
     async create(dto: PedidoCreateDto): Promise<Pedido> {
         const pedido: Pedido = await new this.pedidoModel(dto).save();
 
-        this.eventEmitter.emit('pedido.created', new PedidoCreatedEvent('novo pedido!', pedido.items));
+        this.eventEmitter.emit('pedido.created', new CustomEvent('novo pedido!', pedido.items));
 
         return pedido;
     }
