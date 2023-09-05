@@ -4,7 +4,7 @@ import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 export class ProdutoCreateDto {
   @ApiProperty({
     description: 'bannerUrl do produto',
-    example: 'https://public/gourmet/img/a3014c9dea2915034be850bd2814dad3.png',
+    example: 'https://joelestumano.github.io/public/sambli-gourmet/img/a3014c9dea2915034be850bd2814dad3.png',
   })
   @IsNotEmpty({
     message: 'o bannerUrl do produto deve ser informado',

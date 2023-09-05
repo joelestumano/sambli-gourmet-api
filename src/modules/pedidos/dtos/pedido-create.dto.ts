@@ -1,41 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  ArrayMinSize,
-  IsArray,
-  IsDateString,
-  IsEnum,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from 'class-validator';
+import { ArrayMinSize, IsArray, IsDateString, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { PedidoInterface, PedidoStatusEnum } from '../entities/pedido.entity';
 import { Transform, Type } from 'class-transformer';
 import { Schema } from 'mongoose';
 import { IsClientId } from 'src/modules/clients/decorators/isClientId.decorator';
 import { EnderecoPedidoDto } from 'src/common/dtos/endereco.dto';
+import { ProdutoCreateDto } from 'src/modules/produtos/dtos/produto-create.dto';
 
-
-class ItemPedidoDto {
-  @ApiProperty({
-    description: 'descrição do item do pedido',
-    example: '',
-  })
-  @IsNotEmpty({
-    message: 'a descrição do item deve ser informada',
-  })
-  @IsString()
-  descricao: string;
-
-  @ApiProperty({
-    description: 'valor do item',
-  })
-  @IsNumber()
-  @IsOptional()
-  @Type(() => Number)
-  valor: number;
-}
+class ItemPedidoDto extends ProdutoCreateDto { }
 
 class PagamentoDto {
   @ApiProperty({
