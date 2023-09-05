@@ -50,7 +50,7 @@ export class PedidoCreateDto implements PedidoInterface {
   @ApiProperty({
     format: 'date-time',
     description: 'horário para despacho do pedido',
-    example: '2023-12-31T18:23:02.500Z',
+    example: '2023-12-31 18:23:02.000',
     required: true,
     default: '',
   })
