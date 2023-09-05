@@ -3,7 +3,7 @@ import * as mongoosePaginate from 'mongoose-paginate-v2';
 import { Default } from "src/common/entities/default.entity";
 import { EnderecoInterface } from "src/common/entities/endereco.entity";
 
-export interface ClientInterface {
+export interface ClienteInterface {
     name: string;
     whatsapp: string;
     enderecos: EnderecoInterface[];
@@ -12,7 +12,7 @@ export interface ClientInterface {
 export type ClientDocument = Client & Document;
 
 @Schema({ timestamps: true, collection: 'clients' })
-export class Client extends Default implements ClientInterface {
+export class Client extends Default implements ClienteInterface {
     @Prop({ required: true })
     name: string;
     @Prop({ required: true })

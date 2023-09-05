@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import * as mongoosePaginate from 'mongoose-paginate-v2';
 import { Default } from 'src/common/entities/default.entity';
 import { Endereco, EnderecoInterface } from 'src/common/entities/endereco.entity';
-import { Client } from 'src/modules/clients/entities/client.entity';
+import { Client } from 'src/modules/clientes/entities/cliente.entity';
 
 export enum PedidoStatusEnum {
   pendente = 'pendente',

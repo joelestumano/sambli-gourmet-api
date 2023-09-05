@@ -5,7 +5,7 @@ import { PedidosPaginateQueryDto } from './dtos/pedido-paginate-query.dto';
 import { PaginateConfig } from 'src/common/paginate/paginate-config';
 import { PedidoCreateDto } from './dtos/pedido-create.dto';
 import { Pedido, PedidoDocument, PedidoStatusEnum } from './entities/pedido.entity';
-import { Client } from '../clients/entities/client.entity';
+import { Client } from '../clientes/entities/cliente.entity';
 
 @Injectable()
 export class PedidosService {

@@ -1,10 +1,10 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { ClientInterface } from "../entities/client.entity";
+import { ClienteInterface } from "../entities/cliente.entity";
 import { IsNotEmpty, IsOptional, IsString, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
 import { EnderecoDto } from "src/common/dtos/endereco.dto";
 
-export class ClientCreateDto implements ClientInterface {
+export class ClienteCreateDto implements ClienteInterface {
     @ApiProperty({
         description: 'endereços do cliente',
         type: EnderecoDto,

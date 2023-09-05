@@ -1,14 +1,14 @@
 import { Body, Controller, Get, Post, Query, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { ClientsService } from './clients.service';
-import { ClientCreateDto } from './dtos/client-create.dto';
-import { ClientPaginateQueryDto } from './dtos/client-paginate-query.dto';
+import { ClientesService } from './clientes.service';
+import { ClienteCreateDto } from './dtos/cliente-create.dto';
+import { ClientPaginateQueryDto } from './dtos/cliente-paginate-query.dto';
 
 @Controller('v1/clients')
 @ApiTags('v1/clients')
-export class ClientsController {
+export class ClientesController {
 
-    constructor(private readonly clientsService: ClientsService) { }
+    constructor(private readonly clientesService: ClientesService) { }
 
     @Post('create')
     @ApiOperation({
@@ -17,8 +17,8 @@ export class ClientsController {
     })
     @ApiResponse({ status: 201, description: 'sucesso' })
     @UsePipes(new ValidationPipe({ transform: true }))
-    async add(@Body() dto: ClientCreateDto) {
-        return await this.clientsService.create(dto);
+    async add(@Body() dto: ClienteCreateDto) {
+        return await this.clientesService.create(dto);
     }
 
     @Get('paginate')
@@ -29,6 +29,6 @@ export class ClientsController {
     @ApiResponse({ status: 200, description: 'sucesso' })
     @UsePipes(new ValidationPipe({ transform: true }))
     async paginate(@Query() dto: ClientPaginateQueryDto) {
-      return await this.clientsService.paginate(dto);
+      return await this.clientesService.paginate(dto);
     }
 }

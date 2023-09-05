@@ -3,7 +3,7 @@ import { ArrayMinSize, IsArray, IsDateString, IsEnum, IsNotEmpty, IsNumber, IsOp
 import { PedidoInterface, PedidoStatusEnum } from '../entities/pedido.entity';
 import { Transform, Type } from 'class-transformer';
 import { Schema } from 'mongoose';
-import { IsClientId } from 'src/modules/clients/decorators/isClientId.decorator';
+import { IsClienteId } from 'src/modules/clientes/decorators/isClienteId.decorator';
 import { ProdutoCreateDto } from 'src/modules/produtos/dtos/produto-create.dto';
 import { EnderecoDto } from 'src/common/dtos/endereco.dto';
 
@@ -42,7 +42,7 @@ export class PedidoCreateDto implements PedidoInterface {
   @IsNotEmpty({
     message: 'o _id de registro do cliente deve ser informado',
   })
-  @IsClientId({
+  @IsClienteId({
     message: 'verifique o _id do cliente',
   })
   cliente: Schema.Types.ObjectId;

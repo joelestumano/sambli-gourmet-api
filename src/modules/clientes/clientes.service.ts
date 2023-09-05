@@ -1,19 +1,19 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { ClientCreateDto } from './dtos/client-create.dto';
+import { ClienteCreateDto } from './dtos/cliente-create.dto';
 import mongoose, { Model, PaginateModel, PaginateOptions, PaginateResult } from 'mongoose';
-import { Client, ClientDocument } from './entities/client.entity';
+import { Client, ClientDocument } from './entities/cliente.entity';
 import { PaginateConfig } from 'src/common/paginate/paginate-config';
-import { ClientPaginateQueryDto } from './dtos/client-paginate-query.dto';
+import { ClientPaginateQueryDto } from './dtos/cliente-paginate-query.dto';
 
 @Injectable()
-export class ClientsService {
+export class ClientesService {
     constructor(@InjectModel(Client.name) private readonly clientModel: Model<Client>) { }
 
-    private logger = new Logger(ClientsService.name);
+    private logger = new Logger(ClientesService.name);
 
-    async create(clientCreateDto: ClientCreateDto): Promise<Client> {
-        return await new this.clientModel(clientCreateDto).save();
+    async create(clienteCreateDto: ClienteCreateDto): Promise<Client> {
+        return await new this.clientModel(clienteCreateDto).save();
     }
 
     async paginate(dto: ClientPaginateQueryDto): Promise<PaginateResult<any>> {
