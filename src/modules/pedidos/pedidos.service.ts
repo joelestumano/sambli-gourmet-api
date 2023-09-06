@@ -36,7 +36,7 @@ export class PedidosService {
             populate: [
                 {
                     path: 'cliente',
-                    select: { nome: 1, _id: 0, whatsapp: 1, enderecos: 1 },
+                    select: { nome: 1, _id: 0, whatsapp: 1 },
                     model: Cliente.name
                 },
             ]

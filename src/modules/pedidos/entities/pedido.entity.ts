@@ -10,6 +10,7 @@ export enum PedidoStatusEnum {
   empreparo = 'empreparo',
   despachado = 'despachado',
   cancelado = 'cancelado',
+  concluido = 'concluido',
 }
 
 export interface ItemPedidoInterface {
