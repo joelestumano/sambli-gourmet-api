@@ -7,7 +7,7 @@ import { Produto, ProdutoDocument } from './entities/produto.entity';
 import { ProdutoCreateDto } from './dtos/produto-create.dto';
 import { ProdutoUpdateDto } from './dtos/produto-update.dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { CustomEvent } from '../../common/events/pedido-created.event';
+import { CustomEvent } from '../../common/events/custom-event.event';
 
 @Injectable()
 export class ProdutosService {
@@ -52,7 +52,7 @@ export class ProdutosService {
     async update(id: string, dto: ProdutoUpdateDto) {
         const found: Produto = await this.findById(id);
         const update = await this.produtoModel.updateOne({ _id: id }, dto, { upsert: true }).exec();
-        this.eventEmitter.emit('produto.updated', new CustomEvent('produto atualizado!', update));
+        this.eventEmitter.emit('produtos-changed', new CustomEvent('produtos-changed', update));
         return update;
     }
 

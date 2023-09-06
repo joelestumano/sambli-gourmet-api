@@ -20,17 +20,17 @@ export class ProdutosController {
         description: 'create',
     })
     @ApiResponse({ status: 201, description: 'sucesso' })
-    async add(@Body() dto: ProdutoCreateDto) {
+    async create(@Body() dto: ProdutoCreateDto) {
         return await this.produtosService.create(dto);
     }
 
-    @Sse('updated-notifier')
+    @Sse('changed')
     @ApiOperation({
         summary: 'evento enviado pelo servidor acionado a cada atualização de produto',
         description: 'evento enviado pelo servidor'
     })
-    updatedNotifier() {
-        return fromEvent(this.eventEmitter2, 'produto.updated')
+    changed() {
+        return fromEvent(this.eventEmitter2, 'produtos-changed')
             .pipe(map((event) => ({ data: { event } })));
     }
 

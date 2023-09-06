@@ -7,7 +7,7 @@ import { PedidoCreateDto } from './dtos/pedido-create.dto';
 import { Pedido, PedidoDocument, PedidoStatusEnum } from './entities/pedido.entity';
 import { Cliente } from '../clientes/entities/cliente.entity';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { CustomEvent } from '../../common/events/pedido-created.event';
+import { CustomEvent } from '../../common/events/custom-event.event';
 
 @Injectable()
 export class PedidosService {
