@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, PaginateModel, PaginateOptions, PaginateResult } from 'mongoose';
 import { PedidosPaginateQueryDto } from './dtos/pedido-paginate-query.dto';
@@ -8,6 +8,7 @@ import { Pedido, PedidoDocument, PedidoStatusEnum } from './entities/pedido.enti
 import { Cliente } from '../clientes/entities/cliente.entity';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { CustomEvent } from '../../common/events/custom-event.event';
+import { PedidoUpdateDto } from './dtos/pedido-update.dto';
 
 @Injectable()
 export class PedidosService {
@@ -67,5 +68,22 @@ export class PedidosService {
             query,
             options,
         );
+    }
+
+    async update(id: string, dto: PedidoUpdateDto) {
+        const found: Pedido = await this.findById(id);
+        const update = await this.pedidoModel.updateOne({ _id: id }, dto, { upsert: true }).exec();
+        /*   this.eventEmitter.emit('produtos-changed', new CustomEvent('produtos-changed', update)); */
+        return update;
+    }
+
+    async findById(id: string): Promise<Pedido> {
+        const found = await this.pedidoModel.findById(`${id}`).exec();
+        if (!found) {
+            const message = `nenhum pedido encontrado com a propriedade _id ${id}`;
+            this.logger.error(message);
+            throw new NotFoundException(message);
+        }
+        return found;
     }
 }
