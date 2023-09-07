@@ -10,8 +10,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 @Controller('v1/produtos')
 @ApiTags('v1/produtos')
 export class ProdutosController {
-    constructor(private readonly produtosService: ProdutosService,
-        private eventEmitter2: EventEmitter2) { }
+    constructor(private readonly produtosService: ProdutosService) { }
 
     @Post('create')
     @ApiOperation({
