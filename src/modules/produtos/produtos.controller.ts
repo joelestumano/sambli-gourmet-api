@@ -5,7 +5,6 @@ import { PaginateQueryProdutoDto } from './dtos/produto-paginate-query.dto';
 import { ProdutoCreateDto } from './dtos/produto-create.dto';
 import { ProdutoUpdateDto } from './dtos/produto-update.dto';
 import { ParamIdDto } from '../../common/dtos/param-id.dto';
-import { fromEvent, map } from 'rxjs';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Controller('v1/produtos')
@@ -22,16 +21,6 @@ export class ProdutosController {
     @ApiResponse({ status: 201, description: 'sucesso' })
     async create(@Body() dto: ProdutoCreateDto) {
         return await this.produtosService.create(dto);
-    }
-
-    @Sse('changed')
-    @ApiOperation({
-        summary: 'evento enviado pelo servidor acionado a cada atualização de produto',
-        description: 'evento enviado pelo servidor'
-    })
-    changed() {
-        return fromEvent(this.eventEmitter2, 'produtos-changed')
-            .pipe(map((event) => ({ data: { event } })));
     }
 
     @Get('paginate')
