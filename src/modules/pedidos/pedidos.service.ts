@@ -21,7 +21,7 @@ export class PedidosService {
     async create(dto: PedidoCreateDto): Promise<Pedido> {
         Object.assign(dto, { codigo: this.fakeProtocol() });
         const pedido: Pedido = await new this.pedidoModel(dto).save();
-        this.eventEmitter.emit('changed-collection', new CustomEvent('changed-collection-pedidos', pedido.items));
+        this.eventEmitter.emit('changed-collection', new CustomEvent('changed-collection-pedidos', `pedido ${pedido['_id']} registrado!`));
         return pedido;
     }
 
@@ -72,7 +72,7 @@ export class PedidosService {
     async update(id: string, dto: PedidoUpdateDto) {
         const found: Pedido = await this.findById(id);
         const update = await this.pedidoModel.updateOne({ _id: id }, dto, { upsert: true }).exec();
-        /*   this.eventEmitter.emit('produtos-changed', new CustomEvent('produtos-changed', update)); */
+        this.eventEmitter.emit('changed-collection', new CustomEvent('changed-collection-pedidos', `pedido ${found['_id']} atualizado!`));
         return update;
     }
 
