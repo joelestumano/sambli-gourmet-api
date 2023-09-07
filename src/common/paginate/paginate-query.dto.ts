@@ -9,6 +9,7 @@ export class PaginateQueryDto {
     required: false,
     default: false,
   })
+  @IsOptional()
   @Transform((t: any) => (t.value === 'true' || t.value === true || t.value === 1 || t.value === '1'))
   ativarPaginacao: boolean;
 
