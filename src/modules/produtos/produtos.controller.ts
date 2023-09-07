@@ -5,7 +5,6 @@ import { PaginateQueryProdutoDto } from './dtos/produto-paginate-query.dto';
 import { ProdutoCreateDto } from './dtos/produto-create.dto';
 import { ProdutoUpdateDto } from './dtos/produto-update.dto';
 import { ParamIdDto } from '../../common/dtos/param-id.dto';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Controller('v1/produtos')
 @ApiTags('v1/produtos')
