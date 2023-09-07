@@ -30,7 +30,7 @@ export class PedidosService {
             page: dto.pagina,
             limit: dto.limite,
             customLabels: PaginateConfig.paginateCustomLabels(),
-            sort: { createdAt: 'desc' },
+            sort: { createdAt: 'asc' },
             pagination: dto.ativarPaginacao,
             populate: [
                 {
