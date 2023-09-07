@@ -31,6 +31,7 @@ export interface PedidoInterface {
   }
   obs: string;
   status: PedidoStatusEnum;
+  codigo?: string;
 }
 
 abstract class ItemPedido implements ItemPedidoInterface {
@@ -69,6 +70,8 @@ export class Pedido extends Default implements PedidoInterface {
   obs: string;
   @Prop({ required: true })
   status: PedidoStatusEnum;
+  @Prop({ required: true })
+  codigo: string
 }
 
 export const PedidoSchema = SchemaFactory.createForClass(Pedido);

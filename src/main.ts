@@ -24,6 +24,12 @@ async function bootstrap() {
   }));
   app.useGlobalFilters(new HttpExceptionFilter());
 
+  app.enableCors({
+    origin: '*',
+    allowedHeaders:
+      'Content-Type, Access-Control-Allow-Headers, Authorization',
+  });
+
   Date.prototype.toJSON = function (): any {
     return momentTimezone(this)
       .tz('America/Belem')

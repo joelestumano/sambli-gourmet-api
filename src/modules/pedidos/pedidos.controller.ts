@@ -3,8 +3,6 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { PedidosPaginateQueryDto } from './dtos/pedido-paginate-query.dto';
 import { PedidosService } from './pedidos.service';
 import { PedidoCreateDto } from './dtos/pedido-create.dto';
-import { fromEvent, map } from 'rxjs';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ParamIdDto } from 'src/common/dtos/param-id.dto';
 import { PedidoUpdateDto } from './dtos/pedido-update.dto';
 
@@ -12,8 +10,7 @@ import { PedidoUpdateDto } from './dtos/pedido-update.dto';
 @ApiTags('v1/pedidos')
 export class PedidosController {
 
-    constructor(private readonly pedidoService: PedidosService,
-        private eventEmitter2: EventEmitter2) { }
+    constructor(private readonly pedidoService: PedidosService) { }
 
     @Post('create')
     @ApiOperation({
@@ -24,16 +21,6 @@ export class PedidosController {
     @UsePipes(new ValidationPipe({ transform: true }))
     async create(@Body() dto: PedidoCreateDto) {
         return await this.pedidoService.create(dto);
-    }
-
-    @Sse('create-notifier')
-    @ApiOperation({
-        summary: 'evento enviado pelo servidor acionado a cada novo pedido',
-        description: 'evento enviado pelo servidor'
-    })
-    createNotifier() {
-        return fromEvent(this.eventEmitter2, 'pedido.created')
-            .pipe(map((event) => ({ data: { event } })));
     }
 
     @Get('paginate')

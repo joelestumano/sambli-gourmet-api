@@ -13,6 +13,7 @@ import { ProdutosModule } from './modules/produtos/produtos.module';
 import { PedidosModule } from './modules/pedidos/pedidos.module';
 import { ClientesModule } from './modules/clientes/clientes.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { CustomListener } from './common/events/listeners/custom.listener';
 
 const envFilePath: string = getEnvPath(`${__dirname}/common/envs/`);
 
@@ -38,6 +39,6 @@ const envFilePath: string = getEnvPath(`${__dirname}/common/envs/`);
     EventEmitterModule.forRoot()
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, CustomListener],
 })
 export class AppModule { }

@@ -7,7 +7,7 @@ import { PedidoCreateDto } from './dtos/pedido-create.dto';
 import { Pedido, PedidoDocument, PedidoStatusEnum } from './entities/pedido.entity';
 import { Cliente } from '../clientes/entities/cliente.entity';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { CustomEvent } from '../../common/events/custom-event.event';
+import { CustomEvent } from '../../common/events/custom.event';
 import { PedidoUpdateDto } from './dtos/pedido-update.dto';
 
 @Injectable()
@@ -19,10 +19,9 @@ export class PedidosService {
         private eventEmitter: EventEmitter2) { }
 
     async create(dto: PedidoCreateDto): Promise<Pedido> {
+        Object.assign(dto, { codigo: this.fakeProtocol() });
         const pedido: Pedido = await new this.pedidoModel(dto).save();
-
-        this.eventEmitter.emit('pedido.created', new CustomEvent('novo pedido!', pedido.items));
-
+        this.eventEmitter.emit('changed-collection', new CustomEvent('changed-collection-pedidos', pedido.items));
         return pedido;
     }
 
@@ -85,5 +84,15 @@ export class PedidosService {
             throw new NotFoundException(message);
         }
         return found;
+    }
+
+    private fakeProtocol(): string {
+        var data = new Date();
+        return (
+            ('0' + data.getDate()).substring(-2) +
+            ('0' + (data.getMonth() + 1)).substring(-2) +
+            data.getFullYear() +
+            Math.floor(1000 + Math.random() * 9000)
+        );
     }
 }
