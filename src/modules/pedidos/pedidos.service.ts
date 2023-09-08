@@ -57,6 +57,7 @@ export class PedidosService {
         if (dto.status === PedidoStatusEnum.pendente ||
             dto.status === PedidoStatusEnum.empreparo ||
             dto.status === PedidoStatusEnum.despachado ||
+            dto.status === PedidoStatusEnum.concluido ||
             dto.status === PedidoStatusEnum.cancelado) {
             Object.assign(query, {
                 status: dto.status
