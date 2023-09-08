@@ -1,23 +1,23 @@
-import { Body, Controller, Get, Param, Patch, Post, Query, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Query, Sse, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ProdutosService } from './produtos.service';
-import { PaginateQueryProdutoDto } from './dtos/paginate-query-produto.dto';
+import { PaginateQueryProdutoDto } from './dtos/produto-paginate-query.dto';
 import { ProdutoCreateDto } from './dtos/produto-create.dto';
 import { ProdutoUpdateDto } from './dtos/produto-update.dto';
 import { ParamIdDto } from '../../common/dtos/param-id.dto';
 
-@Controller('produtos')
-@ApiTags('produtos')
+@Controller('v1/produtos')
+@ApiTags('v1/produtos')
 export class ProdutosController {
     constructor(private readonly produtosService: ProdutosService) { }
 
     @Post('create')
     @ApiOperation({
-        summary: 'registro de um novo produto',
+        summary: 'registra novo produto',
         description: 'create',
     })
     @ApiResponse({ status: 201, description: 'sucesso' })
-    async add(@Body() dto: ProdutoCreateDto) {
+    async create(@Body() dto: ProdutoCreateDto) {
         return await this.produtosService.create(dto);
     }
 

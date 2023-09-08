@@ -1,10 +1,15 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
+import { useContainer } from 'class-validator';
+import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import * as momentTimezone from 'moment-timezone';
 
 async function bootstrap() {
+  const logger = new Logger('Main');
   const app = await NestFactory.create(AppModule);
+  useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
   const config = new DocumentBuilder()
     .setTitle('Sambli Gourmet API')
@@ -14,8 +19,24 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
 
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({
+    whitelist: true, // remove propriedades desnecessárias no corpo da solicitação POST
+  }));
+  app.useGlobalFilters(new HttpExceptionFilter());
+
+  app.enableCors({
+    origin: '*',
+    allowedHeaders:
+      'Content-Type, Access-Control-Allow-Headers, Authorization',
+  });
+
+  Date.prototype.toJSON = function (): any {
+    return momentTimezone(this)
+      .tz('America/Belem')
+      .format('YYYY-MM-DD HH:mm:ss.SSS');
+  }
+
   await app.listen(process.env.PORT || 3000);
-  console.log(`Application is running on: ${await app.getUrl()}`);
+  logger.log(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();

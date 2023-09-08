@@ -1,16 +1,19 @@
 import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { PaginateQueryProdutoDto } from './dtos/paginate-query-produto.dto';
+import { PaginateQueryProdutoDto } from './dtos/produto-paginate-query.dto';
 import { Model, PaginateModel, PaginateOptions, PaginateResult } from 'mongoose';
 import { PaginateConfig } from 'src/common/paginate/paginate-config';
 import { InjectModel } from '@nestjs/mongoose';
 import { Produto, ProdutoDocument } from './entities/produto.entity';
 import { ProdutoCreateDto } from './dtos/produto-create.dto';
 import { ProdutoUpdateDto } from './dtos/produto-update.dto';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { CustomEvent } from '../../common/events/custom.event';
 
 @Injectable()
 export class ProdutosService {
     private readonly logger = new Logger(ProdutosService.name);
-    constructor(@InjectModel(Produto.name) private readonly produtoModel: Model<Produto>) { }
+    constructor(@InjectModel(Produto.name) private readonly produtoModel: Model<Produto>,
+        private eventEmitter: EventEmitter2) { }
 
     async create(dto: ProdutoCreateDto): Promise<Produto> {
         const { descricao } = dto;
@@ -32,6 +35,7 @@ export class ProdutosService {
             limit: dto.limite,
             customLabels: PaginateConfig.paginateCustomLabels(),
             sort: { createdAt: 'desc' },
+            pagination: dto.ativarPaginacao
         };
 
         let query = { isDeleted: false, active: true };
@@ -47,9 +51,9 @@ export class ProdutosService {
 
     async update(id: string, dto: ProdutoUpdateDto) {
         const found: Produto = await this.findById(id);
-        return await this.produtoModel
-            .updateOne({ _id: id }, dto, { upsert: true })
-            .exec();
+        const update = await this.produtoModel.updateOne({ _id: id }, dto, { upsert: true }).exec();
+        this.eventEmitter.emit('changed-collection', new CustomEvent('changed-collection-produtos', update));
+        return update;
     }
 
     async findById(id: string): Promise<Produto> {

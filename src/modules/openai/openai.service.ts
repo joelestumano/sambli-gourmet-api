@@ -4,8 +4,7 @@ import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from 'openai';
 import { Message } from 'venom-bot';
 import { OpenaiPromptService } from './openai-prompt.service';
 import { ECallState } from './enums/openai.enum';
-import { OrdersService } from '../orders/orders.service';
-import { Order, OrderStatus } from '../orders/entities/order.entity';
+import { PedidosService } from '../pedidos/pedidos.service';
 
 export enum WhatsappMessageType {
     text = 'text',
@@ -35,7 +34,7 @@ export class OpenaiService {
     constructor(
         private readonly configService: ConfigService,
         private readonly promptService: OpenaiPromptService,
-        private readonly ordersService: OrdersService
+        private readonly ordersService: PedidosService
     ) {
         const openaiConfig = new Configuration({
             apiKey: this.configService.get<string>('openai.key'),
@@ -69,19 +68,19 @@ export class OpenaiService {
                 const resumo = JSON.parse(arrayMatch[0]);
                 this.logger.log(resumo)
 
-                const order: Order = {
-                    active: true,
-                    client: message.sender.pushname,
-                    descricao: JSON.stringify(resumo),
-                    isDeleted: false,
-                    order: call.orderId,
-                    status: OrderStatus.pending,
-                    whatsapp: `+${call.chatId.replace('@c.us', '')}`
-                }
-
-                await this.ordersService.create(order).then(result => {
-                    console.log(result);
-                });
+                /*  const order: Order = {
+                      active: true,
+                      client: message.sender.pushname,
+                      descricao: JSON.stringify(resumo),
+                      isDeleted: false,
+                      orderCode: call.orderId,
+                      status: OrderStatus.pending,
+                      whatsapp: `+${call.chatId.replace('@c.us', '')}`
+                  }
+  
+                   await this.ordersService.create(order).then(result => {
+                      console.log(result);
+                  }); */
 
             }
 
