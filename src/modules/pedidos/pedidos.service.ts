@@ -92,7 +92,7 @@ export class PedidosService {
         return (
             ('0' + data.getDate()).substring(-2) +
             ('0' + (data.getMonth() + 1)).substring(-2) +
-            data.getFullYear() +
+            data.getFullYear().toString().slice(2) +
             Math.floor(1000 + Math.random() * 9000)
         );
     }
