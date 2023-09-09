@@ -5,6 +5,7 @@ import mongoose, { Model, PaginateModel, PaginateOptions, PaginateResult } from 
 import { Cliente, ClienteDocument } from './entities/cliente.entity';
 import { PaginateConfig } from 'src/common/paginate/paginate-config';
 import { ClientPaginateQueryDto } from './dtos/cliente-paginate-query.dto';
+import { ClienteUpdateDto } from './dtos/cliente-update.dto';
 
 @Injectable()
 export class ClientesService {
@@ -37,7 +38,13 @@ export class ClientesService {
         );
     }
 
-    async findById(id: mongoose.Schema.Types.ObjectId): Promise<Cliente> {
+    async update(id: string, dto: ClienteUpdateDto) {
+        const found: Cliente = await this.findById(id);
+        const update = await this.clienteModel.updateOne({ _id: id }, dto, { upsert: true }).exec();
+        return update;
+    }
+
+    async findById(id: mongoose.Schema.Types.ObjectId | string): Promise<Cliente> {
         const found = await this.clienteModel.findById(`${id}`).exec();
         if (!found) {
             const message = `nenhum cliente encontrado com a propriedade _id ${id}`;
