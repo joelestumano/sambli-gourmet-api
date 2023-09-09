@@ -1,38 +1,12 @@
-import { ApiProperty, OmitType } from '@nestjs/swagger';
-import { ArrayMinSize, IsArray, IsDateString, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { ArrayMinSize, IsArray, IsDateString, IsEnum, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { PedidoInterface, PedidoStatusEnum } from '../entities/pedido.entity';
 import { Transform, Type } from 'class-transformer';
 import { Schema } from 'mongoose';
 import { IsClienteId } from 'src/modules/clientes/decorators/isClienteId.decorator';
-import { ProdutoCreateDto } from 'src/modules/produtos/dtos/produto-create.dto';
-import { EnderecoDto } from 'src/common/dtos/endereco.dto';
-
-class ItemPedidoDto extends ProdutoCreateDto { }
-class EnderecoPedidoDto extends OmitType(EnderecoDto, ['principal'] as const) { }
-
-class PagamentoDto {
-  @ApiProperty({
-    description: 'valor no cartao',
-  })
-  @IsNumber()
-  @IsOptional()
-  @Type(() => Number)
-  cartao: number;
-  @ApiProperty({
-    description: 'valor no dinheiro',
-  })
-  @IsNumber()
-  @IsOptional()
-  @Type(() => Number)
-  dinheiro: number;
-  @ApiProperty({
-    description: 'valor no pix',
-  })
-  @IsNumber()
-  @IsOptional()
-  @Type(() => Number)
-  pix: number;
-}
+import { ItemPedidoDto } from './item-pedido.dto';
+import { EnderecoPedidoDto } from './endereco-pedido.dto';
+import { PagamentoDto } from './pagamento.dto';
 
 export class PedidoCreateDto implements PedidoInterface {
   @ApiProperty({
