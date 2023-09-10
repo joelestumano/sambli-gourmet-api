@@ -7,6 +7,7 @@ import { IsClienteId } from 'src/modules/clientes/decorators/isClienteId.decorat
 import { ItemPedidoDto } from './item-pedido.dto';
 import { EnderecoPedidoDto } from './endereco-pedido.dto';
 import { PagamentoDto } from './pagamento.dto';
+import { IsPagamentoValid } from '../decorators/suma-items-valores-constraint.decorator';
 
 export class PedidoCreateDto implements PedidoInterface {
   @ApiProperty({
@@ -79,6 +80,7 @@ export class PedidoCreateDto implements PedidoInterface {
   @ValidateNested({
     message: 'verifique o pagamento informado',
   })
+  @IsPagamentoValid({ message: 'os valores de pagamento deve corresponder aos valores dos items' })
   @Type(() => PagamentoDto)
   pagamento: PagamentoDto;
 

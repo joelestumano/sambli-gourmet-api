@@ -28,8 +28,14 @@ export class ClientesService {
         };
 
         let query = { isDeleted: false, active: true };
-        if (dto.nome) {
-            Object.assign(query, { nome: { $regex: new RegExp(dto.nome, 'i') } });
+        if (dto.nomeWhatsapp) {
+            const searchTerm = dto.nomeWhatsapp.replace('+', '');
+            Object.assign(query, {
+                $or: [
+                    { nome: { $regex: searchTerm, $options: "i" } },
+                    { whatsapp: { $regex: searchTerm, $options: "i" } }
+                ]
+            })
         }
 
         return await (this.clienteModel as PaginateModel<ClienteDocument>).paginate(
