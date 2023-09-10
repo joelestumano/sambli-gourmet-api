@@ -88,12 +88,17 @@ export class PedidosService {
     }
 
     private fakeProtocol(): string {
-        var data = new Date();
-        return (
-            ('0' + data.getDate()).substring(-2) +
-            ('0' + (data.getMonth() + 1)).substring(-2) +
-            data.getFullYear().toString().slice(2) +
-            Math.floor(1000 + Math.random() * 9000)
-        );
+        const tDay = new Date();
+        const date = `${this.fill(tDay.getDate(), 2)}${this.fill(tDay.getMonth(), 2)}${(this.fill(tDay.getFullYear(), 4)).slice(2)}`
+        const time = `${this.fill(tDay.getHours(), 2)}${this.fill(tDay.getMinutes(), 2)}${this.fill(tDay.getMilliseconds(), 3)}`
+        return `${date} ${time}`
+    }
+
+    private fill(value: number, length: number): string {
+        let str = value.toString();
+        while (str.length < length) {
+            str = '0' + str
+        }
+        return str;
     }
 }
