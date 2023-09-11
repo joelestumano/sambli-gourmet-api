@@ -3,7 +3,7 @@ import { IsDateString, IsEnum, IsOptional, IsString, ValidateNested } from 'clas
 import { PedidoInterface, PedidoStatusEnum } from '../entities/pedido.entity';
 import { Transform, Type } from 'class-transformer';
 import { Schema } from 'mongoose';
-import { IsClienteId } from 'src/modules/clientes/decorators/isClienteId.decorator';
+import { IsClienteId } from 'src/modules/clientes/decorators/is-clienteId.decorator';
 import { ItemPedidoDto } from './item-pedido.dto';
 import { EnderecoPedidoDto } from './endereco-pedido.dto';
 import { PagamentoDto } from './pagamento.dto';
@@ -12,7 +12,7 @@ import { PagamentoDto } from './pagamento.dto';
 export class PedidoUpdateDto implements PedidoInterface {
     @ApiProperty({
         description: '_id de registro do cliente',
-        example: '64f764ae018dc9c9c2681bf7',
+        example: '64ff64d10af971cc56b36da7',
     })
     @IsOptional()
     @IsClienteId({

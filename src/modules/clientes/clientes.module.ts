@@ -3,7 +3,7 @@ import { ClientesController } from './clientes.controller';
 import { ClientesService } from './clientes.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Cliente, ClienteSchema } from './entities/cliente.entity';
-import { IsClienteIdValidatorConstraint } from './decorators/isClienteId.decorator';
+import { IsClienteIdValidatorConstraint } from './decorators/is-clienteId.decorator';
 
 @Module({
   controllers: [ClientesController],

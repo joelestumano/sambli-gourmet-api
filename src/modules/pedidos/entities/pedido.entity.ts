@@ -70,7 +70,7 @@ export class Pedido extends Default implements PedidoInterface {
   obs: string;
   @Prop({ required: true })
   status: PedidoStatusEnum;
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   codigo: string
 }
 
