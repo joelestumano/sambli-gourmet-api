@@ -30,8 +30,13 @@ export class ClienteUpdateDto implements ClienteInterface {
     })
     @IsOptional()
     @IsString()
-    @Transform((w) => `+55${(w.value).replace('+55', '')}`)
-    @IsWhatsappValidator({ min: 10, max: 11, prefix: `+55` }, {
+    @Transform(({ value }) => {
+        if (!value.startsWith('+55')) {
+            value = '+55'.concat(value);
+        }
+        return value;
+    })
+    @IsWhatsappValidator({
         message: 'o contato whatsapp deve conter de 10 a 11 caracteres',
     })
     whatsapp: string;

@@ -1,28 +1,28 @@
-import { Injectable } from "@nestjs/common";
-import { ValidationArguments, ValidationOptions, ValidatorConstraint, ValidatorConstraintInterface, registerDecorator } from "class-validator";
+import {
+    registerDecorator,
+    ValidationOptions,
+    ValidatorConstraint,
+    ValidatorConstraintInterface,
+    ValidationArguments,
+} from 'class-validator';
 
-@ValidatorConstraint({ name: 'IsWhatsappValidator', async: false })
-@Injectable()
+@ValidatorConstraint({ async: false })
 export class IsWhatsappValidatorConstraint implements ValidatorConstraintInterface {
-
     validate(whatsapp: string, args: ValidationArguments) {
-        if (whatsapp) {
-            const constraints = args.constraints[0];
-            const value = whatsapp.replace(constraints.prefix, '');
-            const min = constraints.min;
-            const max = constraints.max;
-            return (value.length >= min && value.length <= max)
+        if (!whatsapp?.replace('+55', '')) {
+            return false;
         }
+        return whatsapp.length >= 13 && whatsapp.length <= 14;
     }
 }
 
-export function IsWhatsappValidator(args: { min: number, max: number, prefix: string }, validationOptions?: ValidationOptions) {
-    return function (object: any, propertyName: string) {
+export function IsWhatsappValidator(validationOptions?: ValidationOptions) {
+    return function (object: Object, propertyName: string) {
         registerDecorator({
+            name: 'isWhatsapp',
             target: object.constructor,
             propertyName: propertyName,
             options: validationOptions,
-            constraints: [args],
             validator: IsWhatsappValidatorConstraint,
         });
     };

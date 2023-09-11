@@ -12,7 +12,7 @@ import { PagamentoDto } from './pagamento.dto';
 export class PedidoUpdateDto implements PedidoInterface {
     @ApiProperty({
         description: '_id de registro do cliente',
-        example: '64f764ae018dc9c9c2681bf7',
+        example: '64ff64d10af971cc56b36da7',
     })
     @IsOptional()
     @IsClienteId({
