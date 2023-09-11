@@ -3,7 +3,7 @@ import { IsDateString, IsEnum, IsOptional, IsString, ValidateNested } from 'clas
 import { PedidoInterface, PedidoStatusEnum } from '../entities/pedido.entity';
 import { Transform, Type } from 'class-transformer';
 import { Schema } from 'mongoose';
-import { IsClienteId } from 'src/modules/clientes/decorators/isClienteId.decorator';
+import { IsClienteId } from 'src/modules/clientes/decorators/is-clienteId.decorator';
 import { ItemPedidoDto } from './item-pedido.dto';
 import { EnderecoPedidoDto } from './endereco-pedido.dto';
 import { PagamentoDto } from './pagamento.dto';
