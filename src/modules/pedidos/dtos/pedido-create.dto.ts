@@ -12,7 +12,7 @@ import { IsPagamentoValid } from '../decorators/suma-items-valores-constraint.de
 export class PedidoCreateDto implements PedidoInterface {
   @ApiProperty({
     description: '_id de registro do cliente',
-    example: '64ff64d10af971cc56b36da7',
+    example: '64ff9310ac886b54ea28e4f9',
   })
   @IsNotEmpty({
     message: 'o _id de registro do cliente deve ser informado',
