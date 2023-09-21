@@ -17,7 +17,7 @@ async function bootstrap() {
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('docs', app, document);
+  SwaggerModule.setup('v1/docs', app, document);
 
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true, // remove propriedades desnecessárias no corpo da solicitação POST

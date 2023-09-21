@@ -11,15 +11,19 @@ export class WhatsappService {
     private whatsappRef: Whatsapp;
 
     constructor(private readonly openaiService: OpenaiService) {
-       /*  create({
-            session: 'session-sg-api',
-            autoClose: 0,
-        }).then(async (whatsapp: Whatsapp) => {
-            this.whatsappRef = whatsapp;
-            return await this.start(this.whatsappRef);
-        }).catch((error) => {
-            throw new InternalServerErrorException(error);
-        }); */
+        /*  create({
+             session: 'session-sg-api',
+             autoClose: 0,
+         }).then(async (whatsapp: Whatsapp) => {
+             this.whatsappRef = whatsapp;
+             return await this.start(this.whatsappRef);
+         }).catch((error) => {
+             throw new InternalServerErrorException(error);
+         }); */
+    }
+
+    createSession(): Promise<any> {
+
     }
 
     private async start(whatsappRef: Whatsapp): Promise<void> {
