@@ -3,6 +3,7 @@ import { create, Message, Whatsapp } from 'venom-bot';
 import { OpenaiBotMessage, OpenaiService, WhatsappMessageType } from '../openai/openai.service';
 import { DtoWhatsappProfileName } from './dtos/whatsapp-profile-name.dto';
 import { DtoWhatsappProfileStatus } from './dtos/whatsapp-profile-status.dto';
+import { DtoWhatsappSessionName } from './dtos/whatsapp-session-name.dto';
 
 @Injectable()
 export class WhatsappService {
@@ -22,8 +23,23 @@ export class WhatsappService {
          }); */
     }
 
-    createSession(): Promise<any> {
-
+    async createSession(dto: DtoWhatsappSessionName): Promise<any> {
+        return new Promise((resolve, reject) => {
+            create(
+                dto.sessionName,
+                (base64Qr, asciiQR, attempts, urlCode) => {
+                    console.log(asciiQR); // Optional to log the QR in the terminal
+                    resolve(base64Qr);
+                },
+                undefined,
+                { logQR: false }
+            ).then(async (whatsapp: Whatsapp) => {
+                this.whatsappRef = whatsapp;
+                return await this.start(this.whatsappRef);
+            }).catch((error) => {
+                throw new InternalServerErrorException(error);
+            });
+        })
     }
 
     private async start(whatsappRef: Whatsapp): Promise<void> {
