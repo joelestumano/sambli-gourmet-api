@@ -1,15 +1,37 @@
-import { Body, Controller, Post, UploadedFile } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Get,
+    Post,
+    Query,
+    UploadedFile,
+    UsePipes,
+    ValidationPipe,
+} from '@nestjs/common';
 import { WhatsappService } from './whatsapp.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DtoWhatsappProfileStatus } from './dtos/whatsapp-profile-status.dto';
 import { DtoWhatsappProfileName } from './dtos/whatsapp-profile-name.dto';
 import { UploadTempFile } from 'src/common/decorators/upload-file.decorator';
+import { DtoWhatsappSessionName } from './dtos/whatsapp-session-name.dto';
 
 @Controller('v1/whatsapp')
 @ApiTags('v1/whatsapp')
 export class WhatsappController {
-
     constructor(private readonly whatsappService: WhatsappService) { }
+
+    @Get('create-session')
+    @ApiOperation({
+        summary: 'cria uma sessão de cliente whatsapp',
+        description: 'sessão whatsapp',
+    })
+    @ApiResponse({ status: 200, description: 'sucesso' })
+    @UsePipes(new ValidationPipe({ transform: true }))
+    async createSession(
+        @Query() query: DtoWhatsappSessionName
+    ) {
+        return await this.whatsappService.createSession(query);
+    }
 
     @Post('set-profile-status')
     @ApiOperation({
