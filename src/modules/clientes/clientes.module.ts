@@ -8,6 +8,7 @@ import { IsClienteIdValidatorConstraint } from './decorators/is-clienteId.decora
 @Module({
   controllers: [ClientesController],
   imports: [MongooseModule.forFeature([{ name: Cliente.name, schema: ClienteSchema }])],
-  providers: [ClientesService, IsClienteIdValidatorConstraint]
+  providers: [ClientesService, IsClienteIdValidatorConstraint],
+  exports: [ClientesService]
 })
 export class ClientesModule { }

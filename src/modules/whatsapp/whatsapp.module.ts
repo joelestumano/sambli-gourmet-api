@@ -7,6 +7,7 @@ import { OpenaiModule } from '../openai/openai.module';
 @Module({
   imports: [ConfigModule, OpenaiModule],
   providers: [WhatsappService],
-  controllers: [WhatsappController]
+  controllers: [WhatsappController],
+  exports: [WhatsappService]
 })
 export class WhatsappModule { }

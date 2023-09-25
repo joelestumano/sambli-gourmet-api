@@ -9,6 +9,9 @@ import { Cliente } from '../clientes/entities/cliente.entity';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { CustomEvent } from '../../common/events/custom.event';
 import { PedidoUpdateDto } from './dtos/pedido-update.dto';
+import { WhatsappService } from '../whatsapp/whatsapp.service';
+import { ClientesService } from '../clientes/clientes.service';
+import { ItemPedidoDto } from './dtos/item-pedido.dto';
 
 @Injectable()
 export class PedidosService {
@@ -16,12 +19,15 @@ export class PedidosService {
     private readonly logger = new Logger(PedidosService.name);
 
     constructor(@InjectModel(Pedido.name) private readonly pedidoModel: Model<Pedido>,
+        private whatsappService: WhatsappService,
+        private clientesService: ClientesService,
         private eventEmitter: EventEmitter2) { }
 
     async create(dto: PedidoCreateDto): Promise<Pedido> {
         Object.assign(dto, { codigo: this.fakeProtocol() });
         const pedido: Pedido = await new this.pedidoModel(dto).save();
         this.eventEmitter.emit('changed-collection', new CustomEvent('changed-collection-pedidos', `pedido ${pedido['_id']} registrado!`));
+        await this.handleWhatsappMessage(pedido);
         return pedido;
     }
 
@@ -100,5 +106,16 @@ export class PedidosService {
             str = '0' + str
         }
         return str;
+    }
+
+    private async handleWhatsappMessage(pedido: Pedido, status?: PedidoStatusEnum): Promise<void> {
+        const cliente = await this.clientesService.findById(pedido.cliente);
+        const chatId = ((cliente.whatsapp).replace('+', '')).concat('@c.us');
+        let itemsPedidoStr = '';
+        pedido.items.forEach((item: ItemPedidoDto) => {
+            itemsPedidoStr += `R$ ${item.valor} de ${item.descricao}\n`
+        })
+        const message = `Olá ${cliente.nome}, seu pedido de \n${itemsPedidoStr}acaba de ser recebido!`
+        await this.whatsappService.sendWhatsappMessage(chatId, message);
     }
 }

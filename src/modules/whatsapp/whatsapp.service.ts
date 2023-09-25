@@ -35,6 +35,9 @@ export class WhatsappService {
                 { logQR: false }
             ).then(async (whatsapp: Whatsapp) => {
                 this.whatsappRef = whatsapp;
+                resolve({
+                    status: `[instance: ${dto.sessionName}]: Connected`
+                });
                 return await this.start(this.whatsappRef);
             }).catch((error) => {
                 throw new InternalServerErrorException(error);
@@ -111,6 +114,16 @@ export class WhatsappService {
                     }
                 })
             });
+        } else {
+            throw new InternalServerErrorException('Whatsapp client is null');
+        }
+    }
+
+    async sendWhatsappMessage(chatId: string, message: string) {
+        if (this.whatsappRef) {
+            return await this.whatsappRef.sendText(chatId, `👱‍♀️ ${message}`)
+                .then((result) => result)
+                .catch((error) => error);
         } else {
             throw new InternalServerErrorException('Whatsapp client is null');
         }

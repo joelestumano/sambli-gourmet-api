@@ -4,7 +4,6 @@ import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from 'openai';
 import { Message } from 'venom-bot';
 import { OpenaiPromptService } from './openai-prompt.service';
 import { ECallState } from './enums/openai.enum';
-import { PedidosService } from '../pedidos/pedidos.service';
 
 export enum WhatsappMessageType {
     text = 'text',
@@ -34,7 +33,6 @@ export class OpenaiService {
     constructor(
         private readonly configService: ConfigService,
         private readonly promptService: OpenaiPromptService,
-        private readonly ordersService: PedidosService
     ) {
         const openaiConfig = new Configuration({
             apiKey: this.configService.get<string>('openai.key'),
