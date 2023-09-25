@@ -27,7 +27,7 @@ export class PedidosService {
         Object.assign(dto, { codigo: this.fakeProtocol() });
         const pedido: Pedido = await new this.pedidoModel(dto).save();
         this.eventEmitter.emit('changed-collection', new CustomEvent('changed-collection-pedidos', `pedido ${pedido['_id']} registrado!`));
-        await this.handleWhatsappMessage(pedido);
+        //await this.handleWhatsappMessage(pedido);
         return pedido;
     }
 
