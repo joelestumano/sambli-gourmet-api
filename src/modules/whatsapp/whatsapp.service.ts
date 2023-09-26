@@ -27,7 +27,10 @@ export class WhatsappService {
                         sessionName: session
                     }
                 },
-                { logQR: false }
+                {
+                    logQR: false,
+                    addBrowserArgs: ['--user-agent'],
+                }
             ).then(async (whatsapp: Whatsapp) => {
                 this.whatsappRef = whatsapp;
                 resolve(session_);
