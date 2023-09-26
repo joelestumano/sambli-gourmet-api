@@ -1,4 +1,4 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, PaginateModel, PaginateOptions, PaginateResult } from 'mongoose';
 import { PedidosPaginateQueryDto } from './dtos/pedido-paginate-query.dto';
@@ -78,6 +78,12 @@ export class PedidosService {
 
     async update(id: string, dto: PedidoUpdateDto) {
         const found: Pedido = await this.findById(id);
+        if (!this.updateIsValid(found)) {
+            throw new BadRequestException(`o pedido não pode mais ser atualizado`);
+        }
+        if (!this.updateIsValidPagamento(found, dto)) {
+            throw new BadRequestException(`o pedido não pode ser atualizado com valor inferior ao atual`);
+        }
         const update = await this.pedidoModel.updateOne({ _id: id }, dto, { upsert: true }).exec();
         this.eventEmitter.emit('changed-collection', new CustomEvent('changed-collection-pedidos', `pedido ${found['_id']} atualizado!`));
         return update;
@@ -106,6 +112,19 @@ export class PedidosService {
             str = '0' + str
         }
         return str;
+    }
+
+    private updateIsValid(pedido: Pedido): boolean {
+        let despacho = new Date(pedido.horaDespacho);
+        despacho.setMinutes(despacho.getMinutes() - 10);
+        let moment = new Date();
+        return (moment < despacho) && pedido.status === PedidoStatusEnum.pendente;
+    }
+
+    private updateIsValidPagamento(pedido: Pedido, dto: PedidoUpdateDto): boolean {
+        const pedidoPagamento = Object.values(pedido.pagamento).reduce((suma: number, valor: number) => suma + valor, 0);
+        const dtoPagamento = Object.values(dto.pagamento).reduce((suma: number, valor: number) => suma + valor, 0);
+        return dtoPagamento > pedidoPagamento;
     }
 
     private async handleWhatsappMessage(pedido: Pedido, status?: PedidoStatusEnum): Promise<void> {
