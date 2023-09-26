@@ -11,33 +11,26 @@ export class WhatsappService {
     private readonly logger = new Logger(WhatsappService.name);
     private whatsappRef: Whatsapp;
 
-    constructor(private readonly openaiService: OpenaiService) {
-        /*  create({
-             session: 'session-sg-api',
-             autoClose: 0,
-         }).then(async (whatsapp: Whatsapp) => {
-             this.whatsappRef = whatsapp;
-             return await this.start(this.whatsappRef);
-         }).catch((error) => {
-             throw new InternalServerErrorException(error);
-         }); */
-    }
+    constructor(private readonly openaiService: OpenaiService) { }
 
     async createSession(dto: DtoWhatsappSessionName): Promise<any> {
         return new Promise((resolve, reject) => {
+            let session_;
             create(
                 dto.sessionName,
                 (base64Qr, asciiQR, attempts, urlCode) => {
-                    console.log(asciiQR); // Optional to log the QR in the terminal
                     resolve(base64Qr);
                 },
-                undefined,
+                (statusSession, session) => {
+                    session_ = {
+                        statusSession: statusSession,
+                        sessionName: session
+                    }
+                },
                 { logQR: false }
             ).then(async (whatsapp: Whatsapp) => {
                 this.whatsappRef = whatsapp;
-                resolve({
-                    status: `[instance: ${dto.sessionName}]: Connected`
-                });
+                resolve(session_);
                 return await this.start(this.whatsappRef);
             }).catch((error) => {
                 throw new InternalServerErrorException(error);
@@ -124,8 +117,6 @@ export class WhatsappService {
             return await this.whatsappRef.sendText(chatId, `👱‍♀️ ${message}`)
                 .then((result) => result)
                 .catch((error) => error);
-        } else {
-            throw new InternalServerErrorException('Whatsapp client is null');
         }
     }
 }
