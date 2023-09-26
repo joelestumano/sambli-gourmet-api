@@ -78,12 +78,12 @@ export class PedidosService {
 
     async update(id: string, dto: PedidoUpdateDto) {
         const found: Pedido = await this.findById(id);
-        if (!this.updateIsValid(found)) {
+        /*if (!this.updateIsValid(found)) {
             throw new BadRequestException(`o pedido não pode mais ser atualizado`);
         }
         if (!this.updateIsValidPagamento(found, dto)) {
             throw new BadRequestException(`o pedido não pode ser atualizado com valor inferior ao atual`);
-        }
+        }*/
         const update = await this.pedidoModel.updateOne({ _id: id }, dto, { upsert: true }).exec();
         this.eventEmitter.emit('changed-collection', new CustomEvent('changed-collection-pedidos', `pedido ${found['_id']} atualizado!`));
         return update;
