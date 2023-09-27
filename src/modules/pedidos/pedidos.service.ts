@@ -155,7 +155,9 @@ export class PedidosService {
                 errorMessage = 'o pedido não pode mais ser atualizado';
             }
         }
-
+        console.log('validTime: ', validTime)
+        console.log('validPayment: ', validPayment)
+        console.log('valid: ', valid)
         return { valid: valid, error: errorMessage };
     }
 
