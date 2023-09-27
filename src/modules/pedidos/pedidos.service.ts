@@ -79,12 +79,11 @@ export class PedidosService {
 
     async update(id: string, dto: PedidoUpdateDto) {
         const found: Pedido = await this.findById(id);
-        if (!this.updateIsValid(found)) {
-            throw new BadRequestException(`o pedido não pode mais ser atualizado`);
-        }
 
-        if (!this.updateIsValidPagamento(found, dto)) {
-            throw new BadRequestException(`o pedido não pode ser atualizado com valor inferior ao atual`);
+        const updateIsValid = this.updateIsValid(found, dto);
+
+        if (!updateIsValid.valid) {
+            throw new BadRequestException(updateIsValid.error);
         }
 
         const update = await this.pedidoModel.updateOne({ _id: id }, dto, { upsert: true }).exec();
@@ -124,21 +123,40 @@ export class PedidosService {
         return str;
     }
 
-    private updateIsValid(pedido: Pedido): boolean {
+    private updateIsValid(pedido: Pedido, dto: PedidoUpdateDto): { valid: boolean, error: string } {
         let despacho = new Date(pedido.horaDespacho);
         despacho.setMinutes(despacho.getMinutes() - 10);
         let moment = new Date();
-        return (moment < despacho) && pedido.status === PedidoStatusEnum.pendente;
-    }
 
-    private updateIsValidPagamento(pedido: Pedido, dto: PedidoUpdateDto): boolean {
+        let validTime = (moment < despacho) && pedido.status === PedidoStatusEnum.pendente;
+        let validPayment = false;
+
         if ('pagamento' in dto) {
             const pedidoPagamento = Object.values(pedido.pagamento).reduce((suma: number, valor: number) => suma + valor, 0);
             const dtoPagamento = Object.values(dto.pagamento).reduce((suma: number, valor: number) => suma + valor, 0);
-            return dtoPagamento > pedidoPagamento;
+            validPayment = (dtoPagamento > pedidoPagamento);
         } else {
-            return true;
+            validPayment = true;
         }
+
+        let valid = false;
+        let errorMessage = '';
+
+        if ('pagamento' in dto) {
+            if (validPayment || ((!validPayment) && validTime)) {
+                valid = true;
+            } else {
+                errorMessage = 'o pedido não pode ser atualizado com valor inferior ao atual';
+            }
+        } else {
+            if (validTime) {
+                valid = true;
+            } else {
+                errorMessage = 'o pedido não pode mais ser atualizado';
+            }
+        }
+
+        return { valid: valid, error: errorMessage };
     }
 
     private async handleWhatsappMessage(pedido: Pedido, status?: PedidoStatusEnum): Promise<void> {
