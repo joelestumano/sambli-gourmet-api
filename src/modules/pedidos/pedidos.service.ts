@@ -127,7 +127,7 @@ export class PedidosService {
         let despacho = new Date(pedido.horaDespacho);
         despacho.setMinutes(despacho.getMinutes() - 10);
         let moment = new Date();
-
+        moment.setHours(moment.getHours() - 3);//necessário para validação com horário do servidor
         let validTime = (moment < despacho) && pedido.status === PedidoStatusEnum.pendente;
         let validPayment = false;
 
@@ -155,9 +155,6 @@ export class PedidosService {
                 errorMessage = 'o pedido não pode mais ser atualizado';
             }
         }
-        console.log('validTime: ', validTime)
-        console.log('validPayment: ', validPayment)
-        console.log('valid: ', valid)
         return { valid: valid, error: errorMessage };
     }
 
