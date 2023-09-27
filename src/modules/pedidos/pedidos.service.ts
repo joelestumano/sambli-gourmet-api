@@ -12,6 +12,7 @@ import { PedidoUpdateDto } from './dtos/pedido-update.dto';
 import { WhatsappService } from '../whatsapp/whatsapp.service';
 import { ClientesService } from '../clientes/clientes.service';
 import { ItemPedidoDto } from './dtos/item-pedido.dto';
+import { PedidoUpdateStatusDto } from './dtos/pedido-update-status.dto';
 
 @Injectable()
 export class PedidosService {
@@ -78,12 +79,21 @@ export class PedidosService {
 
     async update(id: string, dto: PedidoUpdateDto) {
         const found: Pedido = await this.findById(id);
-        /*if (!this.updateIsValid(found)) {
+        if (!this.updateIsValid(found)) {
             throw new BadRequestException(`o pedido não pode mais ser atualizado`);
         }
+
         if (!this.updateIsValidPagamento(found, dto)) {
             throw new BadRequestException(`o pedido não pode ser atualizado com valor inferior ao atual`);
-        }*/
+        }
+
+        const update = await this.pedidoModel.updateOne({ _id: id }, dto, { upsert: true }).exec();
+        this.eventEmitter.emit('changed-collection', new CustomEvent('changed-collection-pedidos', `pedido ${found['_id']} atualizado!`));
+        return update;
+    }
+
+    async updateStatus(id: string, dto: PedidoUpdateStatusDto) {
+        const found: Pedido = await this.findById(id);
         const update = await this.pedidoModel.updateOne({ _id: id }, dto, { upsert: true }).exec();
         this.eventEmitter.emit('changed-collection', new CustomEvent('changed-collection-pedidos', `pedido ${found['_id']} atualizado!`));
         return update;
@@ -122,9 +132,13 @@ export class PedidosService {
     }
 
     private updateIsValidPagamento(pedido: Pedido, dto: PedidoUpdateDto): boolean {
-        const pedidoPagamento = Object.values(pedido.pagamento).reduce((suma: number, valor: number) => suma + valor, 0);
-        const dtoPagamento = Object.values(dto.pagamento).reduce((suma: number, valor: number) => suma + valor, 0);
-        return dtoPagamento > pedidoPagamento;
+        if ('pagamento' in dto) {
+            const pedidoPagamento = Object.values(pedido.pagamento).reduce((suma: number, valor: number) => suma + valor, 0);
+            const dtoPagamento = Object.values(dto.pagamento).reduce((suma: number, valor: number) => suma + valor, 0);
+            return dtoPagamento > pedidoPagamento;
+        } else {
+            return true;
+        }
     }
 
     private async handleWhatsappMessage(pedido: Pedido, status?: PedidoStatusEnum): Promise<void> {
