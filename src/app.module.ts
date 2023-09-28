@@ -14,6 +14,7 @@ import { PedidosModule } from './modules/pedidos/pedidos.module';
 import { ClientesModule } from './modules/clientes/clientes.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { CustomListener } from './common/events/listeners/custom.listener';
+import { TaxasEServicosModule } from './modules/taxas-e-servicos/taxas-e-servicos.module';
 
 const envFilePath: string = getEnvPath(`${__dirname}/common/envs/`);
 
@@ -24,6 +25,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/common/envs/`);
     ProdutosModule,
     PedidosModule,
     ClientesModule,
+    TaxasEServicosModule,
     ConfigModule.forRoot({
       envFilePath: envFilePath,
       isGlobal: true,
