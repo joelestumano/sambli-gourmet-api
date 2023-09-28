@@ -8,6 +8,9 @@ import { ItemPedidoDto } from './item-pedido.dto';
 import { EnderecoPedidoDto } from './endereco-pedido.dto';
 import { PagamentoDto } from './pagamento.dto';
 import { IsPagamentoValid } from '../decorators/suma-items-valores-constraint.decorator';
+import { TaxaServicoDto } from './taxas-e-servicos.dto';
+import { IsValidTaxasEServicos } from '../decorators/is-valid-taxas-e-servicos-constraint.decorator';
+
 
 export class PedidoCreateDto implements PedidoInterface {
   @ApiProperty({
@@ -101,4 +104,21 @@ export class PedidoCreateDto implements PedidoInterface {
   @IsEnum(PedidoStatusEnum)
   @Transform((status) => status.value.toLowerCase())
   status: PedidoStatusEnum;
+
+  @ApiProperty({
+    description: 'taxas e serviços',
+    type: TaxaServicoDto,
+    isArray: true,
+  })
+  @IsArray()
+  @IsOptional()
+  @ValidateNested({
+    message: 'verifique as informações de taxas e serviços',
+    each: true,
+  })
+  @Type(() => TaxaServicoDto)
+  @IsValidTaxasEServicos({
+    message: 'verifique as informações de taxas e serviços invalid!!!'
+  })
+  taxasEServicos: TaxaServicoDto[];
 }

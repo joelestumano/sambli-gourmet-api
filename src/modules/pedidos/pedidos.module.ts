@@ -6,14 +6,17 @@ import { Pedido, PedidoSchema } from './entities/pedido.entity';
 import { IsPagamentoValidConstraint } from './decorators/suma-items-valores-constraint.decorator';
 import { WhatsappModule } from '../whatsapp/whatsapp.module';
 import { ClientesModule } from '../clientes/clientes.module';
+import { TaxasEServicosModule } from '../taxas-e-servicos/taxas-e-servicos.module';
+import { IsValidTaxasEServicosConstraint } from './decorators/is-valid-taxas-e-servicos-constraint.decorator';
 
 @Module({
   controllers: [PedidosController],
-  providers: [PedidosService, IsPagamentoValidConstraint],
+  providers: [PedidosService, IsPagamentoValidConstraint, IsValidTaxasEServicosConstraint],
   imports: [
     MongooseModule.forFeature([{ name: Pedido.name, schema: PedidoSchema }]),
     WhatsappModule,
-    ClientesModule
+    ClientesModule,
+    TaxasEServicosModule
   ],
   exports: [PedidosService],
 })

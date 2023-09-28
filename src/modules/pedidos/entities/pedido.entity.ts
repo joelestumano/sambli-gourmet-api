@@ -18,6 +18,11 @@ export interface ItemPedidoInterface {
   valor: number
 }
 
+export interface TaxaServicoInterface {
+  taxaServico: mongoose.Schema.Types.ObjectId,
+  valor: number;
+}
+
 export interface PedidoInterface {
   cliente: mongoose.Schema.Types.ObjectId;
   horaDespacho: string;
@@ -32,6 +37,7 @@ export interface PedidoInterface {
   obs: string;
   status: PedidoStatusEnum;
   codigo?: string;
+  taxasEServicos: TaxaServicoInterface[];
 }
 
 abstract class ItemPedido implements ItemPedidoInterface {
@@ -48,6 +54,13 @@ abstract class Pagamento {
   dinheiro: number;
   @Prop({ required: true, default: 0 })
   pix: number;
+}
+
+abstract class TaxaServico implements TaxaServicoInterface {
+  @Prop({ required: true })
+  taxaServico: mongoose.Schema.Types.ObjectId;
+  @Prop({ required: true, default: 0 })
+  valor: number;
 }
 
 export type PedidoDocument = Pedido & Document;
@@ -72,6 +85,8 @@ export class Pedido extends Default implements PedidoInterface {
   status: PedidoStatusEnum;
   @Prop({ required: true, unique: true })
   codigo: string
+  @Prop({ required: true })
+  taxasEServicos: TaxaServico[];
 }
 
 export const PedidoSchema = SchemaFactory.createForClass(Pedido);

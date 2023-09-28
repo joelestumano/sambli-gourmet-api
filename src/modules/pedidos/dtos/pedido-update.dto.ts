@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsEnum, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { IsArray, IsDateString, IsEnum, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { PedidoInterface, PedidoStatusEnum } from '../entities/pedido.entity';
 import { Transform, Type } from 'class-transformer';
 import { Schema } from 'mongoose';
@@ -7,6 +7,8 @@ import { IsClienteId } from 'src/modules/clientes/decorators/is-clienteId.decora
 import { ItemPedidoDto } from './item-pedido.dto';
 import { EnderecoPedidoDto } from './endereco-pedido.dto';
 import { PagamentoDto } from './pagamento.dto';
+import { TaxaServicoDto } from './taxas-e-servicos.dto';
+import { IsValidTaxasEServicos } from '../decorators/is-valid-taxas-e-servicos-constraint.decorator';
 
 export class PedidoUpdateDto implements PedidoInterface {
     @ApiProperty({
@@ -89,4 +91,21 @@ export class PedidoUpdateDto implements PedidoInterface {
     @IsEnum(PedidoStatusEnum)
     @Transform((status) => status.value.toLowerCase())
     status: PedidoStatusEnum;
+
+    @ApiProperty({
+        description: 'taxas e serviços',
+        type: TaxaServicoDto,
+        isArray: true,
+    })
+    @IsArray()
+    @IsOptional()
+    @ValidateNested({
+        message: 'verifique as informações de taxas e serviços',
+        each: true,
+    })
+    @Type(() => TaxaServicoDto)
+    @IsValidTaxasEServicos({
+        message: 'verifique as informações de taxas e serviços invalid!!!'
+    })
+    taxasEServicos: TaxaServicoDto[];
 }
