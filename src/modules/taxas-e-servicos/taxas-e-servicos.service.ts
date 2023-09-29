@@ -50,4 +50,15 @@ export class TaxasEServicosService {
         }
         return found;
     }
+
+    async findByIdsEntrega(ids: mongoose.Schema.Types.ObjectId[] | string[]): Promise<TaxasEServicos[]> {
+        const found = await this.taxasEServicosModel.find({
+            _id: { $in: ids },
+            descricao: 'entrega'
+        }).exec();
+        if (!found) {
+            return [];
+        }
+        return found;
+    }
 }
