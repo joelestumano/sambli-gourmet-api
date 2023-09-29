@@ -47,9 +47,12 @@ export class PedidosService {
                     model: Cliente.name
                 },
                 {
-                    path: 'taxaseservicos',
-                    select: { descricao: 1, _id: 1, valor: 1 },
-                    model: TaxasEServicos.name
+                    path: 'taxasEServicos',
+                    populate: {
+                        path: 'taxaServico',
+                        select: { descricao: 1, _id: 1, valor: 1 },
+                        model: TaxasEServicos.name
+                    }
                 },
             ]
         };
