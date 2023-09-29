@@ -9,7 +9,7 @@ import { EnderecoPedidoDto } from './endereco-pedido.dto';
 import { PagamentoDto } from './pagamento.dto';
 import { IsPagamentoValid } from '../decorators/suma-items-valores-constraint.decorator';
 import { TaxaServicoDto } from './taxas-e-servicos.dto';
-import { IsValidTaxasEServicos } from '../decorators/is-valid-taxas-e-servicos-constraint.decorator';
+import { IsValidIsDeliver } from '../decorators/is-valid-taxas-e-servicos-constraint.decorator';
 import { IsValidValorTotal } from '../decorators/is-valid-valor-total-constraint.decorator';
 
 export class PedidoCreateDto implements PedidoInterface {
@@ -44,6 +44,9 @@ export class PedidoCreateDto implements PedidoInterface {
   })
   @IsNotEmpty({
     message: 'isDeliver deve ser informado',
+  })
+  @IsValidIsDeliver({
+    message: 'verifique informações obrigatórias em caso de pedido para entrega'
   })
   isDeliver: boolean;
 
@@ -117,9 +120,6 @@ export class PedidoCreateDto implements PedidoInterface {
     each: true,
   })
   @Type(() => TaxaServicoDto)
-  @IsValidTaxasEServicos({
-    message: 'verifique as informações de taxas e serviços invalid!!!'
-  })
   taxasEServicos: TaxaServicoDto[];
 
   @ApiProperty({

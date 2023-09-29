@@ -8,31 +8,33 @@ import {
 import { PedidoCreateDto } from '../dtos/pedido-create.dto';
 import { TaxasEServicosService } from 'src/modules/taxas-e-servicos/taxas-e-servicos.service';
 
-@ValidatorConstraint({ name: 'IsValidTaxasEServicos', async: true })
-export class IsValidTaxasEServicosConstraint
+@ValidatorConstraint({ name: 'IsValidIsDeliver', async: true })
+export class IsValidIsDeliverConstraint
     implements ValidatorConstraintInterface {
 
     constructor(private taxasEServicosService: TaxasEServicosService) { }
 
-    validate(taxas: any, args: ValidationArguments) {
-
+    validate(isDeliver: boolean, args: ValidationArguments) {
         const dto = args.object as PedidoCreateDto;
-
-        if (dto.isDeliver) {
-            return true
+        if (isDeliver) {
+            if ('endereco' in dto) {
+                return true;
+            } else {
+                return false;
+            }
         } else {
             return true;
         }
     }
 }
 
-export function IsValidTaxasEServicos(validationOptions?: ValidationOptions) {
+export function IsValidIsDeliver(validationOptions?: ValidationOptions) {
     return (object: object, propertyName: string) => {
         registerDecorator({
             target: object.constructor,
             propertyName: propertyName,
             options: validationOptions,
-            validator: IsValidTaxasEServicosConstraint,
+            validator: IsValidIsDeliverConstraint,
         });
     };
 }
