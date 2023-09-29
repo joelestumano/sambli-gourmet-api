@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Default } from 'src/common/entities/default.entity';
 import * as mongoosePaginate from 'mongoose-paginate-v2';
 
-export interface TaxasEServicosInterface {
+export interface TaxaServicoInterface {
     descricao: string;
     valor: number;
 }
@@ -10,7 +10,7 @@ export interface TaxasEServicosInterface {
 export type PedidoDocument = TaxasEServicos & Document;
 
 @Schema({ timestamps: true, collection: 'taxaseservicos' })
-export class TaxasEServicos extends Default implements TaxasEServicosInterface {
+export class TaxasEServicos extends Default implements TaxaServicoInterface {
     @Prop({ required: true, unique: true })
     descricao: string;
     @Prop({ required: true, default: 0 })

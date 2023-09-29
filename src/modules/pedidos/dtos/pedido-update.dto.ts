@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsDateString, IsEnum, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { IsArray, IsDateString, IsEnum, IsNumber, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { PedidoInterface, PedidoStatusEnum } from '../entities/pedido.entity';
 import { Transform, Type } from 'class-transformer';
 import { Schema } from 'mongoose';
@@ -9,6 +9,7 @@ import { EnderecoPedidoDto } from './endereco-pedido.dto';
 import { PagamentoDto } from './pagamento.dto';
 import { TaxaServicoDto } from './taxas-e-servicos.dto';
 import { IsValidTaxasEServicos } from '../decorators/is-valid-taxas-e-servicos-constraint.decorator';
+import { IsValidValorTotal } from '../decorators/is-valid-valor-total-constraint.decorator';
 
 export class PedidoUpdateDto implements PedidoInterface {
     @ApiProperty({
@@ -108,4 +109,15 @@ export class PedidoUpdateDto implements PedidoInterface {
         message: 'verifique as informações de taxas e serviços invalid!!!'
     })
     taxasEServicos: TaxaServicoDto[];
+
+    @ApiProperty({
+        description: 'valor total do pedido',
+    })
+    @IsNumber()
+    @IsOptional()
+    @Type(() => Number)
+    @IsValidValorTotal({
+        message: 'o valor total do pedido deve corresponder a soma de todos valores correspondentes ao pedido'
+    })
+    valorTotal: number;
 }

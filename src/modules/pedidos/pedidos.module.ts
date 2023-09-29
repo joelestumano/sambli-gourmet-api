@@ -8,10 +8,11 @@ import { WhatsappModule } from '../whatsapp/whatsapp.module';
 import { ClientesModule } from '../clientes/clientes.module';
 import { TaxasEServicosModule } from '../taxas-e-servicos/taxas-e-servicos.module';
 import { IsValidTaxasEServicosConstraint } from './decorators/is-valid-taxas-e-servicos-constraint.decorator';
+import { IsValidValorTotalConstraint } from './decorators/is-valid-valor-total-constraint.decorator';
 
 @Module({
   controllers: [PedidosController],
-  providers: [PedidosService, IsPagamentoValidConstraint, IsValidTaxasEServicosConstraint],
+  providers: [PedidosService, IsPagamentoValidConstraint, IsValidTaxasEServicosConstraint, IsValidValorTotalConstraint],
   imports: [
     MongooseModule.forFeature([{ name: Pedido.name, schema: PedidoSchema }]),
     WhatsappModule,

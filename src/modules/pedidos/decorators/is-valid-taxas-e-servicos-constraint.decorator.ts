@@ -18,10 +18,6 @@ export class IsValidTaxasEServicosConstraint
 
         const dto = args.object as PedidoCreateDto;
 
-        console.log('dto: ', dto);
-
-        console.log('\ntaxas: ', taxas);
-
         if (dto.isDeliver) {
             return true
         } else {
