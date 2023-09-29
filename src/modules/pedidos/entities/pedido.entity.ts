@@ -38,6 +38,7 @@ export interface PedidoInterface {
   status: PedidoStatusEnum;
   codigo?: string;
   taxasEServicos: TaxaServicoInterface[];
+  valorTotal: number;
 }
 
 abstract class ItemPedido implements ItemPedidoInterface {
@@ -87,6 +88,8 @@ export class Pedido extends Default implements PedidoInterface {
   codigo: string
   @Prop({ required: true })
   taxasEServicos: TaxaServico[];
+  @Prop({ required: true })
+  valorTotal: number;
 }
 
 export const PedidoSchema = SchemaFactory.createForClass(Pedido);

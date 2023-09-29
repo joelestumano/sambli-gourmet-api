@@ -13,6 +13,7 @@ import { WhatsappService } from '../whatsapp/whatsapp.service';
 import { ClientesService } from '../clientes/clientes.service';
 import { ItemPedidoDto } from './dtos/item-pedido.dto';
 import { PedidoUpdateStatusDto } from './dtos/pedido-update-status.dto';
+import { TaxasEServicos } from '../taxas-e-servicos/entities/taxas-e-servicos.entity';
 
 @Injectable()
 export class PedidosService {
@@ -44,6 +45,11 @@ export class PedidosService {
                     path: 'cliente',
                     select: { nome: 1, _id: 1, whatsapp: 1 },
                     model: Cliente.name
+                },
+                {
+                    path: 'taxaseservicos',
+                    select: { descricao: 1, _id: 1, valor: 1 },
+                    model: TaxasEServicos.name
                 },
             ]
         };
