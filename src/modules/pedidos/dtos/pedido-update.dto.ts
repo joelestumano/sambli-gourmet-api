@@ -7,8 +7,8 @@ import { IsClienteId } from 'src/modules/clientes/decorators/is-clienteId.decora
 import { ItemPedidoDto } from './item-pedido.dto';
 import { EnderecoPedidoDto } from './endereco-pedido.dto';
 import { PagamentoDto } from './pagamento.dto';
-import { TaxaServicoDto } from './taxas-e-servicos.dto';
-import { IsValidTaxasEServicos } from '../decorators/is-valid-taxas-e-servicos-constraint.decorator';
+import { TaxaServicoDto } from './taxa-servico.dto';
+import { IsValidIsDeliver } from '../decorators/is-valid-is-deliver-constraint.decorator';
 import { IsValidValorTotal } from '../decorators/is-valid-valor-total-constraint.decorator';
 
 export class PedidoUpdateDto implements PedidoInterface {
@@ -38,6 +38,9 @@ export class PedidoUpdateDto implements PedidoInterface {
         example: false,
     })
     @IsOptional()
+    @IsValidIsDeliver({
+        message: 'verifique informações obrigatórias em caso de pedido para entrega'
+    })
     isDeliver: boolean;
 
     @ApiProperty({
@@ -105,9 +108,6 @@ export class PedidoUpdateDto implements PedidoInterface {
         each: true,
     })
     @Type(() => TaxaServicoDto)
-    @IsValidTaxasEServicos({
-        message: 'verifique as informações de taxas e serviços invalid!!!'
-    })
     taxasEServicos: TaxaServicoDto[];
 
     @ApiProperty({

@@ -7,15 +7,15 @@ export interface TaxaServicoInterface {
     valor: number;
 }
 
-export type PedidoDocument = TaxasEServicos & Document;
+export type PedidoDocument = TaxaServico & Document;
 
 @Schema({ timestamps: true, collection: 'taxaseservicos' })
-export class TaxasEServicos extends Default implements TaxaServicoInterface {
+export class TaxaServico extends Default implements TaxaServicoInterface {
     @Prop({ required: true, unique: true })
     descricao: string;
     @Prop({ required: true, default: 0 })
     valor: number;
 }
 
-export const TaxasEServicosSchema = SchemaFactory.createForClass(TaxasEServicos);
+export const TaxasEServicosSchema = SchemaFactory.createForClass(TaxaServico);
 TaxasEServicosSchema.plugin(mongoosePaginate);

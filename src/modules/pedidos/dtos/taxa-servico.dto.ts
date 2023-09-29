@@ -1,11 +1,11 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { Type } from "class-transformer";
-import { IsNotEmpty, IsNumber } from "class-validator";
+import { ApiProperty, PickType } from "@nestjs/swagger";
+import { IsNotEmpty } from "class-validator";
 import { Schema } from "mongoose";
 import { IsTaxasEServicosId } from "src/modules/taxas-e-servicos/decorators/is-taxas-e-servicos-id.decorator";
-import { TaxaServicoInterface } from "../entities/pedido.entity";
+import { TaxaServicoCreateDto } from "src/modules/taxas-e-servicos/dtos/taxas-e-servicos-create.dto";
 
-export class TaxaServicoDto implements TaxaServicoInterface {
+export class TaxaServicoDto extends PickType(TaxaServicoCreateDto, ['valor'] as const) {
+
     @ApiProperty({
         description: '_id de registro de taxa ou serviço',
         example: '64ff9310ac886b54ea28e4f9',
@@ -17,14 +17,4 @@ export class TaxaServicoDto implements TaxaServicoInterface {
         message: 'verifique o _id de taxa ou serviço',
     })
     taxaServico: Schema.Types.ObjectId;
-
-    @ApiProperty({
-        description: 'valor da taxa serviço',
-    })
-    @IsNumber()
-    @IsNotEmpty({
-        message: 'o valor da taxa serviço deve ser informado',
-    })
-    @Type(() => Number)
-    valor: number;
-}
+} 
