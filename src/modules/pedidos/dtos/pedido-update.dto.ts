@@ -7,8 +7,8 @@ import { IsClienteId } from 'src/modules/clientes/decorators/is-clienteId.decora
 import { ItemPedidoDto } from './item-pedido.dto';
 import { EnderecoPedidoDto } from './endereco-pedido.dto';
 import { PagamentoDto } from './pagamento.dto';
-import { TaxaServicoDto } from './taxas-e-servicos.dto';
-import { IsValidIsDeliver } from '../decorators/is-valid-taxas-e-servicos-constraint.decorator';
+import { TaxaServicoDto } from './taxa-servico.dto';
+import { IsValidIsDeliver } from '../decorators/is-valid-is-deliver-constraint.decorator';
 import { IsValidValorTotal } from '../decorators/is-valid-valor-total-constraint.decorator';
 
 export class PedidoUpdateDto implements PedidoInterface {
