@@ -1,9 +1,9 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { TaxasEServicosInterface } from "../entities/taxas-e-servicos.entity";
+import { TaxaServicoInterface } from "../entities/taxas-e-servicos.entity";
 import { IsNotEmpty, IsNumber, IsString } from "class-validator";
 import { Type } from "class-transformer";
 
-export class TaxasEServicosCreateDto implements TaxasEServicosInterface {
+export class TaxaServicoCreateDto implements TaxaServicoInterface {
     @ApiProperty({
         description: 'descricao da taxa ou serviço',
         example: 'entrega',

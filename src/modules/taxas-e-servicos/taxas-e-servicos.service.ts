@@ -1,10 +1,11 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { TaxasEServicosCreateDto } from './dtos/taxas-e-servicos-create.dto';
+import { TaxaServicoCreateDto } from './dtos/taxas-e-servicos-create.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { TaxasEServicos } from './entities/taxas-e-servicos.entity';
 import mongoose, { Model, PaginateModel, PaginateOptions, PaginateResult } from 'mongoose';
 import { PaginateConfig } from 'src/common/paginate/paginate-config';
 import { TaxasEServicoQueryDto } from './dtos/taxas-e-servicos-paginate-query.dto';
+import { TaxaServicoUpdateDto } from './dtos/taxas-e-servicos-update.dto';
 
 @Injectable()
 export class TaxasEServicosService {
@@ -13,7 +14,7 @@ export class TaxasEServicosService {
 
     private logger = new Logger(TaxasEServicosService.name);
 
-    async create(dto: TaxasEServicosCreateDto): Promise<TaxasEServicos> {
+    async create(dto: TaxaServicoCreateDto): Promise<TaxasEServicos> {
         return await new this.taxasEServicosModel(dto).save();
     }
 
@@ -33,6 +34,12 @@ export class TaxasEServicosService {
             query,
             options,
         );
+    }
+
+    async update(id: string, dto: TaxaServicoUpdateDto) {
+        const found: TaxasEServicos = await this.findById(id);
+        const update = await this.taxasEServicosModel.updateOne({ _id: id }, dto, { upsert: true }).exec();
+        return update;
     }
 
     async findById(id: mongoose.Schema.Types.ObjectId | string): Promise<TaxasEServicos> {
