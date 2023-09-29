@@ -17,7 +17,7 @@ export class IsValidIsDeliverConstraint
     validate(isDeliver: boolean, args: ValidationArguments) {
         const dto = args.object as PedidoCreateDto;
         if (isDeliver) {
-            if ('endereco' in dto && 'taxasEServicos' in dto) {
+            if ('endereco' in dto && 'taxasEServicos' in dto && dto.taxasEServicos.length > 0) {
                 return true;
             } else {
                 return false;
