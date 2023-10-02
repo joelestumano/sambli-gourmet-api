@@ -11,7 +11,7 @@ export class UsuarioController {
 
     @Post('create')
     @ApiOperation({
-        summary: 'registra novo pedido',
+        summary: 'registra novo usuário',
         description: 'create',
     })
     @ApiResponse({ status: 201, description: 'sucesso' })
