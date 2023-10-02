@@ -1,12 +1,14 @@
-import { Body, Controller, Get, Param, Patch, Query, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Query, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { TaxasEServicosService } from './taxas-e-servicos.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { TaxasEServicoQueryDto } from './dtos/taxas-e-servicos-paginate-query.dto';
 import { ParamIdDto } from 'src/common/dtos/param-id.dto';
 import { TaxaServicoUpdateDto } from './dtos/taxas-e-servicos-update.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('v1/taxas-e-servicos')
 @ApiTags('v1/taxas-e-servicos')
+//@UseGuards(JwtAuthGuard)
 export class TaxasEServicosController {
     constructor(private readonly taxasEServicosService: TaxasEServicosService) { }
 

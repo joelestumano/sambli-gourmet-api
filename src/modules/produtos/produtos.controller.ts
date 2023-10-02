@@ -9,7 +9,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('v1/produtos')
 @ApiTags('v1/produtos')
-@UseGuards(JwtAuthGuard)
+//@UseGuards(JwtAuthGuard)
 export class ProdutosController {
     constructor(private readonly produtosService: ProdutosService) { }
 
