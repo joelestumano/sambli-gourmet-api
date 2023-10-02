@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Usuario, UsuarioInterface } from '../entities/usuario.entity';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString, MinLength } from 'class-validator';
 import { MatchPassword } from '../decorators/match-password.decorator';
 
 export class UsuarioCreateDto implements UsuarioInterface {
@@ -42,6 +42,9 @@ export class UsuarioCreateDto implements UsuarioInterface {
         message: 'a senha do usuáio deve ser informada',
     })
     @IsString()
+    @MinLength(6, {
+        message: 'a senha deve possuir ao menos 6 caracteres'
+    })
     password: string;
 
     @ApiProperty({
