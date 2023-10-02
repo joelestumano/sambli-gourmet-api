@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post, Query, Sse, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Query, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { PedidosPaginateQueryDto } from './dtos/pedido-paginate-query.dto';
 import { PedidosService } from './pedidos.service';
@@ -6,11 +6,9 @@ import { PedidoCreateDto } from './dtos/pedido-create.dto';
 import { ParamIdDto } from 'src/common/dtos/param-id.dto';
 import { PedidoUpdateDto } from './dtos/pedido-update.dto';
 import { PedidoUpdateStatusDto } from './dtos/pedido-update-status.dto';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('v1/pedidos')
 @ApiTags('v1/pedidos')
-//@UseGuards(JwtAuthGuard)
 export class PedidosController {
 
     constructor(private readonly pedidoService: PedidosService) { }
