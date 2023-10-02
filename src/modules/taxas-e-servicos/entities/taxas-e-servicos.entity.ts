@@ -3,7 +3,8 @@ import { Default } from 'src/common/entities/default.entity';
 import * as mongoosePaginate from 'mongoose-paginate-v2';
 
 export enum TaxaServicoDescricaoEnum {
-    entrega = 'entrega'
+    entrega = 'entrega',
+    cartao = 'cartao',
 }
 
 export interface TaxaServicoInterface {

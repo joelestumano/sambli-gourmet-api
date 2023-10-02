@@ -25,11 +25,14 @@ export class TaxasEServicosService {
 
     async inicializar(): Promise<void> {
         try {
-            const taxaEntregaExist = await this.findOne('descricao', TaxaServicoDescricaoEnum.entrega);
-            if (!taxaEntregaExist) {
-                const dto: TaxaServicoCreateDto = { descricao: TaxaServicoDescricaoEnum.entrega, valor: 0 };
-                const taxaServico: TaxaServico = await this.create(dto);
-                this.logger.log('created: \u2193', taxaServico);
+            const enumObj = Object.values(TaxaServicoDescricaoEnum);
+            for (const taxa of enumObj) {
+                const taxaEntregaExist = await this.findOne('descricao', taxa);
+                if (!taxaEntregaExist) {
+                    const dto: TaxaServicoCreateDto = { descricao: taxa, valor: 0 };
+                    const taxaServico: TaxaServico = await this.create(dto);
+                    this.logger.log('created: \u2193', taxaServico);
+                }
             }
             this.logger.log('Inicialização bem-sucedida');
         } catch (error) {
