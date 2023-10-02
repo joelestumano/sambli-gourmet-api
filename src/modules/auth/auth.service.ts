@@ -13,7 +13,7 @@ export class AuthService {
 
     async validateUser(email: string, pass: string): Promise<any> {
         const user = await this.usuarioService.findUserByEmail(email) as any;
-        if (user && bcrypt.compareSync(pass, user.password)) {
+        if (user && await bcrypt.compareSync(pass, user.password)) {
             return {
                 _id: user._id,
                 nome: user.nome,
