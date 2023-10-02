@@ -1,26 +1,16 @@
-import { Body, Controller, Get, Param, Patch, Post, Query, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Query, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { TaxasEServicosService } from './taxas-e-servicos.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { TaxaServicoCreateDto } from './dtos/taxas-e-servicos-create.dto';
 import { TaxasEServicoQueryDto } from './dtos/taxas-e-servicos-paginate-query.dto';
 import { ParamIdDto } from 'src/common/dtos/param-id.dto';
 import { TaxaServicoUpdateDto } from './dtos/taxas-e-servicos-update.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('v1/taxas-e-servicos')
 @ApiTags('v1/taxas-e-servicos')
+//@UseGuards(JwtAuthGuard)
 export class TaxasEServicosController {
     constructor(private readonly taxasEServicosService: TaxasEServicosService) { }
-
-    @Post('create')
-    @ApiOperation({
-        summary: 'registra uma nova taxa ou serviço',
-        description: 'create',
-    })
-    @ApiResponse({ status: 201, description: 'sucesso' })
-    @UsePipes(new ValidationPipe({ transform: true }))
-    async add(@Body() dto: TaxaServicoCreateDto) {
-        return await this.taxasEServicosService.create(dto);
-    }
 
     @Get('paginate')
     @ApiOperation({

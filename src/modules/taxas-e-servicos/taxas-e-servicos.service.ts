@@ -1,7 +1,7 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { TaxaServicoCreateDto } from './dtos/taxas-e-servicos-create.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { TaxaServico } from './entities/taxas-e-servicos.entity';
+import { TaxaServico, TaxaServicoDescricaoEnum } from './entities/taxas-e-servicos.entity';
 import mongoose, {
     Model,
     PaginateModel,
@@ -25,9 +25,9 @@ export class TaxasEServicosService {
 
     async inicializar(): Promise<void> {
         try {
-            const taxaEntregaExist = await this.findOne('descricao', 'entrega');
+            const taxaEntregaExist = await this.findOne('descricao', TaxaServicoDescricaoEnum.entrega);
             if (!taxaEntregaExist) {
-                const dto: TaxaServicoCreateDto = { descricao: 'entrega', valor: 2 };
+                const dto: TaxaServicoCreateDto = { descricao: TaxaServicoDescricaoEnum.entrega, valor: 0 };
                 const taxaServico: TaxaServico = await this.create(dto);
                 this.logger.log('created: \u2193', taxaServico);
             }
@@ -37,7 +37,7 @@ export class TaxasEServicosService {
         }
     }
 
-    async create(dto: TaxaServicoCreateDto): Promise<TaxaServico> {
+    private async create(dto: TaxaServicoCreateDto): Promise<TaxaServico> {
         return await new this.taxasEServicosModel(dto).save();
     }
 
@@ -86,7 +86,7 @@ export class TaxasEServicosService {
         const found = await this.taxasEServicosModel
             .find({
                 _id: { $in: ids },
-                descricao: 'entrega',
+                descricao: TaxaServicoDescricaoEnum.entrega,
             })
             .exec();
         if (!found) {
