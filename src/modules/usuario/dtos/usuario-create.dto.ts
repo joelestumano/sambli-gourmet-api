@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { UsuarioInterface } from '../entities/usuario.entity';
+import { Usuario, UsuarioInterface } from '../entities/usuario.entity';
 import { IsNotEmpty, IsString } from 'class-validator';
+import { MatchPassword } from '../decorators/match-password.decorator';
 
 export class UsuarioCreateDto implements UsuarioInterface {
     @ApiProperty({
@@ -51,5 +52,6 @@ export class UsuarioCreateDto implements UsuarioInterface {
         message: 'a confirmação da senha do usuáio deve ser informada',
     })
     @IsString()
+    @MatchPassword(UsuarioCreateDto, (u) => u.password, { message: 'senha e confirme sua senha não correspondente' })
     confirmPassword: string;
 }
