@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { Usuario } from './entities/usuario.entity';
 import { UsuarioCreateDto } from './dtos/usuario-create.dto';
 import { Model } from 'mongoose';
@@ -18,5 +18,13 @@ export class UsuarioService {
         dto.password = bcrypt.hashSync(dto.password, 10);
         const create: Usuario = await new this.usuarioModel(dto).save();
         return create;
+    }
+
+    async findUserByEmail(email: string): Promise<Usuario> {
+        const found = await this.usuarioModel.findOne({ email: email }).exec();
+        if (!found) {
+            throw new NotFoundException(`nenhum usuário encontrado com e-mail ${email}`);
+        }
+        return found;
     }
 }

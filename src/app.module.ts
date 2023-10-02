@@ -16,11 +16,13 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { CustomListener } from './common/events/listeners/custom.listener';
 import { TaxasEServicosModule } from './modules/taxas-e-servicos/taxas-e-servicos.module';
 import { UsuarioModule } from './modules/usuario/usuario.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 const envFilePath: string = getEnvPath(`${__dirname}/common/envs/`);
 
 @Module({
   imports: [
+    AuthModule,
     OpenaiModule,
     WhatsappModule,
     ProdutosModule,
