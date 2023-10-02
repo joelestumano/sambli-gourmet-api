@@ -24,10 +24,6 @@ export class AuthService {
     }
 
     async login(req: any) {
-
-
-        console.log(req)
-
         const payload: TkInterface = {
             sub: req.user._id,
             nome: req.user.nome,
