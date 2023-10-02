@@ -20,7 +20,7 @@ export class UsuarioService {
             password: await bcrypt.hashSync(dto.password, 10),
         };
         const create: Usuario = await new this.usuarioModel(dto_).save();
-        return create;
+        return Object.assign(create, { password: undefined });
     }
 
     async findUserByEmail(email: string): Promise<Usuario> {

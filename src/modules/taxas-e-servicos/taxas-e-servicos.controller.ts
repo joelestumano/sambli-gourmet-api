@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Query, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Query, UsePipes, ValidationPipe } from '@nestjs/common';
 import { TaxasEServicosService } from './taxas-e-servicos.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { TaxasEServicoQueryDto } from './dtos/taxas-e-servicos-paginate-query.dto';
