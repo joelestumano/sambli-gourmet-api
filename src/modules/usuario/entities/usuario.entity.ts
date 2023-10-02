@@ -20,7 +20,7 @@ export class Usuario extends Default implements UsuarioInterface {
     email: string;
     @Prop({ required: true })
     whatsapp: string;
-    @Prop({ required: true })
+    @Prop({ required: false, default: '' })
     securityToken: string;
     @Prop({ required: true })
     password: string;
