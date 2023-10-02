@@ -41,7 +41,7 @@ export class UsuarioCreateDto implements UsuarioInterface {
         message: 'a senha do usuáio deve ser informada',
     })
     @IsString()
-    senha: string;
+    password: string;
 
     @ApiProperty({
         description: 'confirmação da senha do usuáio',
@@ -51,5 +51,5 @@ export class UsuarioCreateDto implements UsuarioInterface {
         message: 'a confirmação da senha do usuáio deve ser informada',
     })
     @IsString()
-    confirmacaoSenha: string;
+    confirmPassword: string;
 }

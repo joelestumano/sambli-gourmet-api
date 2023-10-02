@@ -7,7 +7,7 @@ export interface UsuarioInterface {
     email: string;
     whatsapp: string;
     securityToken?: string;
-    senha: string;
+    password: string;
 }
 
 export type UsuarioDocument = Usuario & Document;
@@ -23,7 +23,7 @@ export class Usuario extends Default implements UsuarioInterface {
     @Prop({ required: true })
     securityToken: string;
     @Prop({ required: true })
-    senha: string;
+    password: string;
 }
 
 export const UsuarioSchema = SchemaFactory.createForClass(Usuario);
