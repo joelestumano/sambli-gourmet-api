@@ -18,6 +18,8 @@ import { CustomListener } from './common/events/listeners/custom.listener';
 import { TaxasEServicosModule } from './modules/taxas-e-servicos/taxas-e-servicos.module';
 import { UsuarioModule } from './modules/usuario/usuario.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { APP_GUARD, Reflector } from '@nestjs/core';
+import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 
 const envFilePath: string = getEnvPath(`${__dirname}/common/envs/`);
 
@@ -46,6 +48,14 @@ const envFilePath: string = getEnvPath(`${__dirname}/common/envs/`);
     EventEmitterModule.forRoot()
   ],
   controllers: [AppController],
-  providers: [AppService, CustomListener],
+  providers: [
+    AppService,
+    CustomListener,
+    {
+      provide: APP_GUARD,
+      useFactory: (ref) => new JwtAuthGuard(ref),
+      inject: [Reflector],
+    },
+  ],
 })
 export class AppModule { }

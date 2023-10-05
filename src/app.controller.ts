@@ -3,12 +3,14 @@ import { AppService } from './app.service';
 import { ApiExcludeEndpoint, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { fromEvent, map } from 'rxjs';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { ApiPublicEndpoint } from './modules/auth/decorators/api-public-endpoint.decorator';
 
 @Controller('v1/app')
 @ApiTags('v1/app')
 export class AppController {
-  constructor(private readonly appService: AppService,private eventEmitter2: EventEmitter2) {}
+  constructor(private readonly appService: AppService, private eventEmitter2: EventEmitter2) { }
 
+  @ApiPublicEndpoint()
   @ApiExcludeEndpoint()
   @Get()
   @Redirect('docs', 200)
@@ -16,13 +18,14 @@ export class AppController {
     return this.appService.getHello();
   }
 
+  @ApiPublicEndpoint()
   @Sse('changed-collection')
   @ApiOperation({
-      summary: 'evento enviado pelo servidor',
-      description: 'evento enviado pelo servidor'
+    summary: 'evento enviado pelo servidor',
+    description: 'evento enviado pelo servidor'
   })
   changedCollection() {
-      return fromEvent(this.eventEmitter2, 'changed-collection')
-          .pipe(map((event) => ({ data: { event } })));
-  } 
+    return fromEvent(this.eventEmitter2, 'changed-collection')
+      .pipe(map((event) => ({ data: { event } })));
+  }
 }
