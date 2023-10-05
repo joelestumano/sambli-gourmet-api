@@ -7,7 +7,7 @@ export class IsPagamentoValidConstraint implements ValidatorConstraintInterface 
         const dto = args.object as any;
         const items =  dto.items;
         const sumaItems = items.reduce((suma: number, item: any) => suma + item.valor, 0);
-        return sumaItems === sumaPagamento;
+        return sumaItems === sumaPagamento; /* todo */
     }
 }
 

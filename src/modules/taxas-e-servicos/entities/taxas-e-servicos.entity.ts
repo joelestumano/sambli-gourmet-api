@@ -4,7 +4,8 @@ import * as mongoosePaginate from 'mongoose-paginate-v2';
 
 export enum TaxaServicoDescricaoEnum {
     entrega = 'entrega',
-    cartao = 'cartao',
+    cartaoCredito = 'cartaoCredito',
+    cartaoDebito = 'cartaoDebito'
 }
 
 export interface TaxaServicoInterface {
