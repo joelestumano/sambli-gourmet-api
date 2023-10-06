@@ -61,12 +61,11 @@ export class AuthService {
 
     async forgottenPassword(dto: ForgottenPasswordDto): Promise<{ message: string }> {
         const usuario = await this.usuarioService.findUserByEmail(dto.email);
-        let response: { message: string };
-
-        await this.emailService
+        return await this.emailService
             .sendMail(usuario)
             .then((resp: any) => {
-                response = {
+                let response: { message: string };
+                return response = {
                     ...response,
                     message: `Uma mensagem com instruções para recuperação de senha foi enviado para o seu endereço de e-mail ${dto.email}. Por favor, verifique sua caixa de entrada e/ou pasta de spam para encontrar o e-mail. Ele deve chegar em alguns minutos.`,
                 };
@@ -75,6 +74,5 @@ export class AuthService {
                 throw new InternalServerErrorException(error);
             });
 
-        return response;
     }
 }

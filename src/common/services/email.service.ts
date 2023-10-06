@@ -6,8 +6,8 @@ import { Usuario } from 'src/modules/usuario/entities/usuario.entity';
 export class EmailService {
     constructor(private mailerService: MailerService) { }
 
-    async sendMail(usuario: Usuario): Promise<void> {
-        new Promise(async (resolve, reject) => {
+    async sendMail(usuario: Usuario): Promise<any> {
+        return new Promise(async (resolve, reject) => {
             await this.mailerService
                 .sendMail({
                     from: 'Equipe SG <sambligourmet@sambli.com.br>',
