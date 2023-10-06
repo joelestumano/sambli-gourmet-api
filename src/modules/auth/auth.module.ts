@@ -7,6 +7,7 @@ import { UsuarioModule } from '../usuario/usuario.module';
 import { AuthService } from './auth.service';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { EmailModule } from 'src/common/services/email.module';
 
 @Module({
     controllers: [AuthController],
@@ -23,6 +24,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
                 },
             }),
         }),
+        EmailModule
     ],
     providers: [AuthService, LocalStrategy, JwtStrategy],
     exports: [JwtModule]
