@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { TkInterface } from './entities/token.interface';
 import { UsuarioService } from '../usuario/usuario.service';
+import { ForgottenPasswordDto } from './dtos/forgotten-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -48,5 +49,13 @@ export class AuthService {
         } catch (error) {
             throw new UnauthorizedException('token inválido');
         }
+    }
+
+    async forgottenPassword(dto: ForgottenPasswordDto): Promise<{ message: string }> {
+        const usuario = await this.usuarioService.findUserByEmail(dto.email);
+        const message = {
+            message: `Uma mensagem com instruções para recuperação de senha foi enviado para o seu endereço de e-mail ${dto.email}. Por favor, verifique sua caixa de entrada e/ou pasta de spam para encontrar o e-mail. Ele deve chegar em alguns minutos.`
+        }
+        return message;
     }
 }
