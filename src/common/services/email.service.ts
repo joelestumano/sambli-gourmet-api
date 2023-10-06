@@ -10,7 +10,7 @@ export class EmailService {
         return new Promise(async (resolve, reject) => {
             await this.mailerService
                 .sendMail({
-                    from: 'Equipe SG <sambligourmet@sambli.com.br>',
+                    from: 'Equipe SG <joel.estumano@sambli.com.br>',
                     to: usuario.email,
                     subject: 'Senha esquecida',
                     html: `<h1>Olá, ${usuario.nome}</h1>

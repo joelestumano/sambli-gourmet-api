@@ -30,7 +30,8 @@ export interface PedidoInterface {
   items: ItemPedidoInterface[]
   endereco: EnderecoInterface;
   pagamento: {
-    cartao: number;
+    cartaoCredito: number;
+    cartaoDebito: number;
     dinheiro: number;
     pix: number;
   }
@@ -50,7 +51,9 @@ abstract class ItemPedido implements ItemPedidoInterface {
 
 abstract class Pagamento {
   @Prop({ required: true, default: 0 })
-  cartao: number;
+  cartaoCredito: number;
+  @Prop({ required: true, default: 0 })
+  cartaoDebito: number;
   @Prop({ required: true, default: 0 })
   dinheiro: number;
   @Prop({ required: true, default: 0 })

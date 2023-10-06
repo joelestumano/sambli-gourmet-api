@@ -52,13 +52,21 @@ const envFilePath: string = getEnvPath(`${__dirname}/common/envs/`);
       useFactory: async (configService: ConfigService) => ({
         transport: {
           service: configService.get<string>('mailerConfig.transport_service'),
+          type: 'OAuth2',
           auth: {
             user: configService.get<string>('mailerConfig.transport_auth_user'),
             pass: configService.get<string>('mailerConfig.transport_auth_pass'),
+
+            /* clientId: process.env.OAUTH_CLIENTID,
+            clientSecret: process.env.OAUTH_CLIENT_SECRET,
+            refreshToken: process.env.OAUTH_REFRESH_TOKEN */
           },
           ignoreTLS: true,
         },
-        defaults: {},
+        defaults: {
+          from: '"No Reply" <joel.estumano@sambli.com.br>',
+        },
+        preview: true,
       }),
       inject: [ConfigService],
     }),
