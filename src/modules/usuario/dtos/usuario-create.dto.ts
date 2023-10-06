@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Usuario, UsuarioInterface } from '../entities/usuario.entity';
+import { UsuarioInterface } from '../entities/usuario.entity';
 import { IsNotEmpty, IsString, MinLength } from 'class-validator';
 import { MatchPassword } from '../decorators/match-password.decorator';
 
