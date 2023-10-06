@@ -4,12 +4,19 @@ import { IsNumber, IsOptional } from "class-validator";
 
 export class PagamentoDto {
     @ApiProperty({
-        description: 'valor no cartao',
+        description: 'valor no cartao de crédido',
     })
     @IsNumber()
     @IsOptional()
     @Type(() => Number)
-    cartao: number;
+    cartaoCredito: number;
+    @ApiProperty({
+        description: 'valor no cartao de débito',
+    })
+    @IsNumber()
+    @IsOptional()
+    @Type(() => Number)
+    cartaoDebito: number;
     @ApiProperty({
         description: 'valor no dinheiro',
     })
