@@ -7,7 +7,6 @@ import { getEnvPath } from './common/helper/env.helper';
 import openapi from './common/configs/openai.config';
 import dbconfig from './common/configs/db.config';
 import jwtConfig from './common/configs/jwt.config';
-import mailerConfig from './common/configs/mailer.config';
 import company from './common/configs/company.config';
 import { OpenaiModule } from './modules/openai/openai.module';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -21,7 +20,6 @@ import { UsuarioModule } from './modules/usuario/usuario.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { APP_GUARD, Reflector } from '@nestjs/core';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
-import { MailerModule } from '@nestjs-modules/mailer';
 
 const envFilePath: string = getEnvPath(`${__dirname}/common/envs/`);
 
@@ -38,35 +36,12 @@ const envFilePath: string = getEnvPath(`${__dirname}/common/envs/`);
     ConfigModule.forRoot({
       envFilePath: envFilePath,
       isGlobal: true,
-      load: [openapi, dbconfig, jwtConfig, mailerConfig, company],
+      load: [openapi, dbconfig, jwtConfig, company],
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         uri: configService.get<string>('dbconfig.host'),
-      }),
-      inject: [ConfigService],
-    }),
-    MailerModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        transport: {
-          service: configService.get<string>('mailerConfig.transport_service'),
-          type: 'OAuth2',
-          auth: {
-            user: configService.get<string>('mailerConfig.transport_auth_user'),
-            pass: configService.get<string>('mailerConfig.transport_auth_pass'),
-
-            /* clientId: process.env.OAUTH_CLIENTID,
-            clientSecret: process.env.OAUTH_CLIENT_SECRET,
-            refreshToken: process.env.OAUTH_REFRESH_TOKEN */
-          },
-          ignoreTLS: true,
-        },
-        defaults: {
-          from: '"No Reply" <joel.estumano@sambli.com.br>',
-        },
-        preview: true,
       }),
       inject: [ConfigService],
     }),
