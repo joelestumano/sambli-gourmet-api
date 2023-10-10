@@ -7,8 +7,8 @@ import { ParamIdDto } from 'src/common/dtos/param-id.dto';
 import { PedidoUpdateDto } from './dtos/pedido-update.dto';
 import { PedidoUpdateStatusDto } from './dtos/pedido-update-status.dto';
 
-@Controller('v1/pedidos')
-@ApiTags('v1/pedidos')
+@Controller('pedidos')
+@ApiTags('pedidos')
 export class PedidosController {
 
     constructor(private readonly pedidoService: PedidosService) { }

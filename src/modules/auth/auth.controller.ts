@@ -5,8 +5,8 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApiPublicEndpoint } from './decorators/api-public-endpoint.decorator';
 import { ForgotPasswordDto } from './dtos/forgot-password.dto';
 
-@Controller('v1/auth')
-@ApiTags('v1/auth')
+@Controller('auth')
+@ApiTags('auth')
 export class AuthController {
     constructor(private authService: AuthService) { }
 

@@ -6,8 +6,8 @@ import { ClientPaginateQueryDto } from './dtos/cliente-paginate-query.dto';
 import { ClienteUpdateDto } from './dtos/cliente-update.dto';
 import { ParamIdDto } from 'src/common/dtos/param-id.dto';
 
-@Controller('v1/clientes')
-@ApiTags('v1/clientes')
+@Controller('clientes')
+@ApiTags('clientes')
 export class ClientesController {
 
     constructor(private readonly clientesService: ClientesService) { }
