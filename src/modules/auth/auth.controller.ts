@@ -4,6 +4,7 @@ import { AuthService } from './auth.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApiPublicEndpoint } from './decorators/api-public-endpoint.decorator';
 import { ForgotPasswordDto } from './dtos/forgot-password.dto';
+import { ResetPasswordDto } from './dtos/reset-password.dto';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -13,8 +14,8 @@ export class AuthController {
     @ApiPublicEndpoint()
     @Post('forgot-password')
     @ApiOperation({
-        summary: 'senha esquecida',
-        description: 'senha esquecida'
+        summary: 'esqueceu sua senha',
+        description: 'esqueceu sua senha'
     })
     async forgotPassword(@Body() dto: ForgotPasswordDto) {
         return await this.authService.forgotPassword(dto);
@@ -29,6 +30,16 @@ export class AuthController {
 
     @Post('refresh-token')
     async refreshToken(@Query('token') token: string) {
-        return this.authService.refreshToken(token);
+        return await this.authService.refreshToken(token);
+    }
+
+    @ApiPublicEndpoint()
+    @ApiOperation({
+        summary: 'redefinir senha',
+        description: 'redefinir senha'
+    })
+    @Post('reset-password')
+    async resetPassword(@Body() dto: ResetPasswordDto) {
+        return await this.authService.resetPassword(dto);
     }
 }

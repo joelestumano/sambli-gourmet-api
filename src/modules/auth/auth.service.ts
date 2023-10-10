@@ -7,6 +7,7 @@ import { ForgotPasswordDto } from './dtos/forgot-password.dto';
 import { MessengerService } from '../messenger/messenger.service';
 import { SecurityTokenI } from '../usuario/entities/usuario.entity';
 import * as crypto from 'crypto';
+import { ResetPasswordDto } from './dtos/reset-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -80,5 +81,9 @@ export class AuthService {
         }).catch(error => {
             throw new ServiceUnavailableException(error);
         })
+    }
+
+    async resetPassword(dto: ResetPasswordDto){
+
     }
 }
