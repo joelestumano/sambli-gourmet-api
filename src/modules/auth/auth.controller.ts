@@ -3,21 +3,22 @@ import { LocalAuthGuard } from './guards/local-auth.guard';
 import { AuthService } from './auth.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApiPublicEndpoint } from './decorators/api-public-endpoint.decorator';
-import { ForgottenPasswordDto } from './dtos/forgotten-password.dto';
+import { ForgotPasswordDto } from './dtos/forgot-password.dto';
+import { ResetPasswordDto } from './dtos/reset-password.dto';
 
-@Controller('v1/auth')
-@ApiTags('v1/auth')
+@Controller('auth')
+@ApiTags('auth')
 export class AuthController {
     constructor(private authService: AuthService) { }
 
     @ApiPublicEndpoint()
-    @Post('forgotten-password')
+    @Post('forgot-password')
     @ApiOperation({
-        summary: 'senha esquecida',
-        description: 'senha esquecida'
+        summary: 'esqueceu sua senha',
+        description: 'esqueceu sua senha'
     })
-    async forgottenPassword(@Body() dto: ForgottenPasswordDto) {
-        return await this.authService.forgottenPassword(dto);
+    async forgotPassword(@Body() dto: ForgotPasswordDto) {
+        return await this.authService.forgotPassword(dto);
     }
 
     @ApiPublicEndpoint()
@@ -29,6 +30,16 @@ export class AuthController {
 
     @Post('refresh-token')
     async refreshToken(@Query('token') token: string) {
-        return this.authService.refreshToken(token);
+        return await this.authService.refreshToken(token);
+    }
+
+    @ApiPublicEndpoint()
+    @ApiOperation({
+        summary: 'redefinir senha',
+        description: 'redefinir senha'
+    })
+    @Post('reset-password')
+    async resetPassword(@Body() dto: ResetPasswordDto) {
+        return await this.authService.resetPassword(dto);
     }
 }

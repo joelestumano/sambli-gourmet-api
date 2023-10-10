@@ -6,8 +6,8 @@ import { ProdutoCreateDto } from './dtos/produto-create.dto';
 import { ProdutoUpdateDto } from './dtos/produto-update.dto';
 import { ParamIdDto } from '../../common/dtos/param-id.dto';
 
-@Controller('v1/produtos')
-@ApiTags('v1/produtos')
+@Controller('produtos')
+@ApiTags('produtos')
 export class ProdutosController {
     constructor(private readonly produtosService: ProdutosService) { }
 

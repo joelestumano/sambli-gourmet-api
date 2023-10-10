@@ -5,8 +5,8 @@ import { fromEvent, map } from 'rxjs';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ApiPublicEndpoint } from './modules/auth/decorators/api-public-endpoint.decorator';
 
-@Controller('v1/app')
-@ApiTags('v1/app')
+@Controller('app')
+@ApiTags('app')
 export class AppController {
   constructor(private readonly appService: AppService, private eventEmitter2: EventEmitter2) { }
 

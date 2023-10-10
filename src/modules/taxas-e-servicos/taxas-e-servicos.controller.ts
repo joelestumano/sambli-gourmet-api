@@ -5,8 +5,8 @@ import { TaxasEServicoQueryDto } from './dtos/taxas-e-servicos-paginate-query.dt
 import { ParamIdDto } from 'src/common/dtos/param-id.dto';
 import { TaxaServicoUpdateDto } from './dtos/taxas-e-servicos-update.dto';
 
-@Controller('v1/taxas-e-servicos')
-@ApiTags('v1/taxas-e-servicos')
+@Controller('taxas-e-servicos')
+@ApiTags('taxas-e-servicos')
 export class TaxasEServicosController {
     constructor(private readonly taxasEServicosService: TaxasEServicosService) { }
 
