@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { TkInterface } from './entities/token.interface';
 import { UsuarioService } from '../usuario/usuario.service';
-import { ForgottenPasswordDto } from './dtos/forgotten-password.dto';
+import { ForgotPasswordDto } from './dtos/forgot-password.dto';
 import { MessengerService } from '../messenger/messenger.service';
 import { SecurityTokenI } from '../usuario/entities/usuario.entity';
 import * as crypto from 'crypto';
@@ -57,7 +57,7 @@ export class AuthService {
         }
     }
 
-    async forgottenPassword(dto: ForgottenPasswordDto): Promise<{ message: string }> {
+    async forgotPassword(dto: ForgotPasswordDto): Promise<{ message: string }> {
         const usuario = await this.usuarioService.findUserByEmail(dto.email);
 
         const expiration = new Date();
