@@ -7,6 +7,7 @@ import { UsuarioModule } from '../usuario/usuario.module';
 import { AuthService } from './auth.service';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { MessengerService } from '../messenger/messenger.service';
 
 @Module({
     controllers: [AuthController],
@@ -24,7 +25,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
             }),
         }),
     ],
-    providers: [AuthService, LocalStrategy, JwtStrategy],
+    providers: [AuthService, LocalStrategy, JwtStrategy, MessengerService],
     exports: [JwtModule]
 })
 export class AuthModule { }

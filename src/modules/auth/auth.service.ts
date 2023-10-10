@@ -1,19 +1,17 @@
-import {
-    Injectable,
-    InternalServerErrorException,
-    UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, ServiceUnavailableException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { TkInterface } from './entities/token.interface';
 import { UsuarioService } from '../usuario/usuario.service';
 import { ForgottenPasswordDto } from './dtos/forgotten-password.dto';
+import { MessengerService } from '../messenger/messenger.service';
 
 @Injectable()
 export class AuthService {
     constructor(
         private usuarioService: UsuarioService,
-        private jwtService: JwtService
+        private jwtService: JwtService,
+        private messengerService: MessengerService
     ) { }
 
     async validateUser(email: string, pass: string): Promise<any> {
@@ -59,7 +57,15 @@ export class AuthService {
 
     async forgottenPassword(dto: ForgottenPasswordDto): Promise<{ message: string }> {
         const usuario = await this.usuarioService.findUserByEmail(dto.email);
-       
-        return
+        const subject = 'Esqueceu sua senha'
+        const content = `<h1>Olá ${usuario.nome}!</h1>
+        <p>Uma mensagem com instruções para recuperação de senha foi enviado para o seu endereço de e-mail ${usuario.email}. Por favor, verifique sua caixa de entrada e/ou pasta de spam para encontrar o e-mail. Ele deve chegar em alguns minutos.</p>
+        `
+        return await this.messengerService.sendEmail(dto.email, subject, content).then(() => {
+            return { message: `Uma mensagem com instruções para recuperação de senha foi enviado para o seu endereço de e-mail ${usuario.email}. Por favor, verifique sua caixa de entrada e/ou pasta de spam para encontrar o e-mail. Ele deve chegar em alguns minutos.` }
+        }).catch(error => {
+            throw new ServiceUnavailableException(error);
+        })
+
     }
 }
