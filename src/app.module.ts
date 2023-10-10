@@ -38,7 +38,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/common/envs/`);
     ConfigModule.forRoot({
       envFilePath: envFilePath,
       isGlobal: true,
-      load: [openapi, dbconfig, jwtConfig, mailerConfig, company],
+      load: [openapi, dbconfig, jwtConfig, company, mailerConfig],
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
@@ -51,22 +51,13 @@ const envFilePath: string = getEnvPath(`${__dirname}/common/envs/`);
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         transport: {
-          service: configService.get<string>('mailerConfig.transport_service'),
-          type: 'OAuth2',
+          service: 'gmail',
           auth: {
-            user: configService.get<string>('mailerConfig.transport_auth_user'),
-            pass: configService.get<string>('mailerConfig.transport_auth_pass'),
-
-            /* clientId: process.env.OAUTH_CLIENTID,
-            clientSecret: process.env.OAUTH_CLIENT_SECRET,
-            refreshToken: process.env.OAUTH_REFRESH_TOKEN */
+            user: configService.get<string>('mailerConfig.user'),
+            pass: configService.get<string>('mailerConfig.pass'),
           },
-          ignoreTLS: true,
         },
-        defaults: {
-          from: '"No Reply" <joel.estumano@sambli.com.br>',
-        },
-        preview: true,
+        defaults: {},
       }),
       inject: [ConfigService],
     }),

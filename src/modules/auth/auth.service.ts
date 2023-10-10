@@ -1,21 +1,17 @@
-import {
-    Injectable,
-    InternalServerErrorException,
-    UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, ServiceUnavailableException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { TkInterface } from './entities/token.interface';
 import { UsuarioService } from '../usuario/usuario.service';
 import { ForgottenPasswordDto } from './dtos/forgotten-password.dto';
-import { EmailService } from 'src/common/services/email.service';
+import { MessengerService } from '../messenger/messenger.service';
 
 @Injectable()
 export class AuthService {
     constructor(
         private usuarioService: UsuarioService,
         private jwtService: JwtService,
-        private emailService: EmailService,
+        private messengerService: MessengerService
     ) { }
 
     async validateUser(email: string, pass: string): Promise<any> {
@@ -61,18 +57,15 @@ export class AuthService {
 
     async forgottenPassword(dto: ForgottenPasswordDto): Promise<{ message: string }> {
         const usuario = await this.usuarioService.findUserByEmail(dto.email);
-        return await this.emailService
-            .sendMail(usuario)
-            .then((resp: any) => {
-                let response: { message: string };
-                return response = {
-                    ...response,
-                    message: `Uma mensagem com instruções para recuperação de senha foi enviado para o seu endereço de e-mail ${dto.email}. Por favor, verifique sua caixa de entrada e/ou pasta de spam para encontrar o e-mail. Ele deve chegar em alguns minutos.`,
-                };
-            })
-            .catch((error) => {
-                throw new InternalServerErrorException(error);
-            });
+        const subject = 'Esqueceu sua senha'
+        const content = `<h1>Olá ${usuario.nome}!</h1>
+        <p>Infelizmente não podemos lhe ajudar no momento.</p>
+        `
+        return await this.messengerService.sendEmail(dto.email, subject, content).then(() => {
+            return { message: content }
+        }).catch(error => {
+            throw new ServiceUnavailableException(error);
+        })
 
     }
 }
