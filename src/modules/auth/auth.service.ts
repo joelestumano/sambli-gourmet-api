@@ -5,6 +5,8 @@ import { TkInterface } from './entities/token.interface';
 import { UsuarioService } from '../usuario/usuario.service';
 import { ForgottenPasswordDto } from './dtos/forgotten-password.dto';
 import { MessengerService } from '../messenger/messenger.service';
+import { SecurityTokenI } from '../usuario/entities/usuario.entity';
+import * as crypto from 'crypto';
 
 @Injectable()
 export class AuthService {
@@ -57,15 +59,26 @@ export class AuthService {
 
     async forgottenPassword(dto: ForgottenPasswordDto): Promise<{ message: string }> {
         const usuario = await this.usuarioService.findUserByEmail(dto.email);
+
+        const expiration = new Date();
+        expiration.setHours(expiration.getHours() + 1);
+        const token = crypto.randomBytes(20).toString('hex');
+
+        const securityToken: SecurityTokenI = {
+            token: token,
+            expiration: expiration.toISOString()
+        }
+
+        const update = await this.usuarioService.update(usuario['_id'], { securityToken: securityToken });
+
         const subject = 'Esqueceu sua senha'
         const content = `<h1>Olá ${usuario.nome}!</h1>
-        <p>Infelizmente não podemos lhe ajudar no momento.</p>
-        `
+         <p>Infelizmente não podemos lhe ajudar no momento.</p>
+         `
         return await this.messengerService.sendEmail(dto.email, subject, content).then(() => {
             return { message: content }
         }).catch(error => {
             throw new ServiceUnavailableException(error);
         })
-
     }
 }

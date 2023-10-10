@@ -1,5 +1,5 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { Usuario } from './entities/usuario.entity';
+import { SecurityTokenI, Usuario } from './entities/usuario.entity';
 import { UsuarioCreateDto } from './dtos/usuario-create.dto';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
@@ -31,5 +31,21 @@ export class UsuarioService {
             );
         }
         return found;
+    }
+
+    async findById(idUsuario: string): Promise<Usuario> {
+        const found = await this.usuarioModel.findById(`${idUsuario}`).exec();
+        if (!found) {
+            const message = `nenhum usuário encontrado com _id ${idUsuario}`;
+            throw new NotFoundException(message);
+        }
+        return found;
+    }
+
+    async update(idUsuario: string, dataUpdate: any) {
+        const user: any = await this.findById(idUsuario);
+        return await this.usuarioModel
+            .updateOne({ _id: idUsuario }, dataUpdate, { upsert: true })
+            .exec();
     }
 }
