@@ -59,10 +59,10 @@ export class AuthService {
         const usuario = await this.usuarioService.findUserByEmail(dto.email);
         const subject = 'Esqueceu sua senha'
         const content = `<h1>Olá ${usuario.nome}!</h1>
-        <p>Uma mensagem com instruções para recuperação de senha foi enviado para o seu endereço de e-mail ${usuario.email}. Por favor, verifique sua caixa de entrada e/ou pasta de spam para encontrar o e-mail. Ele deve chegar em alguns minutos.</p>
+        <p>Infelizmente não podemos lhe ajudar no momento.</p>
         `
         return await this.messengerService.sendEmail(dto.email, subject, content).then(() => {
-            return { message: `Uma mensagem com instruções para recuperação de senha foi enviado para o seu endereço de e-mail ${usuario.email}. Por favor, verifique sua caixa de entrada e/ou pasta de spam para encontrar o e-mail. Ele deve chegar em alguns minutos.` }
+            return { message: content }
         }).catch(error => {
             throw new ServiceUnavailableException(error);
         })
