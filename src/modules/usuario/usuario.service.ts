@@ -19,12 +19,11 @@ export class UsuarioService {
             ...dto,
             password: await bcrypt.hashSync(dto.password, 10),
         };
-        const create: Usuario = await new this.usuarioModel(dto_).save();
-        return Object.assign(create, { password: undefined });
+        return await new this.usuarioModel(dto_).save();
     }
 
-    async findUserByEmail(email: string): Promise<Usuario> {
-        const found = await this.usuarioModel.findOne({ email: email }).exec();
+    async findUserByEmail(email: string, select?: keyof Usuario): Promise<Usuario> {
+        const found = await this.usuarioModel.findOne({ email: email }).select(`+${select}`).exec();
         if (!found) {
             throw new NotFoundException(
                 `nenhum usuário encontrado com e-mail ${email}`,

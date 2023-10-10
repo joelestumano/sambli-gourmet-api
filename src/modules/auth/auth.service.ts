@@ -1,4 +1,4 @@
-import { Injectable, ServiceUnavailableException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, ServiceUnavailableException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { TkInterface } from './entities/token.interface';
@@ -18,7 +18,7 @@ export class AuthService {
     ) { }
 
     async validateUser(email: string, pass: string): Promise<any> {
-        const user = (await this.usuarioService.findUserByEmail(email)) as any;
+        const user = (await this.usuarioService.findUserByEmail(email, 'password')) as any;
         if (user && (await bcrypt.compareSync(pass, user.password))) {
             return {
                 _id: user._id,
@@ -83,7 +83,17 @@ export class AuthService {
         })
     }
 
-    async resetPassword(dto: ResetPasswordDto){
-
+    async resetPassword(dto: ResetPasswordDto) {
+        const usuario = await this.usuarioService.findUserByEmail(dto.email, 'securityToken');
+        if (dto.token !== usuario.securityToken.token) {
+            throw new BadRequestException(`token inválido`);
+        }
+        const moment = new Date();
+        const expira = new Date(usuario.securityToken.expiration);
+        if (moment > expira) {
+            throw new BadRequestException(`token expirado`);
+        }
+        const newPassword = await bcrypt.hashSync(dto.password, 10)
+        return await this.usuarioService.update(usuario['_id'], { password: newPassword });
     }
 }
