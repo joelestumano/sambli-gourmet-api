@@ -72,9 +72,16 @@ export class AuthService {
 
         const update = await this.usuarioService.update(usuario['_id'], { securityToken: securityToken });
 
-        const subject = 'Esqueceu sua senha'
+        const subject = 'Redefinição de senha'
         const content = `<h1>Olá ${usuario.nome}!</h1>
-         <p>Infelizmente não podemos lhe ajudar no momento.</p>
+         <p>Recebemos uma solicitação para redefinir a sua senha. Para prosseguir com a redefinição, por favor siga as instruções abaixo:</p>
+
+         <p>Acesse a página de redefinição de senha pelo app ou <a href="https://sg-painel.onrender.com/login">SG - Painel</a>.</p>
+         <p>Preencha o formulário informado os dados solicitados.</p>
+         <p>Utilize o token ${securityToken.token}.</p>
+         <p>Certifique-se de ter inserido corretamente todas as informações solicitadas e prossiga com o envio.</p>
+
+         <h4>Lembramos que o token de redefinição possui validade de uma hora a partir do recebimento deste e-mail. Caso o prazo expire, será necessário solicitar uma nova redefinição de senha.</h4>
          `
         return await this.messengerService.sendEmail(dto.email, subject, content).then(() => {
             return { message: content }
