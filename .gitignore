@@ -41,3 +41,5 @@ lerna-debug.log*
 # Environment
 /src/common/envs/dev.env
 /src/common/envs/prod.env
+
+/.cache
