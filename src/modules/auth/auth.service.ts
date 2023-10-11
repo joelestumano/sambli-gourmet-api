@@ -8,13 +8,15 @@ import { MessengerService } from '../messenger/messenger.service';
 import { SecurityTokenI } from '../usuario/entities/usuario.entity';
 import * as crypto from 'crypto';
 import { ResetPasswordDto } from './dtos/reset-password.dto';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class AuthService {
     constructor(
         private usuarioService: UsuarioService,
         private jwtService: JwtService,
-        private messengerService: MessengerService
+        private messengerService: MessengerService,
+        private eventEmitter: EventEmitter2
     ) { }
 
     async validateUser(email: string, pass: string): Promise<any> {
@@ -84,6 +86,7 @@ export class AuthService {
          <h4>Lembramos que o token de redefinição possui validade de uma hora a partir do recebimento deste e-mail. Caso o prazo expire, será necessário solicitar uma nova redefinição de senha.</h4>
          `
         return await this.messengerService.sendEmail(dto.email, subject, content).then(() => {
+            this.eventEmitter.emit('forgot.password', usuario);
             return { message: content }
         }).catch(error => {
             throw new ServiceUnavailableException(error);

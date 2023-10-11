@@ -8,12 +8,15 @@ import { AuthService } from './auth.service';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { MessengerService } from '../messenger/messenger.service';
+import { ForgotPasswordListener } from './listeners/forgot-password.listener';
+import { WhatsappModule } from '../whatsapp/whatsapp.module';
 
 @Module({
     controllers: [AuthController],
     imports: [
         PassportModule,
         UsuarioModule,
+        WhatsappModule,
         JwtModule.registerAsync({
             imports: [ConfigModule],
             inject: [ConfigService],
@@ -25,7 +28,7 @@ import { MessengerService } from '../messenger/messenger.service';
             }),
         }),
     ],
-    providers: [AuthService, LocalStrategy, JwtStrategy, MessengerService],
+    providers: [AuthService, LocalStrategy, JwtStrategy, MessengerService, ForgotPasswordListener],
     exports: [JwtModule]
 })
 export class AuthModule { }
