@@ -21,6 +21,8 @@ export class WhatsappService {
             const w: Whatsapp = await create({
                 session: dto.sessionName,
                 headless: 'new',
+                autoClose: 0,
+                logQR: true,
             })
                 .then((client) => client)
                 .catch((erro) => {
