@@ -17,28 +17,23 @@ export class WhatsappService {
     constructor(private readonly openaiService: OpenaiService) { }
 
     async createSession(dto: DtoWhatsappSessionName): Promise<any> {
-        return new Promise((resolve, reject) => {
-            let session_;
-            create(
+        return new Promise(async (resolve, reject) => {
+            await create(
                 dto.sessionName,
                 (base64Qr, asciiQR, attempts, urlCode) => {
                     resolve(base64Qr);
                 },
-                (statusSession, session) => {
-                    session_ = {
-                        statusSession: statusSession,
-                        sessionName: session
-                    }
-                },
+                (statusSession, session) => { },
                 {
                     headless: 'new',
                     logQR: false,
-                    addBrowserArgs: ['--user-agent']
+                    addBrowserArgs: ['--user-agent'],
+                    autoClose: 0
                 },
                 undefined
             ).then(async (whatsapp: Whatsapp) => {
                 this.whatsappRef = whatsapp;
-                resolve(session_);
+                resolve(whatsapp.getStateConnection());
             }).catch((error) => {
                 reject(error);
             });
