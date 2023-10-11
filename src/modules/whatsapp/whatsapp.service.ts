@@ -8,6 +8,7 @@ import {
 import { DtoWhatsappProfileName } from './dtos/whatsapp-profile-name.dto';
 import { DtoWhatsappProfileStatus } from './dtos/whatsapp-profile-status.dto';
 import { DtoWhatsappSessionName } from './dtos/whatsapp-session-name.dto';
+import { puppeteerConfig } from './puppeteer.config';
 
 @Injectable()
 export class WhatsappService {
@@ -27,7 +28,7 @@ export class WhatsappService {
                 {
                     headless: 'new',
                     logQR: false,
-                    addBrowserArgs: ['--user-agent'],
+                    addBrowserArgs: puppeteerConfig.chromiumArgs,
                     autoClose: 0
                 },
                 undefined
