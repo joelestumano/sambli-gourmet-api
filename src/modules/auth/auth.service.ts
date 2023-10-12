@@ -78,7 +78,7 @@ export class AuthService {
         const content = `<h1>Olá ${usuario.nome}!</h1>
          <p>Recebemos uma solicitação para redefinir a sua senha. Para prosseguir com a redefinição, por favor siga as instruções abaixo:</p>
 
-         <p>Acesse a página de redefinição de senha pelo app ou <a href="https://sg-painel.onrender.com/login">SG - Painel</a>.</p>
+         <p>Acesse a página de redefinição de senha pelo app ou <a href="https://sg-painel.onrender.com/reset-password">SG - Painel</a>.</p>
          <p>Preencha o formulário informado os dados solicitados.</p>
          <p>Utilize o token ${securityToken.token}.</p>
          <p>Certifique-se de ter inserido corretamente todas as informações solicitadas e prossiga com o envio.</p>

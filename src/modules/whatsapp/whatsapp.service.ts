@@ -26,28 +26,27 @@ export class WhatsappService {
 
             await create(
                 dto.sessionName,
-                (base64Qr, asciiQR, attempts, urlCode) => {
+                (base64Qr: string, asciiQR: string, attempts: number, urlCode: any) => {
                     resolve(base64Qr);
                 },
                 (statusSession, session) => {
                     this.logger.log({ "status": { statusSession, session } })
                 },
                 {
-                    headless: 'new',
+                    headless: false,
                     logQR: false,
                     addBrowserArgs: ['--user-agent'],
                     autoClose: 0,
                 },
                 undefined,
-            )
-                .then((whatsapp: Whatsapp) => {
-                    this.whatsappRef = whatsapp
-                })
-                .catch((error: any) => {
-                    reject(error);
-                }).finally(() => {
-                    this.logger.log({ "whatsappRef": this.whatsappRef })
-                });
+            ).then((whatsapp: Whatsapp) => {
+                this.whatsappRef = whatsapp
+            }).catch((error: any) => {
+                this.logger.error(error)
+                reject(error);
+            }).finally(() => {
+                this.logger.log({ "whatsapp client": this.whatsappRef })
+            });
         });
     }
 
