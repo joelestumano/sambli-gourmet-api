@@ -33,7 +33,7 @@ export class WhatsappService {
                     this.logger.log({ "status": { statusSession, session } })
                 },
                 {
-                    headless: false,
+                    headless: 'old',
                     logQR: false,
                     addBrowserArgs: ['--user-agent'],
                     autoClose: 0,
