@@ -14,14 +14,12 @@ import { DtoWhatsappProfileStatus } from './dtos/whatsapp-profile-status.dto';
 import { DtoWhatsappProfileName } from './dtos/whatsapp-profile-name.dto';
 import { UploadTempFile } from 'src/common/decorators/upload-file.decorator';
 import { DtoWhatsappSessionName } from './dtos/whatsapp-session-name.dto';
-import { ApiPublicEndpoint } from '../auth/decorators/api-public-endpoint.decorator';
 
 @Controller('whatsapp')
 @ApiTags('whatsapp')
 export class WhatsappController {
     constructor(private readonly whatsappService: WhatsappService) { }
 
-    @ApiPublicEndpoint()
     @Get('create-session')
     @ApiOperation({
         summary: 'cria uma sessão de cliente whatsapp',
