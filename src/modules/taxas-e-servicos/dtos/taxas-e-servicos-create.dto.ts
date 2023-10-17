@@ -23,4 +23,14 @@ export class TaxaServicoCreateDto implements TaxaServicoInterface {
     })
     @Type(() => Number)
     valor: number;
+
+    @ApiProperty({
+        description: 'label',
+        example: 'taxa de entrega',
+    })
+    @IsNotEmpty({
+        message: 'o label deve ser informado',
+    })
+    @IsString()
+    label: string;
 }

@@ -11,6 +11,7 @@ export enum TaxaServicoDescricaoEnum {
 export interface TaxaServicoInterface {
     descricao: string;
     valor: number;
+    label: string;
 }
 
 export type PedidoDocument = TaxaServico & Document;
@@ -21,6 +22,8 @@ export class TaxaServico extends Default implements TaxaServicoInterface {
     descricao: string;
     @Prop({ required: true, default: 0 })
     valor: number;
+    @Prop({ required: true, unique: true })
+    label: string;
 }
 
 export const TaxasEServicosSchema = SchemaFactory.createForClass(TaxaServico);
