@@ -1,9 +1,13 @@
 import { registerDecorator, ValidationOptions, ValidatorConstraint, ValidatorConstraintInterface, ValidationArguments } from 'class-validator';
 import { PedidoCreateDto } from '../dtos/pedido-create.dto';
+import { Logger } from '@nestjs/common';
 
 @ValidatorConstraint({ name: 'IsValidValorTotal', async: false })
 export class IsValidValorTotalConstraint implements ValidatorConstraintInterface {
-    validate(valorTotal: any, args: ValidationArguments) {
+
+    private readonly logger = new Logger(IsValidValorTotalConstraint.name);
+
+    validate(valorTotal: Number, args: ValidationArguments) {
 
         const dto = args.object as PedidoCreateDto;
         const pagamento = dto.pagamento;
@@ -13,7 +17,13 @@ export class IsValidValorTotalConstraint implements ValidatorConstraintInterface
         }, 0) : 0;
 
         const sumaPagamento = Object.values(pagamento).reduce((suma: number, valor: number) => suma + valor, 0);
-        return (sumaPagamento + taxasEServicos) === valorTotal;
+
+
+        this.logger.log("valor total: ", valorTotal);
+        this.logger.log("pagamento: ", sumaPagamento);
+        this.logger.log("taxas e servicos: ", taxasEServicos);
+
+        return (sumaPagamento + taxasEServicos) === Number(valorTotal);
     }
 }
 
