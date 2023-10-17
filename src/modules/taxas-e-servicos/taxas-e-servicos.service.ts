@@ -29,7 +29,12 @@ export class TaxasEServicosService {
             for (const taxa of enumObj) {
                 const taxaEntregaExist = await this.findOne('descricao', taxa);
                 if (!taxaEntregaExist) {
-                    const dto: TaxaServicoCreateDto = { descricao: taxa, valor: 0 };
+                    const label = taxa.replace(/([A-Z]+)/g, " $1").replace(/([A-Z][a-z])/g, " $1");
+                    const dto: TaxaServicoCreateDto = {
+                        descricao: taxa,
+                        valor: 0,
+                        label: label.toLowerCase()
+                    };
                     const taxaServico: TaxaServico = await this.create(dto);
                     this.logger.log('created: \u2193', taxaServico);
                 }

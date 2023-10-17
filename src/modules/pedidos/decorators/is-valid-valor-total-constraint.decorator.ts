@@ -17,12 +17,6 @@ export class IsValidValorTotalConstraint implements ValidatorConstraintInterface
         }, 0) : 0;
 
         const sumaPagamento = Object.values(pagamento).reduce((suma: number, valor: number) => suma + valor, 0);
-
-
-        this.logger.log("valor total: ", valorTotal);
-        this.logger.log("pagamento: ", sumaPagamento);
-        this.logger.log("taxas e servicos: ", taxasEServicos);
-
         return (sumaPagamento + taxasEServicos) === Number(valorTotal);
     }
 }
