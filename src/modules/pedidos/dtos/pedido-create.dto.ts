@@ -86,7 +86,7 @@ export class PedidoCreateDto implements PedidoInterface {
   @ValidateNested({
     message: 'verifique o pagamento informado',
   })
-  @IsPagamentoValid({ message: 'os valores de pagamento deve corresponder aos valores dos items' })
+  //@IsPagamentoValid({ message: 'os valores de pagamento deve corresponder aos valores dos items' })
   @Type(() => PagamentoDto)
   pagamento: PagamentoDto;
 
@@ -130,8 +130,8 @@ export class PedidoCreateDto implements PedidoInterface {
     message: 'verifique as informações do valor total do pedido',
   })
   @Type(() => Number)
-  @IsValidValorTotal({
+  /* @IsValidValorTotal({
     message: 'o valor total do pedido deve corresponder a soma de todos valores correspondentes ao pedido'
-  })
+  }) */
   valorTotal: number;
 }
