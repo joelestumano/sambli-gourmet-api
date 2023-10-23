@@ -109,14 +109,14 @@ export class PedidoCreateDto implements PedidoInterface {
   status: PedidoStatusEnum;
 
   @ApiProperty({
-    description: 'taxas e serviços',
+    description: 'taxas',
     type: TaxaServicoDto,
     isArray: true,
   })
   @IsArray()
   @IsOptional()
   @ValidateNested({
-    message: 'verifique as informações de taxas e serviços',
+    message: 'verifique as informações de taxas',
     each: true,
   })
   @Type(() => TaxaServicoDto)

@@ -6,14 +6,14 @@ import {
     ValidationArguments,
 } from 'class-validator';
 import { PedidoCreateDto } from '../dtos/pedido-create.dto';
-import { TaxasEServicosService } from 'src/modules/taxas-e-servicos/taxas-e-servicos.service';
+import { TaxasService } from 'src/modules/taxas-e-servicos/taxas.service';
 import { TaxaServicoInterface } from '../entities/pedido.entity';
 
 @ValidatorConstraint({ name: 'IsValidIsDeliver', async: true })
 export class IsValidIsDeliverConstraint
     implements ValidatorConstraintInterface {
 
-    constructor(private taxasEServicosService: TaxasEServicosService) { }
+    constructor(private taxasEServicosService: TaxasService) { }
 
     async validate(isDeliver: boolean, args: ValidationArguments) {
         const dto = args.object as PedidoCreateDto;

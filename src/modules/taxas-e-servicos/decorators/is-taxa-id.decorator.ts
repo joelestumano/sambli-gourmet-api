@@ -1,13 +1,13 @@
 import { Injectable } from "@nestjs/common";
 import { ValidationOptions, ValidatorConstraint, ValidatorConstraintInterface, registerDecorator } from "class-validator";
 import mongoose from "mongoose";
-import { TaxasEServicosService } from "../taxas-e-servicos.service";
+import { TaxasService } from "../taxas.service";
 import validator from "validator";
 
-@ValidatorConstraint({ name: 'IsTaxasEServicosId', async: true })
+@ValidatorConstraint({ name: 'IsTaxasId', async: true })
 @Injectable()
-export class IsTaxasEServicosIdValidatorConstraint implements ValidatorConstraintInterface {
-    constructor(private taxasEServicosService: TaxasEServicosService) { }
+export class IsTaxaIdValidatorConstraint implements ValidatorConstraintInterface {
+    constructor(private taxasEServicosService: TaxasService) { }
     async validate(id: mongoose.Schema.Types.ObjectId) {
         if (!validator.isMongoId((id).toString())) {
             return false;
@@ -16,14 +16,14 @@ export class IsTaxasEServicosIdValidatorConstraint implements ValidatorConstrain
     }
 }
 
-export function IsTaxasEServicosId(validationOptions?: ValidationOptions) {
+export function IsTaxasId(validationOptions?: ValidationOptions) {
     return function (object: any, propertyName: string) {
         registerDecorator({
             target: object.constructor,
             propertyName: propertyName,
             options: validationOptions,
             constraints: [],
-            validator: IsTaxasEServicosIdValidatorConstraint,
+            validator: IsTaxaIdValidatorConstraint,
         });
     };
 }
