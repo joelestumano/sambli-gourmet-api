@@ -18,7 +18,7 @@ export class IsValidIsDeliverConstraint
     async validate(isDeliver: boolean, args: ValidationArguments) {
         const dto = args.object as PedidoCreateDto;
         if (isDeliver) {
-            if ('endereco' in dto && 'taxasEServicos' in dto && dto.taxas.length > 0) {
+            if ('endereco' in dto && 'taxas' in dto && dto.taxas.length > 0) {
                 const ids = dto.taxas.map((t: PedidoTaxaInterface) => {
                     return t._id;
                 })

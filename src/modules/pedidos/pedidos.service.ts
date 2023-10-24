@@ -11,9 +11,9 @@ import { CustomEvent } from '../../common/events/custom.event';
 import { PedidoUpdateDto } from './dtos/pedido-update.dto';
 import { WhatsappService } from '../whatsapp/whatsapp.service';
 import { ClientesService } from '../clientes/clientes.service';
-import { PedidoItemDto } from './dtos/item-pedido.dto';
 import { PedidoUpdateStatusDto } from './dtos/pedido-update-status.dto';
 import { Taxa } from '../taxas-e-servicos/entities/taxa.entity';
+import { Produto } from '../produtos/entities/produto.entity';
 
 @Injectable()
 export class PedidosService {
@@ -47,9 +47,17 @@ export class PedidosService {
                     model: Cliente.name
                 },
                 {
-                    path: 'taxasEServicos',
+                    path: 'items',
                     populate: {
-                        path: 'taxaServico',
+                        path: '_id',
+                        select: { _id: 1, bannerUrl: 1, valor: 1, descricao: 1 },
+                        model: Produto.name
+                    }
+                },
+                {
+                    path: 'taxas',
+                    populate: {
+                        path: '_id',
                         select: { _id: 1, referencia: 1, valor: 1, descricao: 1, tipo: 1 },
                         model: Taxa.name
                     }

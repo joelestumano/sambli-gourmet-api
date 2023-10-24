@@ -116,8 +116,8 @@ export class PedidoUpdateDto implements PedidoInterface {
     @IsNumber()
     @IsOptional()
     @Type(() => Number)
-    @IsValidValorTotal({
+   /*  @IsValidValorTotal({
         message: 'o valor total do pedido deve corresponder a soma de todos valores correspondentes ao pedido'
-    })
+    }) */
     valorTotal: number;
 }

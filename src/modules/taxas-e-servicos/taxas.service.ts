@@ -18,7 +18,7 @@ export class TaxasService {
 
     constructor(
         @InjectModel(Taxa.name)
-        private readonly taxasEServicosModel: Model<TaxaDocument>,
+        private readonly taxasModel: Model<TaxaDocument>,
     ) {
         this.inicializar();
     }
@@ -46,7 +46,7 @@ export class TaxasService {
     }
 
     private async create(dto: TaxaCreateDto): Promise<TaxaDocument> {
-        return await new this.taxasEServicosModel(dto).save();
+        return await new this.taxasModel(dto).save();
     }
 
     async paginate(dto: TaxasPaginateQueryDto): Promise<PaginateResult<any>> {
@@ -61,13 +61,13 @@ export class TaxasService {
         let query = { isDeleted: false, active: true };
 
         return await (
-            this.taxasEServicosModel as PaginateModel<TaxaDocument>
+            this.taxasModel as PaginateModel<TaxaDocument>
         ).paginate(query, options);
     }
 
     async update(id: string, dto: TaxaUpdateDto) {
         const found: TaxaDocument = await this.findById(id);
-        const update = await this.taxasEServicosModel
+        const update = await this.taxasModel
             .updateOne({ _id: id }, dto, { upsert: true })
             .exec();
         return update;
@@ -76,7 +76,7 @@ export class TaxasService {
     async findById(
         id: mongoose.Schema.Types.ObjectId | string,
     ): Promise<TaxaDocument> {
-        const found = await this.taxasEServicosModel.findById(`${id}`).exec();
+        const found = await this.taxasModel.findById(`${id}`).exec();
         if (!found) {
             const message = `nenhuma taxa encontrada com a propriedade _id ${id}`;
             throw new NotFoundException(message);
@@ -85,13 +85,13 @@ export class TaxasService {
     }
 
     private async findOne(prop: string, value: string): Promise<TaxaDocument> {
-        return await this.taxasEServicosModel.findOne({ [prop]: value }).exec();
+        return await this.taxasModel.findOne({ [prop]: value }).exec();
     }
 
     async findByIdsEntrega(
         ids: mongoose.Schema.Types.ObjectId[] | string[],
     ): Promise<TaxaDocument[]> {
-        const found = await this.taxasEServicosModel
+        const found = await this.taxasModel
             .find({
                 _id: { $in: ids },
                 referencia: TaxaRefEnum.ENTREGA,
