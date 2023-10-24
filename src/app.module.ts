@@ -16,7 +16,7 @@ import { PedidosModule } from './modules/pedidos/pedidos.module';
 import { ClientesModule } from './modules/clientes/clientes.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { CustomListener } from './common/events/listeners/custom.listener';
-import { TaxasEServicosModule } from './modules/taxas-e-servicos/taxas-e-servicos.module';
+import { TaxasModule } from './modules/taxas-e-servicos/taxas.module';
 import { UsuarioModule } from './modules/usuario/usuario.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { APP_GUARD, Reflector } from '@nestjs/core';
@@ -33,7 +33,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/common/envs/`);
     ProdutosModule,
     PedidosModule,
     ClientesModule,
-    TaxasEServicosModule,
+    TaxasModule,
     UsuarioModule,
     ConfigModule.forRoot({
       envFilePath: envFilePath,
@@ -67,11 +67,11 @@ const envFilePath: string = getEnvPath(`${__dirname}/common/envs/`);
   providers: [
     AppService,
     CustomListener,
-    {
+   /*  {
       provide: APP_GUARD,
       useFactory: (ref) => new JwtAuthGuard(ref),
       inject: [Reflector],
-    },
+    }, */
   ],
 })
 export class AppModule { }

@@ -11,9 +11,9 @@ import { CustomEvent } from '../../common/events/custom.event';
 import { PedidoUpdateDto } from './dtos/pedido-update.dto';
 import { WhatsappService } from '../whatsapp/whatsapp.service';
 import { ClientesService } from '../clientes/clientes.service';
-import { ItemPedidoDto } from './dtos/item-pedido.dto';
 import { PedidoUpdateStatusDto } from './dtos/pedido-update-status.dto';
-import { TaxaServico } from '../taxas-e-servicos/entities/taxas-e-servicos.entity';
+import { Taxa } from '../taxas-e-servicos/entities/taxa.entity';
+import { Produto } from '../produtos/entities/produto.entity';
 
 @Injectable()
 export class PedidosService {
@@ -47,11 +47,19 @@ export class PedidosService {
                     model: Cliente.name
                 },
                 {
-                    path: 'taxasEServicos',
+                    path: 'items',
                     populate: {
-                        path: 'taxaServico',
-                        select: { descricao: 1, _id: 1, valor: 1, label: 1 },
-                        model: TaxaServico.name
+                        path: '_id',
+                        select: { _id: 1, bannerUrl: 1, valor: 1, descricao: 1 },
+                        model: Produto.name
+                    }
+                },
+                {
+                    path: 'taxas',
+                    populate: {
+                        path: '_id',
+                        select: { _id: 1, referencia: 1, valor: 1, descricao: 1, tipo: 1 },
+                        model: Taxa.name
                     }
                 },
             ]
@@ -165,16 +173,5 @@ export class PedidosService {
             }
         }
         return { valid: valid, error: errorMessage };
-    }
-
-    private async handleWhatsappMessage(pedido: Pedido, status?: PedidoStatusEnum): Promise<void> {
-        const cliente = await this.clientesService.findById(pedido.cliente);
-        const chatId = ((cliente.whatsapp).replace('+', '')).concat('@c.us');
-        let itemsPedidoStr = '';
-        pedido.items.forEach((item: ItemPedidoDto) => {
-            itemsPedidoStr += `R$ ${item.valor} de ${item.descricao}\n`
-        })
-        const message = `Olá ${cliente.nome}, seu pedido de \n${itemsPedidoStr}acaba de ser recebido!`
-        await this.whatsappService.sendWhatsappMessage(chatId, message);
     }
 }

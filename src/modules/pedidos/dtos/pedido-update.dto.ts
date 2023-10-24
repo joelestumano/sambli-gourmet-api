@@ -4,12 +4,13 @@ import { PedidoInterface, PedidoStatusEnum } from '../entities/pedido.entity';
 import { Transform, Type } from 'class-transformer';
 import { Schema } from 'mongoose';
 import { IsClienteId } from 'src/modules/clientes/decorators/is-clienteId.decorator';
-import { ItemPedidoDto } from './item-pedido.dto';
+import { PedidoItemDto } from './item-pedido.dto';
 import { EnderecoPedidoDto } from './endereco-pedido.dto';
 import { PagamentoDto } from './pagamento.dto';
-import { TaxaServicoDto } from './taxa-servico.dto';
+import { PedidoTaxaDto } from './taxa-servico.dto';
 import { IsValidIsDeliver } from '../decorators/is-valid-is-deliver-constraint.decorator';
 import { IsValidValorTotal } from '../decorators/is-valid-valor-total-constraint.decorator';
+import { IsPagamentoValid } from '../decorators/suma-items-valores-constraint.decorator';
 
 export class PedidoUpdateDto implements PedidoInterface {
     @ApiProperty({
@@ -38,14 +39,12 @@ export class PedidoUpdateDto implements PedidoInterface {
         example: false,
     })
     @IsOptional()
-    @IsValidIsDeliver({
-        message: 'verifique informações obrigatórias em caso de pedido para entrega'
-    })
+    @IsValidIsDeliver()
     isDeliver: boolean;
 
     @ApiProperty({
         description: 'itens do pedido',
-        type: ItemPedidoDto,
+        type: PedidoItemDto,
         isArray: true,
     })
     @IsOptional()
@@ -53,8 +52,8 @@ export class PedidoUpdateDto implements PedidoInterface {
         message: 'verifique os itens do pedido',
         each: true,
     })
-    @Type(() => ItemPedidoDto)
-    items: ItemPedidoDto[];
+    @Type(() => PedidoItemDto)
+    items: PedidoItemDto[];
 
     @ApiProperty({
         description: 'endereço para entrega',
@@ -74,6 +73,7 @@ export class PedidoUpdateDto implements PedidoInterface {
     @ValidateNested({
         message: 'verifique o pagamento informado',
     })
+    @IsPagamentoValid({ message: 'os valores de pagamento deve corresponder aos valores dos items e taxa de entrega' })
     @Type(() => PagamentoDto)
     pagamento: PagamentoDto;
 
@@ -97,18 +97,18 @@ export class PedidoUpdateDto implements PedidoInterface {
     status: PedidoStatusEnum;
 
     @ApiProperty({
-        description: 'taxas e serviços',
-        type: TaxaServicoDto,
+        description: 'taxas',
+        type: PedidoTaxaDto,
         isArray: true,
     })
     @IsArray()
     @IsOptional()
     @ValidateNested({
-        message: 'verifique as informações de taxas e serviços',
+        message: 'verifique as informações de taxas',
         each: true,
     })
-    @Type(() => TaxaServicoDto)
-    taxasEServicos: TaxaServicoDto[];
+    @Type(() => PedidoTaxaDto)
+    taxas: PedidoTaxaDto[];
 
     @ApiProperty({
         description: 'valor total do pedido',
@@ -116,8 +116,8 @@ export class PedidoUpdateDto implements PedidoInterface {
     @IsNumber()
     @IsOptional()
     @Type(() => Number)
-    @IsValidValorTotal({
+   /*  @IsValidValorTotal({
         message: 'o valor total do pedido deve corresponder a soma de todos valores correspondentes ao pedido'
-    })
+    }) */
     valorTotal: number;
 }
