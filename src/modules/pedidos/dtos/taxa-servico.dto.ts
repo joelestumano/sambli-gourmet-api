@@ -4,7 +4,7 @@ import { Schema } from "mongoose";
 import { IsTaxasId } from "src/modules/taxas-e-servicos/decorators/is-taxa-id.decorator";
 import { TaxaCreateDto } from "src/modules/taxas-e-servicos/dtos/taxa-create.dto";
 
-export class PedidoTaxaDto extends PickType(TaxaCreateDto, ['valor'] as const) {
+export class PedidoTaxaDto extends PickType(TaxaCreateDto, ['referencia', 'valor'] as const) {
 
     @ApiProperty({
         description: '_id de registro da taxa',
