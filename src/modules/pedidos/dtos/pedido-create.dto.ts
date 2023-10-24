@@ -45,9 +45,7 @@ export class PedidoCreateDto implements PedidoInterface {
   @IsNotEmpty({
     message: 'isDeliver deve ser informado',
   })
-  @IsValidIsDeliver({
-    message: 'verifique informações obrigatórias em caso de pedido para entrega'
-  })
+  @IsValidIsDeliver()
   isDeliver: boolean;
 
   @ApiProperty({

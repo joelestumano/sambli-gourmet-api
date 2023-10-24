@@ -38,9 +38,7 @@ export class PedidoUpdateDto implements PedidoInterface {
         example: false,
     })
     @IsOptional()
-    @IsValidIsDeliver({
-        message: 'verifique informações obrigatórias em caso de pedido para entrega'
-    })
+    @IsValidIsDeliver()
     isDeliver: boolean;
 
     @ApiProperty({
