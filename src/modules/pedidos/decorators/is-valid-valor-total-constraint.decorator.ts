@@ -12,7 +12,7 @@ export class IsValidValorTotalConstraint implements ValidatorConstraintInterface
         const dto = args.object as PedidoCreateDto;
         const pagamento = dto.pagamento;
 
-        const taxasEServicos = ("taxasEServicos" in dto) ? dto.taxasEServicos.reduce((total, taxa) => {
+        const taxasEServicos = ("taxasEServicos" in dto) ? dto.taxas.reduce((total, taxa) => {
             return total + taxa.valor; /** todo */
         }, 0) : 0;
 

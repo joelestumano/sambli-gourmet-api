@@ -13,13 +13,13 @@ export enum PedidoStatusEnum {
   concluido = 'concluido',
 }
 
-export interface ItemPedidoInterface {
-  descricao: string,
+export interface PedidoItemInterface {
+  _id: mongoose.Schema.Types.ObjectId,
   valor: number
 }
 
-export interface TaxaServicoInterface {
-  taxaServico: mongoose.Schema.Types.ObjectId,
+export interface PedidoTaxaInterface {
+  _id: mongoose.Schema.Types.ObjectId,
   valor: number;
 }
 
@@ -27,7 +27,7 @@ export interface PedidoInterface {
   cliente: mongoose.Schema.Types.ObjectId;
   horaDespacho: string;
   isDeliver: boolean;
-  items: ItemPedidoInterface[]
+  items: PedidoItemInterface[]
   endereco: EnderecoInterface;
   pagamento: {
     cartaoCredito: number;
@@ -38,15 +38,22 @@ export interface PedidoInterface {
   obs: string;
   status: PedidoStatusEnum;
   codigo?: string;
-  taxasEServicos: TaxaServicoInterface[];
+  taxas: PedidoTaxaInterface[];
   valorTotal: number;
 }
 
-abstract class ItemPedido implements ItemPedidoInterface {
+abstract class PedidoItem implements PedidoItemInterface {
   @Prop({ required: true })
-  descricao: string;
+  _id: mongoose.Schema.Types.ObjectId;
   @Prop({ required: true })
   valor: number
+}
+
+abstract class PedidoTaxa implements PedidoTaxaInterface {
+  @Prop({ required: true })
+  _id: mongoose.Schema.Types.ObjectId;
+  @Prop({ required: true, default: 0 })
+  valor: number;
 }
 
 abstract class Pagamento {
@@ -60,13 +67,6 @@ abstract class Pagamento {
   pix: number;
 }
 
-abstract class TaxaServico implements TaxaServicoInterface {
-  @Prop({ required: true })
-  taxaServico: mongoose.Schema.Types.ObjectId;
-  @Prop({ required: true, default: 0 })
-  valor: number;
-}
-
 export type PedidoDocument = Pedido & Document;
 
 @Schema({ timestamps: true, collection: 'pedidos' })
@@ -78,7 +78,7 @@ export class Pedido extends Default implements PedidoInterface {
   @Prop({ required: true, default: false })
   isDeliver: boolean;
   @Prop({ required: true })
-  items: ItemPedido[];
+  items: PedidoItem[];
   @Prop({ required: false })
   endereco: Endereco;
   @Prop({ required: true })
@@ -90,7 +90,7 @@ export class Pedido extends Default implements PedidoInterface {
   @Prop({ required: true, unique: true })
   codigo: string
   @Prop({ required: true })
-  taxasEServicos: TaxaServico[];
+  taxas: PedidoTaxa[];
   @Prop({ required: true })
   valorTotal: number;
 }

@@ -11,7 +11,7 @@ import { CustomEvent } from '../../common/events/custom.event';
 import { PedidoUpdateDto } from './dtos/pedido-update.dto';
 import { WhatsappService } from '../whatsapp/whatsapp.service';
 import { ClientesService } from '../clientes/clientes.service';
-import { ItemPedidoDto } from './dtos/item-pedido.dto';
+import { PedidoItemDto } from './dtos/item-pedido.dto';
 import { PedidoUpdateStatusDto } from './dtos/pedido-update-status.dto';
 import { Taxa } from '../taxas-e-servicos/entities/taxa.entity';
 
@@ -165,16 +165,5 @@ export class PedidosService {
             }
         }
         return { valid: valid, error: errorMessage };
-    }
-
-    private async handleWhatsappMessage(pedido: Pedido, status?: PedidoStatusEnum): Promise<void> {
-        const cliente = await this.clientesService.findById(pedido.cliente);
-        const chatId = ((cliente.whatsapp).replace('+', '')).concat('@c.us');
-        let itemsPedidoStr = '';
-        pedido.items.forEach((item: ItemPedidoDto) => {
-            itemsPedidoStr += `R$ ${item.valor} de ${item.descricao}\n`
-        })
-        const message = `Olá ${cliente.nome}, seu pedido de \n${itemsPedidoStr}acaba de ser recebido!`
-        await this.whatsappService.sendWhatsappMessage(chatId, message);
     }
 }

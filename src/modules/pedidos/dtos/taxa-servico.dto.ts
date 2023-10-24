@@ -4,7 +4,7 @@ import { Schema } from "mongoose";
 import { IsTaxasId } from "src/modules/taxas-e-servicos/decorators/is-taxa-id.decorator";
 import { TaxaCreateDto } from "src/modules/taxas-e-servicos/dtos/taxa-create.dto";
 
-export class TaxaServicoDto extends PickType(TaxaCreateDto, ['valor'] as const) {
+export class PedidoTaxaDto extends PickType(TaxaCreateDto, ['valor'] as const) {
 
     @ApiProperty({
         description: '_id de registro da taxa',
@@ -16,5 +16,5 @@ export class TaxaServicoDto extends PickType(TaxaCreateDto, ['valor'] as const) 
     @IsTaxasId({
         message: 'verifique o _id da taxa',
     })
-    taxaServico: Schema.Types.ObjectId;
+    _id: Schema.Types.ObjectId;
 } 

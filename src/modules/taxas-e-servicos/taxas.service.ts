@@ -94,7 +94,7 @@ export class TaxasService {
         const found = await this.taxasEServicosModel
             .find({
                 _id: { $in: ids },
-                descricao: TaxaRefEnum.ENTREGA,
+                referencia: TaxaRefEnum.ENTREGA,
             })
             .exec();
         if (!found) {

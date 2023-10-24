@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { PaginateQueryProdutoDto } from './dtos/produto-paginate-query.dto';
-import { Model, PaginateModel, PaginateOptions, PaginateResult } from 'mongoose';
+import mongoose, { Model, PaginateModel, PaginateOptions, PaginateResult } from 'mongoose';
 import { PaginateConfig } from 'src/common/paginate/paginate-config';
 import { InjectModel } from '@nestjs/mongoose';
 import { Produto, ProdutoDocument } from './entities/produto.entity';
@@ -56,7 +56,7 @@ export class ProdutosService {
         return update;
     }
 
-    async findById(id: string): Promise<Produto> {
+    async findById(id: mongoose.Schema.Types.ObjectId | string): Promise<Produto> {
         const found = await this.produtoModel.findById(`${id}`).exec();
         if (!found) {
             const message = `nenhum produto encontrado com a propriedade _id ${id}`;

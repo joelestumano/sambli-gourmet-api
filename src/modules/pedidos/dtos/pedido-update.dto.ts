@@ -4,10 +4,10 @@ import { PedidoInterface, PedidoStatusEnum } from '../entities/pedido.entity';
 import { Transform, Type } from 'class-transformer';
 import { Schema } from 'mongoose';
 import { IsClienteId } from 'src/modules/clientes/decorators/is-clienteId.decorator';
-import { ItemPedidoDto } from './item-pedido.dto';
+import { PedidoItemDto } from './item-pedido.dto';
 import { EnderecoPedidoDto } from './endereco-pedido.dto';
 import { PagamentoDto } from './pagamento.dto';
-import { TaxaServicoDto } from './taxa-servico.dto';
+import { PedidoTaxaDto } from './taxa-servico.dto';
 import { IsValidIsDeliver } from '../decorators/is-valid-is-deliver-constraint.decorator';
 import { IsValidValorTotal } from '../decorators/is-valid-valor-total-constraint.decorator';
 
@@ -45,7 +45,7 @@ export class PedidoUpdateDto implements PedidoInterface {
 
     @ApiProperty({
         description: 'itens do pedido',
-        type: ItemPedidoDto,
+        type: PedidoItemDto,
         isArray: true,
     })
     @IsOptional()
@@ -53,8 +53,8 @@ export class PedidoUpdateDto implements PedidoInterface {
         message: 'verifique os itens do pedido',
         each: true,
     })
-    @Type(() => ItemPedidoDto)
-    items: ItemPedidoDto[];
+    @Type(() => PedidoItemDto)
+    items: PedidoItemDto[];
 
     @ApiProperty({
         description: 'endereço para entrega',
@@ -98,7 +98,7 @@ export class PedidoUpdateDto implements PedidoInterface {
 
     @ApiProperty({
         description: 'taxas',
-        type: TaxaServicoDto,
+        type: PedidoTaxaDto,
         isArray: true,
     })
     @IsArray()
@@ -107,8 +107,8 @@ export class PedidoUpdateDto implements PedidoInterface {
         message: 'verifique as informações de taxas',
         each: true,
     })
-    @Type(() => TaxaServicoDto)
-    taxasEServicos: TaxaServicoDto[];
+    @Type(() => PedidoTaxaDto)
+    taxas: PedidoTaxaDto[];
 
     @ApiProperty({
         description: 'valor total do pedido',
