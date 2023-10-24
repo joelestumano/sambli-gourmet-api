@@ -10,6 +10,7 @@ import { PagamentoDto } from './pagamento.dto';
 import { PedidoTaxaDto } from './taxa-servico.dto';
 import { IsValidIsDeliver } from '../decorators/is-valid-is-deliver-constraint.decorator';
 import { IsValidValorTotal } from '../decorators/is-valid-valor-total-constraint.decorator';
+import { IsPagamentoValid } from '../decorators/suma-items-valores-constraint.decorator';
 
 export class PedidoUpdateDto implements PedidoInterface {
     @ApiProperty({
@@ -72,6 +73,7 @@ export class PedidoUpdateDto implements PedidoInterface {
     @ValidateNested({
         message: 'verifique o pagamento informado',
     })
+    @IsPagamentoValid({ message: 'os valores de pagamento deve corresponder aos valores dos items e taxa de entrega' })
     @Type(() => PagamentoDto)
     pagamento: PagamentoDto;
 
