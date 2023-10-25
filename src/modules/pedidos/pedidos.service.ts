@@ -145,13 +145,13 @@ export class PedidosService {
         despacho.setMinutes(despacho.getMinutes() - 10);
         let moment = new Date();
         moment.setHours(moment.getHours() - 3);//necessário para validação com horário do servidor
-        let validTime = (moment < despacho) && pedido.status === PedidoStatusEnum.pendente;
-        let validPayment = false;
+        let validTime = (moment < despacho) && pedido.status === PedidoStatusEnum.pendente || pedido.status === PedidoStatusEnum.despachado;
+        let validPayment: boolean = false;
 
         if ('pagamento' in dto) {
             const pedidoPagamento = Object.values(pedido.pagamento).reduce((suma: number, valor: number) => suma + valor, 0);
             const dtoPagamento = Object.values(dto.pagamento).reduce((suma: number, valor: number) => suma + valor, 0);
-            validPayment = (dtoPagamento > pedidoPagamento);
+            validPayment = (dtoPagamento > pedidoPagamento) || (dtoPagamento === pedidoPagamento && pedido.status === PedidoStatusEnum.despachado);
         } else {
             validPayment = true;
         }
