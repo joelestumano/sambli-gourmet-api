@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, ServiceUnavailableException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, ServiceUnavailableException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { TkInterface } from './entities/token.interface';
@@ -9,9 +9,13 @@ import { SecurityTokenI } from '../usuario/entities/usuario.entity';
 import * as crypto from 'crypto';
 import { ResetPasswordDto } from './dtos/reset-password.dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { TokenDecodeType } from './entities/token-decode.type';
 
 @Injectable()
 export class AuthService {
+
+    private readonly logger = new Logger(AuthService.name);
+
     constructor(
         private usuarioService: UsuarioService,
         private jwtService: JwtService,
@@ -43,10 +47,8 @@ export class AuthService {
     }
 
     async refreshToken(token: string) {
-        try {
-            const tokenDecode = (await this.jwtService.verifyAsync(
-                token,
-            )) as TkInterface;
+        return await this.tokenVerifyAsync(token).then((tokenDecode: TokenDecodeType) => {
+
             const payload = {
                 sub: tokenDecode.sub,
                 nome: tokenDecode.nome,
@@ -55,9 +57,17 @@ export class AuthService {
             return {
                 access_token: this.jwtService.sign(payload),
             };
-        } catch (error) {
+
+        }).catch((error) => {
+            this.logger.error(error);
             throw new UnauthorizedException('token inválido');
-        }
+        })
+    }
+
+    async tokenVerifyAsync(token: string): Promise<TokenDecodeType | undefined> {
+        return await this.jwtService.verifyAsync(
+            token,
+        )
     }
 
     async forgotPassword(dto: ForgotPasswordDto): Promise<{ message: string }> {

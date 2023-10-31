@@ -4,6 +4,7 @@ import * as mongoosePaginate from 'mongoose-paginate-v2';
 import { Default } from 'src/common/entities/default.entity';
 import { Endereco, EnderecoInterface } from 'src/common/entities/endereco.entity';
 import { Cliente } from 'src/modules/clientes/entities/cliente.entity';
+import { Usuario } from 'src/modules/usuario/entities/usuario.entity';
 
 export enum PedidoStatusEnum {
   pendente = 'pendente',
@@ -40,6 +41,7 @@ export interface PedidoInterface {
   codigo?: string;
   taxas: PedidoTaxaInterface[];
   valorTotal: number;
+  usuario?: mongoose.Schema.Types.ObjectId;
 }
 
 abstract class PedidoItem implements PedidoItemInterface {
@@ -93,6 +95,8 @@ export class Pedido extends Default implements PedidoInterface {
   taxas: PedidoTaxa[];
   @Prop({ required: true })
   valorTotal: number;
+  @Prop({ required: true, ref: Usuario.name })
+  usuario: mongoose.Schema.Types.ObjectId;
 }
 
 export const PedidoSchema = SchemaFactory.createForClass(Pedido);

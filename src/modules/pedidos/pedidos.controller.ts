@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post, Query, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Query, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { PedidosPaginateQueryDto } from './dtos/pedido-paginate-query.dto';
 import { PedidosService } from './pedidos.service';
@@ -6,6 +6,8 @@ import { PedidoCreateDto } from './dtos/pedido-create.dto';
 import { ParamIdDto } from 'src/common/dtos/param-id.dto';
 import { PedidoUpdateDto } from './dtos/pedido-update.dto';
 import { PedidoUpdateStatusDto } from './dtos/pedido-update-status.dto';
+import { SetUsuarioInterceptor } from './interceptors/set-usuario.interceptor';
+import { SetCodigoInterceptor } from './interceptors/set-codigo.interceptor';
 
 @Controller('pedidos')
 @ApiTags('pedidos')
@@ -14,6 +16,7 @@ export class PedidosController {
     constructor(private readonly pedidoService: PedidosService) { }
 
     @Post('create')
+    @UseInterceptors(SetCodigoInterceptor, SetUsuarioInterceptor)
     @ApiOperation({
         summary: 'registra novo pedido',
         description: 'create',

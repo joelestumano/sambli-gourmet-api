@@ -29,6 +29,6 @@ import { WhatsappModule } from '../whatsapp/whatsapp.module';
         }),
     ],
     providers: [AuthService, LocalStrategy, JwtStrategy, MessengerService, ForgotPasswordListener],
-    exports: [JwtModule]
+    exports: [JwtModule, AuthService]
 })
 export class AuthModule { }

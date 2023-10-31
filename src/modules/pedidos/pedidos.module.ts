@@ -9,16 +9,23 @@ import { ClientesModule } from '../clientes/clientes.module';
 import { TaxasModule } from '../taxas-e-servicos/taxas.module';
 import { IsValidIsDeliverConstraint } from './decorators/is-valid-is-deliver-constraint.decorator';
 import { IsValidValorTotalConstraint } from './decorators/is-valid-valor-total-constraint.decorator';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   controllers: [PedidosController],
-  providers: [PedidosService, IsPagamentoValidConstraint, IsValidIsDeliverConstraint, IsValidValorTotalConstraint],
+  providers: [
+    PedidosService,
+    IsPagamentoValidConstraint,
+    IsValidIsDeliverConstraint,
+    IsValidValorTotalConstraint,
+  ],
   imports: [
     MongooseModule.forFeature([{ name: Pedido.name, schema: PedidoSchema }]),
     WhatsappModule,
     ClientesModule,
-    TaxasModule
+    TaxasModule,
+    AuthModule,
   ],
   exports: [PedidosService],
 })
-export class PedidosModule { }
+export class PedidosModule {}

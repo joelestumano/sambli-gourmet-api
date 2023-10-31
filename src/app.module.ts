@@ -67,11 +67,11 @@ const envFilePath: string = getEnvPath(`${__dirname}/common/envs/`);
   providers: [
     AppService,
     CustomListener,
-   /*  {
+    {
       provide: APP_GUARD,
       useFactory: (ref) => new JwtAuthGuard(ref),
       inject: [Reflector],
-    }, */
+    },
   ],
 })
 export class AppModule { }

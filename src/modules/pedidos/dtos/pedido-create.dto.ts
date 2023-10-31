@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ArrayMinSize, IsArray, IsDateString, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { ArrayMinSize, IsArray, IsDateString, IsEmpty, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { PedidoInterface, PedidoStatusEnum } from '../entities/pedido.entity';
 import { Transform, Type } from 'class-transformer';
 import { Schema } from 'mongoose';
@@ -13,6 +13,13 @@ import { IsValidIsDeliver } from '../decorators/is-valid-is-deliver-constraint.d
 import { IsValidValorTotal } from '../decorators/is-valid-valor-total-constraint.decorator';
 
 export class PedidoCreateDto implements PedidoInterface {
+
+  @IsNotEmpty()
+  usuario: Schema.Types.ObjectId;
+
+  @IsNotEmpty()
+  codigo: string;
+
   @ApiProperty({
     description: '_id de registro do cliente',
     example: '64ff9310ac886b54ea28e4f9',

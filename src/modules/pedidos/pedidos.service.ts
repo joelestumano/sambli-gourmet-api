@@ -14,26 +14,26 @@ import { ClientesService } from '../clientes/clientes.service';
 import { PedidoUpdateStatusDto } from './dtos/pedido-update-status.dto';
 import { Taxa } from '../taxas-e-servicos/entities/taxa.entity';
 import { Produto } from '../produtos/entities/produto.entity';
+import { Usuario } from '../usuario/entities/usuario.entity';
 
 @Injectable()
 export class PedidosService {
 
     private readonly logger = new Logger(PedidosService.name);
 
-    constructor(@InjectModel(Pedido.name) private readonly pedidoModel: Model<Pedido>,
+    constructor(@InjectModel(Pedido.name) private readonly pedidoModel: Model<PedidoDocument>,
         private whatsappService: WhatsappService,
         private clientesService: ClientesService,
         private eventEmitter: EventEmitter2) { }
 
-    async create(dto: PedidoCreateDto): Promise<Pedido> {
-        Object.assign(dto, { codigo: this.fakeProtocol() });
-        const pedido: Pedido = await new this.pedidoModel(dto).save();
+    async create(dto: PedidoCreateDto): Promise<PedidoDocument> {
+        const pedido: PedidoDocument = await new this.pedidoModel(dto).save();
         this.eventEmitter.emit('changed-collection', new CustomEvent('changed-collection-pedidos', `pedido ${pedido['_id']} registrado!`));
         //await this.handleWhatsappMessage(pedido);
         return pedido;
     }
 
-    async paginate(dto: PedidosPaginateQueryDto): Promise<PaginateResult<any>> {
+    async paginate(dto: PedidosPaginateQueryDto): Promise<PaginateResult<PedidoDocument>> {
         let options: PaginateOptions = {
             page: dto.pagina,
             limit: dto.limite,
@@ -61,6 +61,11 @@ export class PedidosService {
                         select: { _id: 1, referencia: 1, valor: 1, descricao: 1, tipo: 1 },
                         model: Taxa.name
                     }
+                },
+                {
+                    path: 'usuario',
+                    select: { nome: 1, _id: 1, whatsapp: 1 },
+                    model: Usuario.name
                 },
             ]
         };
@@ -125,20 +130,6 @@ export class PedidosService {
         return found;
     }
 
-    private fakeProtocol(): string {
-        const tDay = new Date();
-        const date = `${this.fill(tDay.getDate(), 2)}${this.fill(tDay.getMonth() + 1, 2)}${(this.fill(tDay.getFullYear(), 4)).slice(2)}`
-        const time = `${this.fill(tDay.getHours(), 2)}${this.fill(tDay.getMinutes(), 2)}${this.fill(tDay.getMilliseconds(), 3)}`
-        return date.concat(time);
-    }
-
-    private fill(value: number, length: number): string {
-        let str = value.toString();
-        while (str.length < length) {
-            str = '0' + str
-        }
-        return str;
-    }
 
     private updateIsValid(pedido: Pedido, dto: PedidoUpdateDto): { valid: boolean, error: string } {
         let despacho = new Date(pedido.horaDespacho);
