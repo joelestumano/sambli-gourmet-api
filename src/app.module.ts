@@ -15,13 +15,13 @@ import { ProdutosModule } from './modules/produtos/produtos.module';
 import { PedidosModule } from './modules/pedidos/pedidos.module';
 import { ClientesModule } from './modules/clientes/clientes.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
-import { CustomListener } from './common/events/listeners/custom.listener';
 import { TaxasModule } from './modules/taxas-e-servicos/taxas.module';
 import { UsuarioModule } from './modules/usuario/usuario.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { APP_GUARD, Reflector } from '@nestjs/core';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { ServerSentEventsModule } from './modules/server-sent-events/server-sent-events.module';
 
 const envFilePath: string = getEnvPath(`${__dirname}/common/envs/`);
 
@@ -35,6 +35,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/common/envs/`);
     ClientesModule,
     TaxasModule,
     UsuarioModule,
+    ServerSentEventsModule,
     ConfigModule.forRoot({
       envFilePath: envFilePath,
       isGlobal: true,
@@ -66,7 +67,6 @@ const envFilePath: string = getEnvPath(`${__dirname}/common/envs/`);
   controllers: [AppController],
   providers: [
     AppService,
-    CustomListener,
     {
       provide: APP_GUARD,
       useFactory: (ref) => new JwtAuthGuard(ref),
